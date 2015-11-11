@@ -26,6 +26,7 @@ button
 
 #output
 	display inline-block
+	font-family 'Source Code Pro', 'Courier New', monospace
 	width 40em
 	vertical-align top
 
@@ -33,8 +34,10 @@ button
 	section
 		border-radius 0.4em
 
-.code
-	font-family 'Source Code Pro', 'Courier New', monospace
+	> div,
+	> section
+		margin-bottom 1em
+
 
 .string
 	font-family serif
@@ -51,7 +54,7 @@ button
 	position absolute
 	top 0.4em
 	right 0.8em
-	color rgba(0,0,0,0.2)
+	color rgba(0, 0, 0, 0.2)
 
 .function
 	background-color rgb(250,230,230)
@@ -60,7 +63,12 @@ button
 	position relative
 
 	header
-		margin-bottom 0.5em
+		margin-bottom 0.3em
+		padding-bottom 0.2em
+		border-bottom 1px solid rgba(0, 0, 0, 0.1)
+
+	> div
+		// margin 0.5em
 
 	.name
 		font-weight 900
@@ -78,8 +86,8 @@ button
 			content ', '
 
 .declarations
-	background-color rgb(230,200,200)
-	padding 0.5em
+	background-color rgb(230, 230, 250)
+	padding 0.2em 0.8em
 	margin-bottom 0.2em
 	position relative
 
