@@ -1,0 +1,24 @@
+{
+  "name": "scriptalizer",
+  "version": "0.0.0",
+  "description": "Syntax highlighting is twothousand and late. Syntax visualization is the real deal!",
+  "main": "source/index.js",
+  "scripts": {
+    "develop": "stylus --watch --out build source"
+  },
+  "keywords": [
+    "syntax",
+    "highlighting",
+    "syntax",
+    "visualizing"
+  ],
+  "author": "Adrian Sieber",
+  "license": "UNLICENSED",
+  "private": "true",
+  "dependencies": {
+    "esprima": "^2.7.0"
+  },
+  "devDependencies": {
+    "stylus": "^0.52.4"
+  }
+}

@@ -1,0 +1,88 @@
+* {
+	margin 0
+	padding 0
+	border 0
+}
+
+body
+	font-size 14px
+	font-family sans-serif
+
+form
+	display inline-block
+
+textarea
+	border 1px solid gray
+	display block
+	padding 1em
+	border-radius 0.4em
+	vertical-align top
+
+button
+	border-radius 0.5em
+	cursor pointer
+	padding 0.5em 1em
+	margin 2em
+
+#output
+	display inline-block
+	width 40em
+	vertical-align top
+
+	div,
+	section
+		border-radius 0.4em
+
+.code
+	font-family 'Source Code Pro', 'Courier New', monospace
+
+.string
+	font-family serif
+	color rgb(50,50,50)
+	font-size 1.2 em
+
+.number
+	color rgb(200,50,50)
+
+.label,
+.function::after
+	content: 'function'
+	font-size 0.8em
+	position absolute
+	top 0.4em
+	right 0.8em
+	color rgba(0,0,0,0.2)
+
+.function
+	background-color rgb(250,230,230)
+	padding 1em
+	margin-bottom 1em
+	position relative
+
+	header
+		margin-bottom 0.5em
+
+	.name
+		font-weight 900
+		margin-right 0.5em
+
+	.arguments
+		color gray
+		&::before
+			content '('
+		&::after
+			content ')'
+
+	.argument:not(:last-of-type)
+		&::after
+			content ', '
+
+.declarations
+	background-color rgb(230,200,200)
+	padding 0.5em
+	margin-bottom 0.2em
+	position relative
+
+.assignment
+	&::after
+		content: ' = '
