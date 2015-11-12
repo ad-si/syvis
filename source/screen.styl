@@ -1,3 +1,10 @@
+fontColor = black
+functionColor = rgb(250, 230, 230)
+declarationsColor = rgb(225, 235, 250)
+stringColor = rgb(100, 100, 100)
+numberColor = rgb(200, 50, 50)
+regexColor = rgb(250, 100, 0)
+
 * {
 	margin 0
 	padding 0
@@ -5,6 +12,7 @@
 }
 
 body
+	color fontColor
 	font-size 14px
 	font-family sans-serif
 
@@ -41,11 +49,11 @@ button
 
 .string
 	font-family serif
-	color rgb(50,50,50)
+	color stringColor
 	font-size 1.2 em
 
 .number
-	color rgb(200,50,50)
+	color numberColor
 
 .label,
 .function::after
@@ -57,7 +65,7 @@ button
 	color rgba(0, 0, 0, 0.2)
 
 .function
-	background-color rgb(250,230,230)
+	background-color functionColor
 	padding 1em
 	margin-bottom 1em
 	position relative
@@ -86,7 +94,7 @@ button
 			content ', '
 
 .declarations
-	background-color rgb(230, 230, 250)
+	background-color declarationsColor
 	padding 0.2em 0.8em
 	margin-bottom 0.2em
 	position relative
