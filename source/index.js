@@ -32,46 +32,65 @@ function walkTree (body) {
 		newBody = body
 	else if (Array.isArray(body.body))
 		newBody = body.body
-	else
+
+	if (newBody) {
+		return newBody.map(element => {
+
+			if (element.type === 'FunctionDeclaration') {
+				return ['section.code.function',
+					['header',
+						['span.name', element.id.name],
+						['span.arguments',
+							...element.params.map(param => {
+								return ['span.argument', param.name]
+							})
+						]
+					],
+					['div', walkTree(element.body)]
+				]
+			}
+
+			if (element.type === 'VariableDeclaration') {
+				return ['div.declarations',
+					['span.kind.label', element.kind],
+					...element.declarations.map(declaration => {
+						return ['p.declaration',
+							['span', declaration.id.name],
+							(declaration.init) ? ['span.assignment'] : true,
+							(declaration.init) ?
+								['span', String(declaration.init.value), {
+									class: (declaration.init.regex) ?
+										'regex' :
+										typeof declaration.init.value
+								}]
+								:
+								true
+						]
+					})
+				]
+			}
+			else if (element.type === 'ExpressionStatement') {
+				return visualizeExpressionStatement(element.expression)
+			}
+			// else if (element.type === 'ReturnStatement') {
+			// 	return visualizeReturnStatement(element.argument)
+			// }
+			else {
+				return ['p',
+					['span', element.type],
+					element.body ? walkTree(element.body) : true
+				]
+			}
+		})
+	}
+	else if (body.type === 'CallExpression') {
+	}
+	else if (body.type === 'ConditionalExpression') {
+	}
+	else {
+		console.error(body)
 		throw new Error(body)
-
-	return newBody.map(element => {
-
-		if (element.type === 'FunctionDeclaration') {
-			return ['section.code.function',
-				['header',
-					['span.name', element.id.name],
-					['span.arguments',
-						...element.params.map(param => {
-							return ['span.argument', param.name]
-						})
-					]
-				],
-				['div', walkTree(element.body)]
-			]
-		}
-
-		if (element.type === 'VariableDeclaration') {
-			return ['div.declarations',
-				['span.kind.label', element.kind],
-				...element.declarations.map(declaration => {
-					return ['p.declaration',
-						['span', declaration.id.name],
-						(declaration.init) ? ['span.assignment'] : true,
-						(declaration.init) ?
-							['span', declaration.init.value, {
-								class: typeof declaration.init.value
-							}]
-							:
-							true
-					]
-				})
-			]
-		}
-		else {
-			return ['p', 'test']
-		}
-	})
+	}
 }
 
 
