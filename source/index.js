@@ -24,6 +24,29 @@ function visualizeSyntax (value) {
 	}
 }
 
+function visualizeExpressionStatement (expression) {
+
+	if (expression.type === 'AssignmentExpression') {
+		return ['section.assignmentExpression',
+			['span', expression.left.name],
+			['span.assignment'],
+			['span', walkTree(expression.right)]
+		]
+	}
+	else {
+		return ['p', expression.type]
+	}
+}
+
+function visualizeReturnStatement (argument) {
+	if (argument) {
+		return walkTree(argument)
+	}
+	else {
+		return ['p', 'ERROR']
+	}
+}
+
 function walkTree (body) {
 
 	let newBody
