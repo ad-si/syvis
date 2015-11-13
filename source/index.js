@@ -28,9 +28,9 @@ function visualizeExpressionStatement (expression) {
 
 	if (expression.type === 'AssignmentExpression') {
 		return ['section.assignmentExpression',
-			['span', expression.left.name],
+			['span.left', walkTree(expression.left)],
 			['span.assignment'],
-			['span', walkTree(expression.right)]
+			['span.right', walkTree(expression.right)]
 		]
 	}
 	else {
@@ -62,10 +62,10 @@ function walkTree (body) {
 			if (element.type === 'FunctionDeclaration') {
 				return ['section.code.function',
 					['header',
-						['span.name', element.id.name],
+						['span.name', walkTree(element.id)],
 						['span.arguments',
 							...element.params.map(param => {
-								return ['span.argument', param.name]
+								return ['span.argument', walkTree(param)]
 							})
 						]
 					],
@@ -78,7 +78,7 @@ function walkTree (body) {
 					['span.kind.label', element.kind],
 					...element.declarations.map(declaration => {
 						return ['p.declaration',
-							['span', declaration.id.name],
+							['span', walkTree(declaration.id)],
 							(declaration.init) ? ['span.assignment'] : true,
 							(declaration.init) ?
 								['span', String(declaration.init.value), {
@@ -109,6 +109,9 @@ function walkTree (body) {
 	else if (body.type === 'CallExpression') {
 	}
 	else if (body.type === 'ConditionalExpression') {
+	}
+	else if (body.type === 'Identifier') {
+		return body.name
 	}
 	else {
 		console.error(body)
