@@ -1,7 +1,7 @@
 {
-  "name": "scriptalizer",
+  "name": "syvis",
   "version": "0.0.0",
-  "description": "Syntax highlighting is twothousand and late. Syntax visualization is the real deal!",
+  "description": "Forget syntax highlighting. Syntax visualization is the real deal!",
   "main": "source/index.js",
   "scripts": {
     "develop": "stylus --watch --out build source"

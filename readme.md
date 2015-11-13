@@ -1,4 +1,4 @@
-# Scriptalizer
+# Syvis
 
 Syntax visualization instead of syntax highlighting.
 
