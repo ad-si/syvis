@@ -63,20 +63,15 @@ function visualizeFunctionExpression (node) {
 function visualizeVariableDeclaration (node) {
 	return ['div.declarations',
 		['span.kind.label', node.kind],
-		...node.declarations.map(declaration => {
-			return ['p.declaration',
-				['span', walkTree(declaration.id)],
-				(declaration.init) ? ['span.assignment'] : true,
-				(declaration.init) ?
-					['span', String(declaration.init.value), {
-						class: (declaration.init.regex) ?
-							'regex' :
-							typeof declaration.init.value
-					}]
-					:
-					true
-			]
-		})
+		walkTree(node.declarations)
+	]
+}
+
+function visualizeVariableDeclarator (node) {
+	return ['p.declaration',
+		['span', walkTree(node.id)],
+		node.init ? ['span.assignment'] : true,
+		node.init ? ['span', walkTree(node.init)] : true
 	]
 }
 
@@ -129,6 +124,20 @@ function visualizeSyntax (value) {
 	}
 }
 
+function visualizeLiteral (node) {
+	return ['span',
+		node.regex ?
+			String(node.value) :
+			JSON
+				.stringify(node.value)
+				.replace(/^"(.*)"$/, '$1'),
+		{
+			class: (node.regex) ?
+				'regex' :
+				typeof node.value
+		}
+	]
+}
 
 function walkTree (node) {
 
@@ -136,6 +145,9 @@ function walkTree (node) {
 		return ''
 	}
 
+	if (Array.isArray(node)) {
+		return node.map(walkTree)
+	}
 	if (node.type === 'Program') {
 		return node.body.map(walkTree)
 	}
@@ -150,6 +162,9 @@ function walkTree (node) {
 	}
 	if (node.type === 'VariableDeclaration') {
 		return visualizeVariableDeclaration(node)
+	}
+	if (node.type === 'VariableDeclarator') {
+		return visualizeVariableDeclarator(node)
 	}
 	if (node.type === 'CallExpression') {
 		return visualizeCallExpression(node)
@@ -167,7 +182,7 @@ function walkTree (node) {
 		return node.name
 	}
 	if (node.type === 'Literal') {
-		return node.raw
+		return visualizeLiteral(node)
 	}
 	if (node.type === 'ExpressionStatement') {
 		return visualizeExpressionStatement(node.expression)
