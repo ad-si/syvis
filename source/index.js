@@ -25,7 +25,7 @@ function visualizeExpressionStatement (expression) {
 }
 
 function visualizeReturnStatement (argument) {
-	return ['span', 'return ',
+	return ['span.return',
 		walkTree(argument)
 	]
 }

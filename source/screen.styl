@@ -4,6 +4,14 @@ declarationsColor = rgb(225, 235, 250)
 stringColor = rgb(100, 100, 100)
 numberColor = rgb(200, 50, 50)
 regexColor = rgb(250, 100, 0)
+returnColor = rgb(200, 250, 220)
+
+labelStyling()
+	font-size 0.8em
+	position absolute
+	top 0.4em
+	right 0.8em
+	color rgba(0, 0, 0, 0.2)
 
 * {
 	margin 0
@@ -63,20 +71,19 @@ button
 .regex
 	color regexColor
 
-.label,
-.function::after
-	content: 'function'
-	font-size 0.8em
-	position absolute
-	top 0.4em
-	right 0.8em
-	color rgba(0, 0, 0, 0.2)
+.label
+	labelStyling()
 
 .function
 	background-color functionColor
+	border 1px solid darken(functionColor, 10%)
 	padding 1em
 	margin-bottom 1em
 	position relative
+
+	&::after
+		content: 'function'
+		labelStyling()
 
 	header
 		margin-bottom 0.3em
@@ -103,6 +110,7 @@ button
 
 .declarations
 	background-color declarationsColor
+	border 1px solid darken(declarationsColor, 10%)
 	padding 0.2em 0.8em
 	margin-bottom 1em
 	position relative
@@ -110,8 +118,18 @@ button
 .declarations + .declarations
 	margin-top -0.8em
 
-
-
 .assignment
 	&::after
 		content: ' = '
+
+.return
+	display inline-block
+	background-color returnColor
+	border 1px solid darken(returnColor, 40%)
+	padding 0.2em 5em 0.4em 0.8em
+	border-radius 0.4em
+	position relative
+
+	&::after
+		content: 'return'
+		labelStyling()
