@@ -10,20 +10,6 @@ visualizeButton.addEventListener('click', function () {
 	shaven([outputElement, shavenArray])
 })
 
-
-function visualizeSyntax (value) {
-	try {
-		let syntax = esprima.parse(value)
-
-		outputElement.innerHTML = ''
-
-		return walkTree(syntax.body)
-	}
-	catch (error) {
-		console.info(error.stack)
-	}
-}
-
 function visualizeExpressionStatement (expression) {
 
 	if (expression.type === 'AssignmentExpression') {
@@ -39,89 +25,164 @@ function visualizeExpressionStatement (expression) {
 }
 
 function visualizeReturnStatement (argument) {
-	if (argument) {
-		return walkTree(argument)
+	return ['span', 'return ',
+		walkTree(argument)
+	]
+}
+
+function visualizeBinaryExpression (node) {
+	return ['span.binaryExpression',
+		['span.left', walkTree(node.left)],
+		['span.operator', node.operator],
+		['span.right', walkTree(node.right)]
+	]
+}
+
+function visualizeFunctionDeclaration (node) {
+	return ['section.code.function',
+		['header',
+			['span.name', walkTree(node.id)],
+			['span.arguments',
+				...node.params.map(param => {
+					return ['span.argument', walkTree(param)]
+				})
+			]
+		],
+		['div', walkTree(node.body)]
+	]
+}
+
+function visualizeFunctionExpression (node) {
+	return ['span',
+		['span', ...node.params.map(walkTree)],
+		['span', ' => '],
+		['span', walkTree(node.body)]
+	]
+}
+
+function visualizeVariableDeclaration (node) {
+	return ['div.declarations',
+		['span.kind.label', node.kind],
+		...node.declarations.map(declaration => {
+			return ['p.declaration',
+				['span', walkTree(declaration.id)],
+				(declaration.init) ? ['span.assignment'] : true,
+				(declaration.init) ?
+					['span', String(declaration.init.value), {
+						class: (declaration.init.regex) ?
+							'regex' :
+							typeof declaration.init.value
+					}]
+					:
+					true
+			]
+		})
+	]
+}
+
+function visualizeCallExpression (node) {
+	return ['span',
+		['span', walkTree(node.callee)],
+		['span', '('],
+		['span', ...node.arguments.map(walkTree)],
+		['span', ')'],
+	]
+}
+
+function visualizeUnaryExpression (node) {
+	return ['span',
+		['span', node.operator],
+		['span', walkTree(node.argument)]
+	]
+}
+
+function visualizeMemberExpression (node) {
+	return ['span',
+		['span', walkTree(node.object)],
+		['span', node.computed ? '[' : ''],//['br']],
+		['span', node.computed ? false : '.'],
+		['span', walkTree(node.property)],
+		['span', node.computed ? ']' : false]
+	]
+}
+
+function visualizeConditionalExpression (node) {
+	return ['span',
+		['span', walkTree(node.test)],
+		['span', ' ? '],
+		['span', walkTree(node.consequent)],
+		['span', ' : '],
+		['span', walkTree(node.alternate)]
+	]
+}
+
+function visualizeSyntax (value) {
+	try {
+		let syntaxTree = esprima.parse(value)
+
+		outputElement.innerHTML = ''
+
+		return walkTree(syntaxTree)
 	}
-	else {
-		return ['p', 'ERROR']
+	catch (error) {
+		console.error(error.stack)
 	}
 }
 
-function walkTree (body) {
 
-	let newBody
+function walkTree (node) {
 
-	if (Array.isArray(body))
-		newBody = body
-	else if (Array.isArray(body.body))
-		newBody = body.body
+	if (!node) {
+		return ''
+	}
 
-	if (newBody) {
-		return newBody.map(element => {
+	if (node.type === 'Program') {
+		return node.body.map(walkTree)
+	}
+	if (node.type === 'BlockStatement') {
+		return node.body.map(walkTree)
+	}
+	if (node.type === 'FunctionDeclaration') {
+		return visualizeFunctionDeclaration(node)
+	}
+	if (node.type === 'FunctionExpression') {
+		return visualizeFunctionExpression(node)
+	}
+	if (node.type === 'VariableDeclaration') {
+		return visualizeVariableDeclaration(node)
+	}
+	if (node.type === 'CallExpression') {
+		return visualizeCallExpression(node)
+	}
+	if (node.type === 'MemberExpression') {
+		return visualizeMemberExpression(node)
+	}
+	if (node.type === 'BinaryExpression') {
+		return visualizeBinaryExpression(node)
+	}
+	if (node.type === 'ConditionalExpression') {
+		return visualizeConditionalExpression(node)
+	}
+	if (node.type === 'Identifier') {
+		return node.name
+	}
+	if (node.type === 'Literal') {
+		return node.raw
+	}
+	if (node.type === 'ExpressionStatement') {
+		return visualizeExpressionStatement(node.expression)
+	}
+	if (node.type === 'UnaryExpression') {
+		return visualizeUnaryExpression(node.argument)
+	}
+	if (node.type === 'ReturnStatement') {
+		return visualizeReturnStatement(node.argument)
+	}
 
-			if (element.type === 'FunctionDeclaration') {
-				return ['section.code.function',
-					['header',
-						['span.name', walkTree(element.id)],
-						['span.arguments',
-							...element.params.map(param => {
-								return ['span.argument', walkTree(param)]
-							})
-						]
-					],
-					['div', walkTree(element.body)]
-				]
-			}
-
-			if (element.type === 'VariableDeclaration') {
-				return ['div.declarations',
-					['span.kind.label', element.kind],
-					...element.declarations.map(declaration => {
-						return ['p.declaration',
-							['span', walkTree(declaration.id)],
-							(declaration.init) ? ['span.assignment'] : true,
-							(declaration.init) ?
-								['span', String(declaration.init.value), {
-									class: (declaration.init.regex) ?
-										'regex' :
-										typeof declaration.init.value
-								}]
-								:
-								true
-						]
-					})
-				]
-			}
-			else if (element.type === 'ExpressionStatement') {
-				return visualizeExpressionStatement(element.expression)
-			}
-			// else if (element.type === 'ReturnStatement') {
-			// 	return visualizeReturnStatement(element.argument)
-			// }
-			else {
-				return ['p',
-					['span', element.type],
-					element.body ? walkTree(element.body) : true
-				]
-			}
-		})
-	}
-	else if (body.type === 'CallExpression') {
-	}
-	else if (body.type === 'ConditionalExpression') {
-	}
-	else if (body.type === 'Identifier') {
-		return body.name
-	}
-	else {
-		console.error(body)
-		throw new Error(body)
-	}
+	throw new Error(JSON.stringify(node))
 }
 
 
 let shavenArray = visualizeSyntax(inputElement.value)
-
-console.log(shavenArray)
 
 shaven([outputElement, shavenArray])
