@@ -5,10 +5,18 @@ const visualizeButton = document.getElementById('visualizeButton')
 const outputElement = document.getElementById('output')
 
 
-visualizeButton.addEventListener('click', function () {
-	let shavenArray = visualizeSyntax(inputElement.value)
-	shaven([outputElement, shavenArray])
-})
+function ajax (url, callback) {
+	let request = new XMLHttpRequest()
+	request.open('GET', url)
+	request.onreadystatechange = () => {
+		if (request.readyState !== 4 || request.status !== 200)
+			return
+
+		callback(null, request.responseText)
+	}
+	request.send()
+}
+
 
 function visualizeExpressionStatement (expression) {
 
@@ -139,6 +147,7 @@ function visualizeLiteral (node) {
 	]
 }
 
+
 function walkTree (node) {
 
 	if (!node) {
@@ -198,6 +207,16 @@ function walkTree (node) {
 }
 
 
-let shavenArray = visualizeSyntax(inputElement.value)
+visualizeButton.addEventListener('click', function () {
+	let shavenArray = visualizeSyntax(inputElement.value)
+	shaven([outputElement, shavenArray])
+})
 
-shaven([outputElement, shavenArray])
+ajax('/filename', (filenameError, filename) => {
+	ajax('/' + filename, (fileContentError, fileContent) => {
+
+		let shavenArray = visualizeSyntax(fileContent)
+
+		shaven([outputElement, shavenArray])
+	})
+})
