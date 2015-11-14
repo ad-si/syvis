@@ -6,47 +6,50 @@
 		<link rel=stylesheet href=build/screen.css media=screen>
 	</head>
 	<body>
-		<h1>Syvis</h1>
-		<h2>The Syntax Visualizer</h2>
+		<main>
+			<h1>Syvis</h1>
+			<h2>The Syntax Visualizer</h2>
 
-		<form>
-			<textarea id=input name=input rows=30 cols=60>
-		function autoFormat(string1, string2) {
+			<form>
+				<textarea id=input name=input rows=30 cols=60>
+			function autoFormat(string1, string2) {
 
-			var numberOfTabs,
-				matches,
-				sortedString
+				var numberOfTabs,
+					matches,
+					sortedString
 
-			sortedString = string.split('\n').sort()
-			matches = sortedString[sortedString.length - 1].match(/^\s*/)
-			numberOfTabs = matches ? matches[0].length : 0
+				sortedString = string.split('\n').sort()
+				matches = sortedString[sortedString.length - 1].match(/^\s*/)
+				numberOfTabs = matches ? matches[0].length : 0
 
-			return string
-				.split('\n')
-				.map(function (line) {
-					return line.substr(numberOfTabs)
-				})
-				.join('\n')
-				.slice(0, -1)
-		}
+				return string
+					.split('\n')
+					.map(function (line) {
+						return line.substr(numberOfTabs)
+					})
+					.join('\n')
+					.slice(0, -1)
+			}
 
-		function test (x) {
-			let a = 'test'
-			let b = 1234
-			let c = /.*\.png$/gi
+			function test (x) {
+				let a = 'test'
+				let b = 1234
+				let c = /.*\.png$/gi
 
-			return x * x
-		}
+				return x * x
+			}
 
-			</textarea>
-			<button id=visualizeButton type=button>Visualize</button>
-		</form>
+				</textarea>
+				<button id=visualizeButton type=button>Visualize</button>
+			</form>
 
-		<div id=output></div>
+			<div id=output></div>
+		</main>
 
-		<script src=https://cdn.rawgit.com/jquery/esprima/2.7.0/esprima.js>
-		</script>
-		<script src=https://rawgit.com/adius/shaven/gh-pages/shaven.js></script>
+		<!-- <script src=https://cdn.rawgit.com/jquery/esprima/2.7.0/esprima.js> -->
+		<script src=lib/esprima.js></script>
+		<!-- <script src=https://rawgit.com/adius/shaven/gh-pages/shaven.js></script> -->
+		<script src=lib/shaven.js></script>
 		<script src=source/index.js></script>
 	</body>
 </html>
