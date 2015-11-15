@@ -119,13 +119,13 @@ function visualizeConditionalExpression (node) {
 	]
 }
 
-function visualizeSyntax (value) {
+function visualizeSyntax (fileData) {
 	try {
-		let syntaxTree = esprima.parse(value)
+		let syntaxTree = esprima.parse(fileData.content)
 
 		outputElement.innerHTML = ''
 
-		return walkTree(syntaxTree)
+		return walkTree(syntaxTree, fileData)
 	}
 	catch (error) {
 		console.error(error.stack)
@@ -148,7 +148,7 @@ function visualizeLiteral (node) {
 }
 
 
-function walkTree (node) {
+function walkTree (node, fileData) {
 
 	if (!node) {
 		return ''
@@ -158,7 +158,10 @@ function walkTree (node) {
 		return node.map(walkTree)
 	}
 	if (node.type === 'Program') {
-		return node.body.map(walkTree)
+		return ['section.file',
+			['span.label', fileData.name],
+			...node.body.map(walkTree)
+		]
 	}
 	if (node.type === 'BlockStatement') {
 		return node.body.map(walkTree)
@@ -215,7 +218,10 @@ visualizeButton.addEventListener('click', function () {
 ajax('/filename', (filenameError, filename) => {
 	ajax('/' + filename, (fileContentError, fileContent) => {
 
-		let shavenArray = visualizeSyntax(fileContent)
+		let shavenArray = visualizeSyntax({
+			name: filename,
+			content: fileContent
+		})
 
 		shaven([outputElement, shavenArray])
 	})

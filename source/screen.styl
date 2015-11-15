@@ -5,6 +5,7 @@ stringColor = rgb(100, 100, 100)
 numberColor = rgb(200, 50, 50)
 regexColor = rgb(250, 100, 0)
 returnColor = rgb(200, 250, 220)
+fileColor = rgb(200, 200, 200)
 
 labelStyling()
 	font-size 0.8em
@@ -26,7 +27,7 @@ body
 
 main
 	width 50em
-	padding 2em 1em
+	padding 2em 1em 5em 1em
 	margin 0 auto
 
 h2
@@ -48,11 +49,12 @@ button
 	padding 0.5em 1em
 	margin 2em
 
-#output
-	display inline-block
+.file
+	border 1px solid fileColor
+	border-radius 0.5em
+	padding 1em 1em
+	position relative
 	font-family 'Source Code Pro', 'Courier New', monospace
-	width 40em
-	vertical-align top
 
 	div,
 	section
@@ -61,7 +63,6 @@ button
 	> div,
 	> section
 		margin-bottom 1em
-
 
 .string
 	font-family serif
