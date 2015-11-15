@@ -1,8 +1,15 @@
 'use strict'
 
+const fs = require('fs')
+const path = require('path')
+
 const inputElement = document.getElementById('input')
 const visualizeButton = document.getElementById('visualizeButton')
 const outputElement = document.getElementById('output')
+
+let visualizers = {}
+
+let test = fs.readdirSync(__dirname)
 
 
 function ajax (url, callback) {
@@ -15,21 +22,6 @@ function ajax (url, callback) {
 		callback(null, request.responseText)
 	}
 	request.send()
-}
-
-
-function visualizeExpressionStatement (expression) {
-
-	if (expression.type === 'AssignmentExpression') {
-		return ['section.assignmentExpression',
-			['span.left', walkTree(expression.left)],
-			['span.assignment'],
-			['span.right', walkTree(expression.right)]
-		]
-	}
-	else {
-		return ['p', expression.type]
-	}
 }
 
 function visualizeReturnStatement (argument) {
@@ -197,7 +189,7 @@ function walkTree (node, fileData) {
 		return visualizeLiteral(node)
 	}
 	if (node.type === 'ExpressionStatement') {
-		return visualizeExpressionStatement(node.expression)
+		return visualizers['ExpressionStatement'](node.expression)
 	}
 	if (node.type === 'UnaryExpression') {
 		return visualizeUnaryExpression(node.argument)
@@ -205,10 +197,26 @@ function walkTree (node, fileData) {
 	if (node.type === 'ReturnStatement') {
 		return visualizeReturnStatement(node.argument)
 	}
+	else {
+		return ['p', node.type]
+	}
 
 	throw new Error(JSON.stringify(node))
 }
 
+
+let visualizerNames = fs.readdirSync(path.join(__dirname, 'visualizers'))
+
+visualizerNames.forEach(name => {
+
+	let nameInCamelCase = name
+		.replace('.js', '')
+		.split('-')
+		.map(word => word[0].toUpperCase() + word.substr(1))
+		.join('')
+
+	visualizers[nameInCamelCase] = require(name)
+})
 
 visualizeButton.addEventListener('click', function () {
 	let shavenArray = visualizeSyntax(inputElement.value)

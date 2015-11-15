@@ -17,11 +17,11 @@
   "license": "UNLICENSED",
   "private": "true",
   "dependencies": {
+    "brfs": "^1.4.1",
+    "browserify-middleware": "^7.0.0",
     "esprima": "^2.7.0",
     "express": "^4.13.3",
-    "stylus": "^0.52.4"
-  },
-  "devDependencies": {
+    "serve-favicon": "^2.3.0",
     "stylus": "^0.52.4"
   }
 }
