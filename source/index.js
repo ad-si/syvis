@@ -3,7 +3,10 @@
 const fs = require('fs')
 const path = require('path')
 
-const walkTree = require('walkTree')
+//const shaven = require('shaven')
+const esprima = require('esprima')
+
+const walkTree = require('../walkTree')
 
 const inputElement = document.getElementById('input')
 const visualizeButton = document.getElementById('visualizeButton')

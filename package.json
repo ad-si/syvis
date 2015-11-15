@@ -5,7 +5,8 @@
   "main": "source/index.js",
   "bin": "source/cli.js",
   "scripts": {
-    "develop": "stylus --watch --out build source"
+    "develop": "stylus --watch --out build source",
+    "postinstall": "cp node_modules/shaven/shaven.js public"
   },
   "keywords": [
     "syntax",

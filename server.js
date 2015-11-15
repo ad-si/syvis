@@ -23,7 +23,7 @@ let mainModule = {}
 mainModule[path.join(__dirname, 'source', 'index.js')] = {run: true}
 
 let walkTreeModule = {
-	[path.join(__dirname, 'source', 'walkTree.js')]: {expose: 'walkTree'}
+	[path.join(__dirname, 'source', 'walkTree.js')]: {expose: '../walkTree'}
 }
 
 
