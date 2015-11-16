@@ -1,7 +1,7 @@
 fontColor = black
 functionColor = rgb(250, 230, 230)
 declarationsColor = rgb(225, 235, 250)
-stringColor = rgb(100, 100, 100)
+stringColor = rgb(100, 160, 120)
 numberColor = rgb(200, 50, 50)
 regexColor = rgb(250, 100, 0)
 returnColor = rgb(200, 250, 220)
@@ -33,6 +33,9 @@ main
 h2
 	margin-bottom 1em
 
+p
+	margin-bottom 0.8em
+
 form
 	display inline-block
 
@@ -56,18 +59,10 @@ button
 	position relative
 	font-family 'Source Code Pro', 'Courier New', monospace
 
-	div,
-	section
-		border-radius 0.4em
-
-	> div,
-	> section
-		margin-bottom 1em
-
 .string
-	font-family serif
+	font-style italic
+	font-weight 700
 	color stringColor
-	font-size 1.2 em
 
 .number
 	color numberColor
@@ -141,3 +136,24 @@ button
 	&::after
 		content: 'return'
 		labelStyling()
+
+.comment
+	border-left 4px solid rgb(240, 240, 240)
+	padding-left 1em
+	color rgb(180, 180, 180)
+	font-size 0.9em
+
+.commentedSection
+	margin-top 2em
+
+.label + .commentedSection
+	margin-top 0 !important
+
+.withTrailingComment
+	p
+		display inline-block
+		margin-right 1em
+
+	.trailing.comment
+		border-width 2px
+		padding-left 0.5em

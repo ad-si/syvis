@@ -31,7 +31,11 @@ function ajax (url, callback) {
 
 function visualizeSyntax (fileData) {
 	try {
-		let syntaxTree = esprima.parse(fileData.content)
+		let syntaxTree = esprima.parse(fileData.content, {
+			loc: true,
+			range: false,
+			attachComment: true
+		})
 
 		outputElement.innerHTML = ''
 
