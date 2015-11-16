@@ -8,8 +8,9 @@ module.exports = (node) => [
 			.stringify(node.value)
 			.replace(/^"(.*)"$/, '$1'),
 	{
-		class: (node.regex) ?
-			'regex' :
-			typeof node.value
+		class: 'literal' +
+			(node.regex ? ' regex' :  ' ' + typeof node.value) +
+			(node.value === true ? ' true' : '') +
+			(node.value === false ? ' false' : '')
 	}
 ]

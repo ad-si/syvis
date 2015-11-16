@@ -155,6 +155,18 @@ button
 		padding-left 0.5em
 
 
+.assignment,
+.infinity,
+.true,
+.false,
+.equal,
+.bitshift
+	color transparent
+	margin 0 0.2em
+	width 0.8em
+	display inline-block
+	&::before
+		color black
 
 
 .assignment
@@ -162,3 +174,41 @@ button
 	font-size 0.8em
 	&::before
 		content ':='
+
+.infinity
+	font-size 1.4em
+	vertical-align -10%
+	&::before
+		content '∞'
+
+.true::before
+	color green
+	content '✔︎'
+.false::before
+	color red
+	content '✘'
+
+.equal::before
+	content '='
+.not.equal::before
+	content '≠'
+
+.strict.equal::before
+	content '≡'
+	font-size 1em
+.not.strict.equal::before
+	content '≢'
+	font-size 1.6em
+
+.bitshift.left::before
+	content '≪'
+.bitshift.right::before
+	content '≫'
+
+.smaller.equal::before
+	content '≤'
+	font-size 1.2em
+.larger.equal::before
+	content '≥'
+	font-size 1.2em
+//:=
