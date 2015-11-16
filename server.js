@@ -15,8 +15,8 @@ const port = 3000
 
 app.use(serveFavicon(path.resolve(__dirname, 'images', 'favicon.ico')))
 app.use(stylus.middleware({
-	src: __dirname,
-	dest: path.join(__dirname, '../public')
+	src: path.join(__dirname, 'source'),
+	dest: path.join(__dirname, 'public')
 }))
 
 let mainModule = {}
