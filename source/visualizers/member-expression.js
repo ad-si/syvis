@@ -1,7 +1,7 @@
 const walkTree = require('../walkTree')
 
 module.exports = (node) => [
-	'span',
+	'span.memberExpression',
 	['span', walkTree(node.object)],
 	['span', node.computed ? '[' : ''],//['br']],
 	['span', node.computed ? false : '.'],

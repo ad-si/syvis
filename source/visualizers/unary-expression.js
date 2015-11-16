@@ -1,7 +1,7 @@
 const walkTree = require('../walkTree')
 
 module.exports = (node) => [
-	'span',
+	'span.unaryExpression',
 	['span', node.operator],
 	['span', walkTree(node.argument)]
 ]

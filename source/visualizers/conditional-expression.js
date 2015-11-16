@@ -1,7 +1,7 @@
 const walkTree = require('../walkTree')
 
 module.exports = (node) => [
-	'span',
+	'span.conditionalExpression',
 	['span', walkTree(node.test)],
 	['span', ' ? '],
 	['span', walkTree(node.consequent)],
