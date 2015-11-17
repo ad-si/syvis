@@ -1,14 +1,15 @@
+'use strict'
+
 const walkTree = require('../walkTree')
 
-module.exports = (node) => [
-	'section.code.function',
-	['header',
-		['span.name', walkTree(node.id)],
-		['span.arguments',
-			...node.params.map(param => {
-				return ['span.argument', walkTree(param)]
-			})
-		]
-	],
-	['div', walkTree(node.body)]
-]
+module.exports = (node) => {
+
+	return [
+		'section.code.function',
+		['header',
+			['span.name', walkTree(node.id)],
+			['span.arguments', walkTree(node.params)]
+		],
+		['div', node.body ? walkTree(node.body) : null]
+	]
+}
