@@ -57,10 +57,11 @@ app.use('/', express.static('public'))
 
 
 app.get('/filename', (request, response) => {
-	response.send(process.argv[2])
+	response.send(path.resolve(process.argv[2]))
 })
 
-app.get('/' + process.argv[2], (request, response) => {
+app.get(path.resolve(process.argv[2]), (request, response) => {
+
 	fs
 		.createReadStream(path.resolve(process.argv[2]))
 		.pipe(response)

@@ -48,7 +48,7 @@ function visualizeSyntax (fileData) {
 
 
 ajax('/filename', (filenameError, filename) => {
-	ajax('/' + filename, (fileContentError, fileContent) => {
+	ajax(filename, (fileContentError, fileContent) => {
 
 		let shavenArray = visualizeSyntax({
 			name: filename,
