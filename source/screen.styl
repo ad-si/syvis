@@ -183,7 +183,7 @@ button
 	width 1.5em
 	font-size 0.8em
 	&::before
-		content ':='
+		content '='
 
 .infinity
 	font-size 1.4em
@@ -198,14 +198,20 @@ button
 	color red
 	content '✘'
 
-.equal::before
-	content '='
+span[class='operator equal']
+	width 1.5em
+	&::before
+		color orange
+		content 'is'
 .not.equal::before
 	content '≠'
 
-.strict.equal::before
-	content '≡'
-	font-size 1em
+span[class='operator strict equal']
+	width 6.5em
+	&::before
+		color orange
+		content 'is exactly'
+		white-space nowrap
 .not.strict.equal::before
 	content '≢'
 	font-size 1.6em
@@ -221,4 +227,3 @@ button
 .larger.equal::before
 	content '≥'
 	font-size 1.2em
-//:=
