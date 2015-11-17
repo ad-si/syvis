@@ -87,7 +87,7 @@ function walkTree (node, fileData) {
 	}
 
 
-	if (Array.isArray(node)) {
+	if (Array.isArray(node) && node.length) {
 		return node.map(walkTree)
 	}
 	if (node.type === 'Program') {
@@ -106,15 +106,21 @@ function walkTree (node, fileData) {
 		]
 	}
 	if (node.type === 'BlockStatement') {
-		return node.body.map(walkTree)
+		if (node.body.length)
+			return node.body.map(walkTree)
+		else
+			return ''
 	}
 
 
 	if (visualizers[node.type]) {
 		return require(visualizers[node.type])(node)
 	}
+	else {
+		return ['p.error', node.type]
+	}
 
-	throw new Error(JSON.stringify(node))
+	//throw new Error(JSON.stringify(node))
 }
 
 module.exports = walkTree
