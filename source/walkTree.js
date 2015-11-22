@@ -91,7 +91,14 @@ function walkTree (node, fileData) {
 		return node.map(walkTree)
 	}
 	if (node.type === 'Program') {
+
+		let shebang = ''
+
+		if (fileData.shebang)
+			shebang = ['div.shebang', fileData.shebang]
+
 		return ['section.file',
+			shebang,
 			['span.label', fileData ? fileData.name : false],
 			...node.body.map(walkTree),
 			Array.isArray(node.comments) ?

@@ -30,20 +30,27 @@ function ajax (url, callback) {
 }
 
 function visualizeSyntax (fileData) {
-	try {
-		let syntaxTree = esprima.parse(fileData.content, {
-			loc: true,
-			range: false,
-			attachComment: true
-		})
 
-		outputElement.innerHTML = ''
+	let output = []
+	let indexOfFirstNewline = fileData.content.indexOf('\n')
 
-		return walkTree(syntaxTree, fileData)
+	if (fileData.content.startsWith('#!')) {
+		fileData.shebang = fileData.content.slice(0, indexOfFirstNewline)
+		fileData.content = fileData.content.slice(indexOfFirstNewline)
 	}
-	catch (error) {
-		console.error(error.stack)
-	}
+
+	let syntaxTree = esprima.parse(fileData.content, {
+		loc: true,
+		range: false,
+		attachComment: true,
+		tolerant: true
+	})
+
+	outputElement.innerHTML = ''
+
+	output.push(walkTree(syntaxTree, fileData))
+
+	return output
 }
 
 
