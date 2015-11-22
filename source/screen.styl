@@ -107,6 +107,16 @@ button
 		&::after
 			content ', '
 
+.functionExpression
+	.params
+		&::before
+			content '('
+		&::after
+			content ')'
+		& > span:not(:last-of-type)
+			&::after
+				content ', '
+
 .declarations
 	width max-content
 	background-color declarationsColor
