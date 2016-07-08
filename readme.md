@@ -28,3 +28,14 @@ npm start -- path/to/javascript/file.js
 [Parsing Problem]: http://joshondesign.com/2016/06/13/the_parsing_problem
 [Webassembly
 ]: http://sitepoint.com/future-programming-webassembly-life-after-javascript
+
+
+### Mobile Coding
+
+Links on how to code on mobile/touch devices
+
+- [Working Copy] - A Git client for iOS that clones, edits, commits, pushes, …
+- [Ask HN: Who writes code on smartphones?][Ask HN]
+
+[Working Copy]: http://workingcopyapp.com
+[Ask HN]: https://news.ycombinator.com/item?id=11697029
