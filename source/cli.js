@@ -9,18 +9,19 @@ const walkTree = require('./walkTree')
 
 let internalBuffer = ''
 
+function transform (chunk, encoding, done) {
+  internalBuffer = internalBuffer.concat(chunk.toString())
+  this.push('')
+  done()
+}
+
+function flush (done) {
+  let ast = esprima.parse(internalBuffer)
+  this.push(JSON.stringify(walkTree(ast), null, 2))
+  this.push(shaven(walkTree(ast))[0])
+  done()
+}
+
 process.stdin
-	.pipe(new stream.Transform({
-		transform: function (chunk, encoding, done) {
-			internalBuffer = internalBuffer.concat(chunk.toString())
-			this.push('')
-			done()
-		},
-		flush: function (done) {
-			let ast = esprima.parse(internalBuffer)
-			this.push(JSON.stringify(walkTree(ast), null, 2))
-			this.push(shaven(walkTree(ast))[0])
-			done()
-		}
-	}))
-	.pipe(process.stdout)
+  .pipe(new stream.Transform({transform, flush}))
+  .pipe(process.stdout)
