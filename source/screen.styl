@@ -8,173 +8,173 @@ returnColor = rgb(200, 250, 220)
 fileColor = rgb(200, 200, 200)
 
 labelStyling()
-	font-size 0.8em
-	position absolute
-	top 0.4em
-	right 0.8em
-	color rgba(0, 0, 0, 0.2)
+  font-size 0.8em
+  position absolute
+  top 0.4em
+  right 0.8em
+  color rgba(0, 0, 0, 0.2)
 
 * {
-	margin 0
-	padding 0
-	border 0
+  margin 0
+  padding 0
+  border 0
 }
 
 body
-	color fontColor
-	font-size 13px
-	font-family sans-serif
+  color fontColor
+  font-size 13px
+  font-family sans-serif
 
 main
-	width 50em
-	padding 2em 1em 5em 1em
-	margin 0 auto
+  width 50em
+  padding 2em 1em 5em 1em
+  margin 0 auto
 
 h2
-	margin-bottom 1em
+  margin-bottom 1em
 
 p
-	margin-bottom 0.5em
+  margin-bottom 0.5em
 
 form
-	display inline-block
+  display inline-block
 
 textarea
-	border 1px solid gray
-	display none //block
-	padding 1em
-	border-radius 0.4em
-	vertical-align top
+  border 1px solid gray
+  display none //block
+  padding 1em
+  border-radius 0.4em
+  vertical-align top
 
 button
-	border-radius 0.5em
-	cursor pointer
-	padding 0.5em 1em
-	margin 2em
+  border-radius 0.5em
+  cursor pointer
+  padding 0.5em 1em
+  margin 2em
 
 .file
-	border 1px solid fileColor
-	border-radius 0.5em
-	padding 1em 1em
-	position relative
-	font-family 'Source Code Pro', 'Courier New', monospace
+  border 1px solid fileColor
+  border-radius 0.5em
+  padding 1em 1em
+  position relative
+  font-family 'Source Code Pro', 'Courier New', monospace
 
 .string
-	font-style italic
-	font-weight 700
-	color stringColor
+  font-style italic
+  font-weight 700
+  color stringColor
 
 .number
-	color numberColor
+  color numberColor
 
 .regex
-	color regexColor
+  color regexColor
 
 .label
-	labelStyling()
+  labelStyling()
 
 .function
-	background-color functionColor
-	border 1px solid darken(functionColor, 10%)
-	padding 1em
-	margin-bottom 1em
-	position relative
+  background-color functionColor
+  border 1px solid darken(functionColor, 10%)
+  padding 1em
+  margin-bottom 1em
+  position relative
 
-	&::after
-		content: 'function'
-		labelStyling()
+  &::after
+    content: 'function'
+    labelStyling()
 
-	header
-		margin-bottom 0.3em
-		padding-bottom 0.2em
-		border-bottom 1px solid rgba(0, 0, 0, 0.1)
+  header
+    margin-bottom 0.3em
+    padding-bottom 0.2em
+    border-bottom 1px solid rgba(0, 0, 0, 0.1)
 
-	> div
-		// margin 0.5em
+  > div
+    // margin 0.5em
 
-	.name
-		font-weight 900
-		margin-right 0.5em
+  .name
+    font-weight 900
+    margin-right 0.5em
 
-	.arguments
-		color gray
-		&::before
-			content '('
-		&::after
-			content ')'
+  .arguments
+    color gray
+    &::before
+      content '('
+    &::after
+      content ')'
 
-	.argument:not(:last-of-type)
-		&::after
-			content ', '
+  .argument:not(:last-of-type)
+    &::after
+      content ', '
 
 .functionExpression
-	.params
-		&::before
-			content '('
-		&::after
-			content ')'
-		& > span:not(:last-of-type)
-			&::after
-				content ', '
+  .params
+    &::before
+      content '('
+    &::after
+      content ')'
+    & > span:not(:last-of-type)
+      &::after
+        content ', '
 
 .declarations
-	width max-content
-	background-color declarationsColor
-	border 1px solid darken(declarationsColor, 5%)
-	border-radius 3px
-	padding 0.2em 4em 0.2em 0.8em
-	margin-bottom 1em
-	position relative
+  width max-content
+  background-color declarationsColor
+  border 1px solid darken(declarationsColor, 5%)
+  border-radius 3px
+  padding 0.2em 4em 0.2em 0.8em
+  margin-bottom 1em
+  position relative
 
 .declarations + .declarations
-	margin-top -0.8em
+  margin-top -0.8em
 
 .operator
-	margin 0 0.4em
+  margin 0 0.4em
 
 .return
-	display inline-block
-	background-color returnColor
-	border 1px solid darken(returnColor, 20%)
-	padding 0.2em 5em 0.4em 0.8em
-	border-radius 0.4em
-	position relative
+  display inline-block
+  background-color returnColor
+  border 1px solid darken(returnColor, 20%)
+  padding 0.2em 5em 0.4em 0.8em
+  border-radius 0.4em
+  position relative
 
-	&::after
-		content: 'return'
-		labelStyling()
+  &::after
+    content: 'return'
+    labelStyling()
 
 .comment
-	border-left 4px solid rgb(240, 240, 240)
-	padding-left 1em
-	color rgb(180, 180, 180)
-	font-size 0.9em
+  border-left 4px solid rgb(240, 240, 240)
+  padding-left 1em
+  color rgb(180, 180, 180)
+  font-size 0.9em
 
 .commentedSection
-	margin-top 2em
+  margin-top 2em
 
 .label + .commentedSection
-	margin-top 0 !important
+  margin-top 0 !important
 
 .withTrailingComment
-	p
-		display inline-block
-		margin-right 1em
+  p
+    display inline-block
+    margin-right 1em
 
-	.trailing.comment
-		border-width 2px
-		padding-left 0.5em
+  .trailing.comment
+    border-width 2px
+    padding-left 0.5em
 
 .arrayElement
-	border-collapse collapse
-	border 1px solid rgba(0,0,0,0.2)
-	margin-right -1px
-	padding 0 0.5em
+  border-collapse collapse
+  border 1px solid rgba(0,0,0,0.2)
+  margin-right -1px
+  padding 0 0.5em
 
 .openingBracket,
 .closingBracket,
 .arraySeparator
-	color transparent
+  color transparent
 
 .assignment,
 .infinity,
@@ -182,74 +182,74 @@ button
 .false,
 .equal,
 .bitshift
-	color transparent
-	margin 0 0.2em
-	width 0.8em
-	display inline-block
-	&::before
-		color black
+  color transparent
+  margin 0 0.2em
+  width 0.8em
+  display inline-block
+  &::before
+    color black
 
 
 .assignment
-	width 1.5em
-	font-size 0.8em
-	&::before
-		content '='
+  width 1.5em
+  font-size 0.8em
+  &::before
+    content '='
 
 .infinity
-	font-size 1.4em
-	vertical-align -10%
-	&::before
-		content '∞'
+  font-size 1.4em
+  vertical-align -10%
+  &::before
+    content '∞'
 
 .true::before
-	color green
-	content '✔︎'
+  color green
+  content '✔︎'
 .false::before
-	color red
-	content '✘'
+  color red
+  content '✘'
 
 span[class='operator equal']
-	width 1.5em
-	&::before
-		color orange
-		content 'is'
+  width 1.5em
+  &::before
+    color orange
+    content 'is'
 .not.equal::before
-	content '≠'
+  content '≠'
 
 span[class='operator strict equal']
-	width 6.5em
-	&::before
-		color orange
-		content 'is exactly'
-		white-space nowrap
+  width 6.5em
+  &::before
+    color orange
+    content 'is exactly'
+    white-space nowrap
 .not.strict.equal::before
-	content '≢'
-	font-size 1.6em
+  content '≢'
+  font-size 1.6em
 
 .bitshift.left::before
-	content '≪'
+  content '≪'
 .bitshift.right::before
-	content '≫'
+  content '≫'
 
 .smaller.equal::before
-	content '≤'
-	font-size 1.2em
+  content '≤'
+  font-size 1.2em
 .larger.equal::before
-	content '≥'
-	font-size 1.2em
+  content '≥'
+  font-size 1.2em
 
 .error
-	color red
-	background-color rgb(250,200,200)
-	border 1px solid rgb(230,180,180)
-	border-radius 3px
-	padding 0.2em 1em
+  color red
+  background-color rgb(250,200,200)
+  border 1px solid rgb(230,180,180)
+  border-radius 3px
+  padding 0.2em 1em
 
 .shebang
-	color gray
-	margin-bottom 1em
+  color gray
+  margin-bottom 1em
 
 // .thisExpression
-// 	&::after
-// 		content 'this'
+//  &::after
+//    content 'this'

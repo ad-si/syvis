@@ -10,124 +10,124 @@ let visualizers = {}
 
 
 function commentTemplate (comment) {
-	return [
-		'p&',
-		{class: 'comment ' + comment.type.toLowerCase()},
-		comment.value.replace(/\n/g, '<br>')
-	]
+  return [
+    'p&',
+    {class: 'comment ' + comment.type.toLowerCase()},
+    comment.value.replace(/\n/g, '<br>')
+  ]
 }
 
 visualizerNames
-	.filter(name => /.+\.js$/i.test(name))
-	.forEach(name => {
+  .filter(name => /.+\.js$/i.test(name))
+  .forEach(name => {
 
-		let nameInCamelCase = name
-			.replace('.js', '')
-			.split('-')
-			.map(word => word[0].toUpperCase() + word.substr(1))
-			.join('')
+    let nameInCamelCase = name
+      .replace('.js', '')
+      .split('-')
+      .map(word => word[0].toUpperCase() + word.substr(1))
+      .join('')
 
-		visualizers[nameInCamelCase] = path.join(visualizersPath, name)
-	})
+    visualizers[nameInCamelCase] = path.join(visualizersPath, name)
+  })
 
 
 function walkTree (node, fileData) {
 
-	if (!node) {
-		return ''
-	}
+  if (!node) {
+    return ''
+  }
 
-	if (Array.isArray(node.leadingComments)) {
-		if (node.leadingComments.length) {
-			if (node.leadingComments.some(comment => comment.value)) {
-				let comments = node.leadingComments
-					.map(comment => {
-						if (comment.value !== null) {
-							let commentArray = commentTemplate(comment)
-							comment.value = null
-							return commentArray
-						}
-					})
+  if (Array.isArray(node.leadingComments)) {
+    if (node.leadingComments.length) {
+      if (node.leadingComments.some(comment => comment.value)) {
+        let comments = node.leadingComments
+          .map(comment => {
+            if (comment.value !== null) {
+              let commentArray = commentTemplate(comment)
+              comment.value = null
+              return commentArray
+            }
+          })
 
-				return ['div.commentedSection',
-					['div.leadingComments', ...comments],
-					walkTree(node)
-				]
-			}
-		}
-		else {
-			delete node.leadingComments
-			return walkTree(node)
-		}
-	}
+        return ['div.commentedSection',
+          ['div.leadingComments', ...comments],
+          walkTree(node)
+        ]
+      }
+    }
+    else {
+      delete node.leadingComments
+      return walkTree(node)
+    }
+  }
 
-	if (Array.isArray(node.trailingComments)) {
-		if (node.loc.end.line === node.trailingComments[0].loc.end.line) {
-			if (
-				node.trailingComments[0].value !== null &&
-				node.trailingComments[0].type === 'Line'
-			) {
-				let commentArray = [
-					'span.trailing.comment',
-					node.trailingComments[0].value.trim()
-				]
+  if (Array.isArray(node.trailingComments)) {
+    if (node.loc.end.line === node.trailingComments[0].loc.end.line) {
+      if (
+        node.trailingComments[0].value !== null &&
+        node.trailingComments[0].type === 'Line'
+      ) {
+        let commentArray = [
+          'span.trailing.comment',
+          node.trailingComments[0].value.trim()
+        ]
 
-				node.trailingComments[0].value = null
+        node.trailingComments[0].value = null
 
-				return ['div.withTrailingComment',
-					walkTree(node),
-					commentArray
-				]
-			}
-		}
-		else {
-			node.trailingComments = 'null'
-			return walkTree(node)
-		}
-	}
-
-
-	if (Array.isArray(node) && node.length) {
-		return node.map(walkTree)
-	}
-	if (node.type === 'Program') {
-
-		let shebang = ''
-
-		if (fileData.shebang)
-			shebang = ['div.shebang', fileData.shebang]
-
-		return ['section.file',
-			shebang,
-			['span.label', fileData ? fileData.name : false],
-			...node.body.map(walkTree),
-			Array.isArray(node.comments) ?
-				['div.comments',
-					...node.comments
-						.filter(comment => comment.value)
-						.map(comment => {
-							return commentTemplate(comment)
-						})
-				] :
-				true
-		]
-	}
-	if (node.type === 'BlockStatement') {
-		if (node.body.length)
-			return node.body.map(walkTree)
-		else
-			return ''
-	}
+        return ['div.withTrailingComment',
+          walkTree(node),
+          commentArray
+        ]
+      }
+    }
+    else {
+      node.trailingComments = 'null'
+      return walkTree(node)
+    }
+  }
 
 
-	if (visualizers[node.type]) {
-		return require(visualizers[node.type])(node)
-	}
-	else {
-		return ['p.error', node.type]
-	}
+  if (Array.isArray(node) && node.length) {
+    return node.map(walkTree)
+  }
+  if (node.type === 'Program') {
 
-	//throw new Error(JSON.stringify(node))
+    let shebang = ''
+
+    if (fileData.shebang)
+      shebang = ['div.shebang', fileData.shebang]
+
+    return ['section.file',
+      shebang,
+      ['span.label', fileData ? fileData.name : false],
+      ...node.body.map(walkTree),
+      Array.isArray(node.comments) ?
+        ['div.comments',
+          ...node.comments
+            .filter(comment => comment.value)
+            .map(comment => {
+              return commentTemplate(comment)
+            })
+        ] :
+        true
+    ]
+  }
+  if (node.type === 'BlockStatement') {
+    if (node.body.length)
+      return node.body.map(walkTree)
+    else
+      return ''
+  }
+
+
+  if (visualizers[node.type]) {
+    return require(visualizers[node.type])(node)
+  }
+  else {
+    return ['p.error', node.type]
+  }
+
+  //throw new Error(JSON.stringify(node))
 }
 
 module.exports = walkTree

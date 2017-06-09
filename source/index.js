@@ -18,55 +18,55 @@ let test = fs.readdirSync(__dirname)
 
 
 function ajax (url, callback) {
-	let request = new XMLHttpRequest()
-	request.open('GET', url)
-	request.onreadystatechange = () => {
-		if (request.readyState !== 4 || request.status !== 200)
-			return
+  let request = new XMLHttpRequest()
+  request.open('GET', url)
+  request.onreadystatechange = () => {
+    if (request.readyState !== 4 || request.status !== 200)
+      return
 
-		callback(null, request.responseText)
-	}
-	request.send()
+    callback(null, request.responseText)
+  }
+  request.send()
 }
 
 function visualizeSyntax (fileData) {
 
-	let output = []
-	let indexOfFirstNewline = fileData.content.indexOf('\n')
+  let output = []
+  let indexOfFirstNewline = fileData.content.indexOf('\n')
 
-	if (fileData.content.startsWith('#!')) {
-		fileData.shebang = fileData.content.slice(0, indexOfFirstNewline)
-		fileData.content = fileData.content.slice(indexOfFirstNewline)
-	}
+  if (fileData.content.startsWith('#!')) {
+    fileData.shebang = fileData.content.slice(0, indexOfFirstNewline)
+    fileData.content = fileData.content.slice(indexOfFirstNewline)
+  }
 
-	let syntaxTree = esprima.parse(fileData.content, {
-		loc: true,
-		range: false,
-		attachComment: true,
-		tolerant: true
-	})
+  let syntaxTree = esprima.parse(fileData.content, {
+    loc: true,
+    range: false,
+    attachComment: true,
+    tolerant: true
+  })
 
-	outputElement.innerHTML = ''
+  outputElement.innerHTML = ''
 
-	output.push(walkTree(syntaxTree, fileData))
+  output.push(walkTree(syntaxTree, fileData))
 
-	return output
+  return output
 }
 
 
 ajax('/filename', (filenameError, filename) => {
-	ajax(filename, (fileContentError, fileContent) => {
+  ajax(filename, (fileContentError, fileContent) => {
 
-		let shavenArray = visualizeSyntax({
-			name: filename,
-			content: fileContent
-		})
+    let shavenArray = visualizeSyntax({
+      name: filename,
+      content: fileContent
+    })
 
-		shaven([outputElement, shavenArray])
-	})
+    shaven([outputElement, shavenArray])
+  })
 })
 
 visualizeButton.addEventListener('click', function () {
-	let shavenArray = visualizeSyntax(inputElement.value)
-	shaven([outputElement, shavenArray])
+  let shavenArray = visualizeSyntax(inputElement.value)
+  shaven([outputElement, shavenArray])
 })
