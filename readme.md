@@ -24,7 +24,9 @@ npm start -- path/to/javascript/file.js
 
 - [Future Programming Webassembly Life After JavaScript][Webassembly]
 - [Programming Beyond Text: The Parsing Problem][Parsing Problem]
+- [Lamdu][Lamdu]
 
+[Lamdu]: http://www.lamdu.org
 [Parsing Problem]: http://joshondesign.com/2016/06/13/the_parsing_problem
 [Webassembly
 ]: http://sitepoint.com/future-programming-webassembly-life-after-javascript
