@@ -4,14 +4,15 @@ quietColor = hsl(0, 0, 50%)
 silentColor = hsl(0, 0, 75%)
 backgroundColor = hsl(0, 0, 100%)
 
-functionColor = rgb(250, 230, 230)
-whileColor = hsl(100, 80%, 90%)
-declarationsColor = rgb(225, 235, 250)
-stringColor = rgb(100, 160, 120)
-numberColor = rgb(200, 50, 50)
-regexColor = rgb(250, 100, 0)
-returnColor = rgb(200, 250, 220)
-fileColor = silentColor
+functionColor     = hsl(  0, 40%, 92%)
+whileColor        = hsl(100, 80%, 92%)
+ifColor           = hsl( 60, 50%, 92%)
+declarationsColor = hsl(220, 40%, 92%)
+stringColor       = hsl(140, 25%, 50%)
+numberColor       = hsl(  0, 50%, 50%)
+regexColor        = hsl( 24, 50%, 50%)
+returnColor       = hsl(140, 50%, 90%)
+fileColor         = silentColor
 
 labelStyling()
   color rgba(0, 0, 0, 0.2)
@@ -39,6 +40,10 @@ main
   width 50em
   padding 2em 1em 5em 1em
   margin 0 auto
+
+h1
+  font-size 3em
+  margin-bottom 0.5em
 
 h2
   margin-bottom 1em
@@ -93,9 +98,7 @@ button
   labelStyling()
 
 
-.while
-  background-color whileColor
-  border 1px solid darken(whileColor, 10%)
+.if, .while
   padding 0.5em 1em
   margin-bottom 1em
 
@@ -104,10 +107,41 @@ button
       display inline-block
 
     &::before
-      content 'while'
       display inline-block
       margin-right 1em
       font-weight 600
+
+.if
+  background-color ifColor
+  border 1px solid darken(ifColor, 10%)
+
+  header
+    &::before
+      content 'if'
+
+  .consequent::before, .alternate::before
+    margin-left -1em
+    display block
+    font-weight 600
+    margin-bottom 1em
+
+  .consequent
+    padding 0.5em 1em
+    &::before
+      content 'then'
+
+  .alternate
+    padding 0.5em 1em
+    &::before
+      content 'else'
+
+.while
+  background-color whileColor
+  border 1px solid darken(whileColor, 10%)
+
+  header
+    &::before
+      content 'while'
 
   .body
     padding 0.5em 1em
@@ -179,10 +213,13 @@ button
     labelStyling()
 
 .comment
+  display inline-block
   border-left 4px solid rgb(240, 240, 240)
   padding-left 1em
   color rgb(180, 180, 180)
   font-size 0.9em
+  &::first-letter
+    text-transform uppercase
 
 .commentedSection
   margin-top 1em
@@ -198,6 +235,12 @@ button
   .trailing.comment
     border-width 2px
     padding-left 0.5em
+
+.arrayExpression:empty
+    &::before
+      content '['
+    &::after
+      content ']'
 
 .arrayElement
   border-collapse collapse
