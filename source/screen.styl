@@ -1,18 +1,25 @@
-fontColor = black
+primaryColor = hsl(0, 0, 0%)
+mutedColor = hsl(0, 0, 25%)
+quietColor = hsl(0, 0, 50%)
+silentColor = hsl(0, 0, 75%)
+backgroundColor = hsl(0, 0, 100%)
+
 functionColor = rgb(250, 230, 230)
 declarationsColor = rgb(225, 235, 250)
 stringColor = rgb(100, 160, 120)
 numberColor = rgb(200, 50, 50)
 regexColor = rgb(250, 100, 0)
 returnColor = rgb(200, 250, 220)
-fileColor = rgb(200, 200, 200)
+fileColor = silentColor
 
 labelStyling()
-  font-size 0.8em
-  position absolute
-  top 0.4em
-  right 0.8em
   color rgba(0, 0, 0, 0.2)
+  display block
+  font-size 0.8em
+  text-align right
+
+
+// --------
 
 * {
   margin 0
@@ -21,9 +28,10 @@ labelStyling()
 }
 
 body
-  color fontColor
+  color primaryColor
   font-size 13px
   font-family sans-serif
+  background-color backgroundColor
 
 main
   width 50em
@@ -38,6 +46,11 @@ p
 
 form
   display inline-block
+  input[type=text]
+    border-radius 0.5em
+    border 1px solid silentColor
+    padding 0.5em 1em
+    width 25em
 
 textarea
   border 1px solid gray
@@ -47,6 +60,7 @@ textarea
   vertical-align top
 
 button
+  border 1px solid silentColor
   border-radius 0.5em
   cursor pointer
   padding 0.5em 1em
@@ -58,6 +72,9 @@ button
   padding 1em 1em
   position relative
   font-family 'Source Code Pro', 'Courier New', monospace
+  > .label
+    margin-bottom 1em
+    color rgba(primaryColor, 0.8)
 
 .string
   font-style italic
@@ -76,12 +93,13 @@ button
 .function
   background-color functionColor
   border 1px solid darken(functionColor, 10%)
-  padding 1em
+  padding 0.5em 1em
   margin-bottom 1em
   position relative
 
-  &::after
-    content: 'function'
+  &::before
+    content 'function'
+    margin-bottom -0.6em
     labelStyling()
 
   header
@@ -96,14 +114,14 @@ button
     font-weight 900
     margin-right 0.5em
 
-  .arguments
+  .parameters
     color gray
     &::before
       content '('
     &::after
       content ')'
 
-  .argument:not(:last-of-type)
+  .parameter:not(:last-of-type)
     &::after
       content ', '
 
@@ -118,16 +136,12 @@ button
         content ', '
 
 .declarations
-  width max-content
   background-color declarationsColor
   border 1px solid darken(declarationsColor, 5%)
   border-radius 3px
-  padding 0.2em 4em 0.2em 0.8em
-  margin-bottom 1em
+  padding 0.2em 0.8em
+  margin-bottom 0.2em
   position relative
-
-.declarations + .declarations
-  margin-top -0.8em
 
 .operator
   margin 0 0.4em
@@ -136,12 +150,14 @@ button
   display inline-block
   background-color returnColor
   border 1px solid darken(returnColor, 20%)
-  padding 0.2em 5em 0.4em 0.8em
+  padding 0.2em 1em
   border-radius 0.4em
   position relative
+  min-width 8em
 
-  &::after
-    content: 'return'
+  &::before
+    content 'return'
+    margin-bottom -0.6em
     labelStyling()
 
 .comment
@@ -151,7 +167,7 @@ button
   font-size 0.9em
 
 .commentedSection
-  margin-top 2em
+  margin-top 1em
 
 .label + .commentedSection
   margin-top 0 !important
@@ -191,8 +207,8 @@ button
 
 
 .assignment
-  width 1.5em
   font-size 0.8em
+  padding 0 0.2em
   &::before
     content '='
 
