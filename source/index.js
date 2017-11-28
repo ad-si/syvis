@@ -1,49 +1,29 @@
-'use strict'
-
-const fs = require('fs')
 const path = require('path')
 
-//const shaven = require('shaven')
+const shaven = require('shaven').default
 const esprima = require('esprima')
 
 const walkTree = require('../walkTree')
 
-const inputElement = document.getElementById('input')
-const visualizeButton = document.getElementById('visualizeButton')
+const fileUrlForm = document.getElementById('fileUrl')
+const fileUrlInput = document.querySelector('#fileUrl input')
 const outputElement = document.getElementById('output')
 
-let visualizers = {}
-
-let test = fs.readdirSync(__dirname)
-
-
-function ajax (url, callback) {
-  let request = new XMLHttpRequest()
-  request.open('GET', url)
-  request.onreadystatechange = () => {
-    if (request.readyState !== 4 || request.status !== 200)
-      return
-
-    callback(null, request.responseText)
-  }
-  request.send()
-}
 
 function visualizeSyntax (fileData) {
-
-  let output = []
-  let indexOfFirstNewline = fileData.content.indexOf('\n')
+  const output = []
+  const indexOfFirstNewline = fileData.content.indexOf('\n')
 
   if (fileData.content.startsWith('#!')) {
     fileData.shebang = fileData.content.slice(0, indexOfFirstNewline)
     fileData.content = fileData.content.slice(indexOfFirstNewline)
   }
 
-  let syntaxTree = esprima.parse(fileData.content, {
+  const syntaxTree = esprima.parse(fileData.content, {
     loc: true,
     range: false,
     attachComment: true,
-    tolerant: true
+    tolerant: true,
   })
 
   outputElement.innerHTML = ''
@@ -54,19 +34,33 @@ function visualizeSyntax (fileData) {
 }
 
 
-ajax('/filename', (filenameError, filename) => {
-  ajax(filename, (fileContentError, fileContent) => {
+async function main () {
+  const fileNameResponse = await fetch('/filename')
+  const fileName = await fileNameResponse.text()
+  const fileContentResponse = await fetch(fileName)
+  const fileData = {
+    name: fileName,
+    content: await fileContentResponse.text(),
+  }
+  const shavenArray = visualizeSyntax(fileData)
 
-    let shavenArray = visualizeSyntax({
-      name: filename,
-      content: fileContent
-    })
+  shaven([outputElement, shavenArray])[0]
+}
 
-    shaven([outputElement, shavenArray])
-  })
-})
 
-visualizeButton.addEventListener('click', function () {
-  let shavenArray = visualizeSyntax(inputElement.value)
-  shaven([outputElement, shavenArray])
+main()
+
+
+fileUrlForm.addEventListener('submit', async event => {
+  event.preventDefault()
+
+  const fileContentResponse = await fetch('/files/' + fileUrlInput.value)
+  const fileData = {
+    name: fileUrlInput.value,
+    content: await fileContentResponse.text(),
+  }
+  console.info(fileData)
+  const shavenArray = visualizeSyntax(fileData)
+
+  shaven([outputElement, shavenArray])[0]
 })
