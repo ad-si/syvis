@@ -6,5 +6,5 @@ module.exports = (node) => [
   ['span', ' ? '],
   ['span', walkTree(node.consequent)],
   ['span', ' : '],
-  ['span', walkTree(node.alternate)]
+  ['span', walkTree(node.alternate)],
 ]

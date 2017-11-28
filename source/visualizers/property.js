@@ -4,5 +4,5 @@ module.exports = (node) => [
   'p.property',
   ['span.key', walkTree(node.key)],
   ['span.propertyAssignment', ': '],
-  ['span.value', walkTree(node.value)]
+  ['span.value', walkTree(node.value)],
 ]

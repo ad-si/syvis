@@ -1,6 +1,4 @@
-const walkTree = require('../walkTree')
-
-module.exports = (node) => [
+module.exports = () => [
   'span.thisExpression',
-  'this'
+  'this',
 ]

@@ -1,7 +1,5 @@
 #! /usr/bin/env node
 
-'use strict'
-
 const stream = require('stream')
 const esprima = require('esprima')
 const shaven = require('shaven')
@@ -16,7 +14,7 @@ function transform (chunk, encoding, done) {
 }
 
 function flush (done) {
-  let ast = esprima.parse(internalBuffer)
+  const ast = esprima.parse(internalBuffer)
   this.push(JSON.stringify(walkTree(ast), null, 2))
   this.push(shaven(walkTree(ast))[0])
   done()

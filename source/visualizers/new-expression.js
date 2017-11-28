@@ -6,5 +6,5 @@ module.exports = (node) => [
   ['span', walkTree(node.callee)],
   ['span.leftSeparator', '('],
   ['span', ...node.arguments.map(walkTree)],
-  ['span.rightSeparator', ')']
+  ['span.rightSeparator', ')'],
 ]

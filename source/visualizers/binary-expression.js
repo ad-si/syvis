@@ -1,8 +1,6 @@
-'use strict'
-
 const walkTree = require('../walkTree')
 
-let classNameMap = {
+const classNameMap = {
   '==': ' equal',
   '!=': ' not equal',
   '===': ' strict equal',
@@ -18,9 +16,9 @@ module.exports = (node) => [
   ['span.left', walkTree(node.left)],
   ['span',
     {
-      class: 'operator' + (classNameMap[node.operator] || '')
+      class: 'operator' + (classNameMap[node.operator] || ''),
     },
-    node.operator
+    node.operator,
   ],
-  ['span.right', walkTree(node.right)]
+  ['span.right', walkTree(node.right)],
 ]

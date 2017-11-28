@@ -1,19 +1,19 @@
-'use strict'
-
-const walkTree = require('../walkTree.js')
-
-let specialClassMap = {
-  'Infinity': 'infinity'
+const specialClassMap = {
+  Infinity: 'infinity',
 }
 
 module.exports = (node) => {
-  let speciaClass = specialClassMap[node.name]
+  let specialClass = specialClassMap[node.name]
+
+  if (node.isFunctionParameter) {
+    specialClass = 'parameter'
+  }
 
   return [
     'span.identifier',
     {
-      class: speciaClass
+      class: specialClass,
     },
-    node.name
+    node.name,
   ]
 }

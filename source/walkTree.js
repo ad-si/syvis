@@ -1,27 +1,17 @@
-'use strict'
-
 const fs = require('fs')
 const path = require('path')
+const assert = require('assert')
 
 const visualizersPath = path.join(__dirname, 'visualizers')
 
-let visualizerNames = fs.readdirSync(path.join(__dirname, 'visualizers'))
-let visualizers = {}
+const visualizerNames = fs.readdirSync(path.join(__dirname, 'visualizers'))
 
-
-function commentTemplate (comment) {
-  return [
-    'p&',
-    {class: 'comment ' + comment.type.toLowerCase()},
-    comment.value.replace(/\n/g, '<br>')
-  ]
-}
-
+const visualizers = {}
 visualizerNames
   .filter(name => /.+\.js$/i.test(name))
   .forEach(name => {
 
-    let nameInCamelCase = name
+    const nameInCamelCase = name
       .replace('.js', '')
       .split('-')
       .map(word => word[0].toUpperCase() + word.substr(1))
@@ -31,33 +21,38 @@ visualizerNames
   })
 
 
-function walkTree (node, fileData) {
+function commentTemplate (comment) {
+  return [
+    'p&',
+    {class: 'comment ' + comment.type.toLowerCase()},
+    comment.value.replace(/\n/g, '<br>'),
+  ]
+}
 
-  if (!node) {
-    return ''
-  }
+
+function walkTree (node, fileData) {
+  if (!node) return ''
 
   if (Array.isArray(node.leadingComments)) {
     if (node.leadingComments.length) {
       if (node.leadingComments.some(comment => comment.value)) {
-        let comments = node.leadingComments
+        const comments = node.leadingComments
           .map(comment => {
-            if (comment.value !== null) {
-              let commentArray = commentTemplate(comment)
-              comment.value = null
-              return commentArray
-            }
+            if (comment.value === null) return []
+            const commentArray = commentTemplate(comment)
+            comment.value = null
+            return commentArray
           })
 
         return ['div.commentedSection',
           ['div.leadingComments', ...comments],
-          walkTree(node)
+          walkTree(node, fileData),
         ]
       }
     }
     else {
       delete node.leadingComments
-      return walkTree(node)
+      return walkTree(node, fileData)
     }
   }
 
@@ -67,22 +62,22 @@ function walkTree (node, fileData) {
         node.trailingComments[0].value !== null &&
         node.trailingComments[0].type === 'Line'
       ) {
-        let commentArray = [
+        const commentArray = [
           'span.trailing.comment',
-          node.trailingComments[0].value.trim()
+          node.trailingComments[0].value.trim(),
         ]
 
         node.trailingComments[0].value = null
 
         return ['div.withTrailingComment',
-          walkTree(node),
-          commentArray
+          walkTree(node, fileData),
+          commentArray,
         ]
       }
     }
     else {
       node.trailingComments = 'null'
-      return walkTree(node)
+      return walkTree(node, fileData)
     }
   }
 
@@ -90,33 +85,38 @@ function walkTree (node, fileData) {
   if (Array.isArray(node) && node.length) {
     return node.map(walkTree)
   }
-  if (node.type === 'Program') {
 
+  if (node.type === 'Program') {
     let shebang = ''
 
-    if (fileData.shebang)
+    if (fileData.shebang) {
       shebang = ['div.shebang', fileData.shebang]
+    }
 
     return ['section.file',
       shebang,
       ['span.label', fileData ? fileData.name : false],
       ...node.body.map(walkTree),
-      Array.isArray(node.comments) ?
-        ['div.comments',
+      Array.isArray(node.comments)
+        ? [
+          'div.comments',
           ...node.comments
             .filter(comment => comment.value)
             .map(comment => {
               return commentTemplate(comment)
-            })
-        ] :
-        true
+            }),
+        ]
+        : true,
     ]
   }
+
   if (node.type === 'BlockStatement') {
-    if (node.body.length)
+    if (node.body.length) {
       return node.body.map(walkTree)
-    else
+    }
+    else {
       return ''
+    }
   }
 
 
@@ -126,8 +126,8 @@ function walkTree (node, fileData) {
   else {
     return ['p.error', node.type]
   }
-
-  //throw new Error(JSON.stringify(node))
 }
 
 module.exports = walkTree
+
+
