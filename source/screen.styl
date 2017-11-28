@@ -5,6 +5,7 @@ silentColor = hsl(0, 0, 75%)
 backgroundColor = hsl(0, 0, 100%)
 
 functionColor = rgb(250, 230, 230)
+whileColor = hsl(100, 80%, 90%)
 declarationsColor = rgb(225, 235, 250)
 stringColor = rgb(100, 160, 120)
 numberColor = rgb(200, 50, 50)
@@ -17,6 +18,7 @@ labelStyling()
   display block
   font-size 0.8em
   text-align right
+  margin-bottom -0.6em
 
 
 // --------
@@ -90,6 +92,27 @@ button
 .label
   labelStyling()
 
+
+.while
+  background-color whileColor
+  border 1px solid darken(whileColor, 10%)
+  padding 0.5em 1em
+  margin-bottom 1em
+
+  header
+    > div
+      display inline-block
+
+    &::before
+      content 'while'
+      display inline-block
+      margin-right 1em
+      font-weight 600
+
+  .body
+    padding 0.5em 1em
+
+
 .function
   background-color functionColor
   border 1px solid darken(functionColor, 10%)
@@ -99,16 +122,12 @@ button
 
   &::before
     content 'function'
-    margin-bottom -0.6em
     labelStyling()
 
   header
     margin-bottom 0.3em
     padding-bottom 0.2em
     border-bottom 1px solid rgba(0, 0, 0, 0.1)
-
-  > div
-    // margin 0.5em
 
   .name
     font-weight 900
@@ -157,7 +176,6 @@ button
 
   &::before
     content 'return'
-    margin-bottom -0.6em
     labelStyling()
 
 .comment
