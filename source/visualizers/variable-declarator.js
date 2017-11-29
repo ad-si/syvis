@@ -2,7 +2,6 @@ const walkTree = require('../walkTree')
 
 module.exports = (node) => [
   '.declaration',
-  ['span', walkTree(node.id)],
-  node.init ? ['span.assignment', '='] : true,
-  node.init ? ['span', walkTree(node.init)] : true,
+  ['span.identifier', walkTree(node.id)],
+  node.init ? ['span.init', walkTree(node.init)] : true,
 ]

@@ -13,11 +13,16 @@ visualizerNames
     const nameInCamelCase = name
       .replace('.js', '')
       .split('-')
-      .map(word => word[0].toUpperCase() + word.substr(1))
+      .map(capitalize)
       .join('')
 
     visualizers[nameInCamelCase] = path.join(visualizersPath, name)
   })
+
+
+function capitalize (word) {
+  return word[0].toUpperCase() + word.substr(1)
+}
 
 
 function commentTemplate (comment) {
