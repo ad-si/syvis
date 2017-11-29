@@ -1,24 +1,11 @@
 const walkTree = require('../walkTree')
-
-const classNameMap = {
-  '==': ' equal',
-  '!=': ' not equal',
-  '===': ' strict equal',
-  '!==': ' not strict equal',
-  '<=': ' smaller equal',
-  '>=': ' larger equal',
-  '<<': ' bitshift left',
-  '>>': ' bitshift right',
-}
+const operatorMap = require('../operatorMap.js')
 
 module.exports = (node) => [
   'span.binaryExpression',
+  {
+    class: 'operator-' + (operatorMap.binary[node.operator] || ''),
+  },
   ['span.left', walkTree(node.left)],
-  ['span',
-    {
-      class: 'operator' + (classNameMap[node.operator] || ''),
-    },
-    node.operator,
-  ],
   ['span.right', walkTree(node.right)],
 ]

@@ -1,7 +1,10 @@
 const walkTree = require('../walkTree')
+const operatorMap = require('../operatorMap.js')
 
 module.exports = (node) => [
   'span.unaryExpression',
-  ['span', node.operator],
-  ['span', walkTree(node.argument)],
+  {
+    class: 'operator-' + (operatorMap.unary[node.operator] || ''),
+  },
+  walkTree(node.argument),
 ]

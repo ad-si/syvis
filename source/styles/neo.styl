@@ -8,8 +8,8 @@
 }
 
 body
-  color primaryColor
-  font-size 13px
+  color mutedColor
+  font-size 12px
   font-family sans-serif
   background-color backgroundColor
 
@@ -77,8 +77,13 @@ button
 
 .string
   font-style italic
-  font-weight 700
   color stringColor
+  &:empty
+    &::before
+      content "'"
+    &::after
+      content "'"
+
 
 .number
   color numberColor
@@ -118,6 +123,7 @@ button
   > header
     > div
       display inline-block
+      vertical-align middle
 
     &::before
       display inline-block
@@ -129,8 +135,11 @@ button
   border-color darken(ifColor, 20%)
 
   > header
+    display inline-block
+    vertical-align middle
     &::before
       content 'if'
+      color darken(ifColor, 50%)
 
   > .consequent
     padding 0 0 0 1em
@@ -138,6 +147,7 @@ button
   > .alternate
     padding 0 0 0 1em
     &::before
+      color darken(ifColor, 50%)
       content 'else'
       display block
       font-weight 600
@@ -199,6 +209,7 @@ button
 
   > header
     > .name
+      color darken(functionColor, 50%)
       font-weight 900
       margin-right 0.5em
 
@@ -213,12 +224,17 @@ button
         &::after
           content ', '
 
+
 .functionExpression .params,
 .arguments
   &::before
-    content '('
+    color transSilentColor
+    content '( '
+
   &::after
-    content ')'
+    color transSilentColor
+    content ' )'
+
   & > span:not(:last-of-type)
     &::after
       content ', '
@@ -244,7 +260,7 @@ button
       color darken(arrowFuncColor, 50%)
       &::after
         margin 0 1em
-        content '=>'
+        content '⇒'
 
 
 .expressionStatement
@@ -259,7 +275,7 @@ button
       content '.'
 
   &.computed
-    .property
+    > .property
       &::before
         content '['
       &::after
@@ -267,11 +283,24 @@ button
 
 
 .callee > .memberExpression > .property
-  color hsl(190, 70%, 60%) !important
+  color hsl(190, 60%, 50%) !important
   &::before
     content '\A   .'
-    color  hsl(190, 70%, 60%) !important
+    color  transSilentColor
 
+
+.logicalExpression
+  border-color transSilentColor
+  border-radius 1em
+  border-style solid
+  border-width 1px
+  display inline-block
+  vertical-align middle
+  padding 0.1em 0.8em
+  .left,
+  .right
+    display inline-block
+    vertical-align middle
 
 
 .declarations
@@ -293,7 +322,7 @@ button
     &::after
       margin-left 0.6em
       content '='
-      color darken(declarationsColor, 20%)
+      color  transSilentColor
 
   > .init
     flex-grow 3
@@ -402,35 +431,61 @@ button
   color red
   content '✘'
 
-span[class='operator equal']
+
+// Operators
+
+.left::after
+  font-weight 600
+
+.operator-and
+  > .left::after
+    content '\a0∧\a0'
+
+.operator-or
+  > .left::after
+    content '\a0∨\a0'
+
+.operator-not::before
+  content '¬\a0'
+  font-weight 600
+
+.operator-add
+  > .left::after
+    content '\a0+\a0'
+
+.operator-equals
   width 1.5em
-  &::before
-    color orange
-    content 'is'
-.not.equal::before
-  content '≠'
+  > .left::after
+    content '\a0≔\a0'
 
-span[class='operator strict equal']
-  width 6.5em
-  &::before
-    color orange
-    content 'is exactly'
-    white-space nowrap
-.not.strict.equal::before
-  content '≢'
-  font-size 1.6em
+.operator-equals-not
+  > .left::after
+    content '\a0≠\a0'
 
-.bitshift.left::before
-  content '≪'
-.bitshift.right::before
-  content '≫'
+.operator-equals-strict
+  > .left::after
+    content '\a0≡\a0'
 
-.smaller.equal::before
-  content '≤'
-  font-size 1.2em
-.larger.equal::before
-  content '≥'
-  font-size 1.2em
+.operator-equals-strict-not
+  > .left::after
+    content '\a0≢\a0'
+
+.operator-shift-left
+  > .left::after
+    content '\a0≪\a0'
+
+.operator-shift-right
+  > .left::after
+    content '\a0≫\a0'
+
+.operator-less-than-equals
+  > .left::after
+    content '\a0≤\a0'
+
+.operator-greater-than-equals
+  > .left::after
+    content '\a0≥\a0'
+
 
 .error
   color red
