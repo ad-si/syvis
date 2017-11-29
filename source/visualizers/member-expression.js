@@ -1,10 +1,13 @@
 const walkTree = require('../walkTree')
 
-module.exports = (node) => [
-  'span.memberExpression',
-  ['span', walkTree(node.object)],
-  ['span', node.computed ? '[' : ''], // ['br']],
-  ['span', node.computed ? false : '.'],
-  ['span', walkTree(node.property)],
-  ['span', node.computed ? ']' : false],
-]
+module.exports = (node) => {
+  const classes = ['memberExpression']
+  if (node.computed) classes.push('computed')
+
+  return [
+    'span',
+    {class: classes.join(' ')},
+    ['span.object', walkTree(node.object)],
+    ['span.property', walkTree(node.property)],
+  ]
+}

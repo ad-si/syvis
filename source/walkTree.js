@@ -1,6 +1,5 @@
 const fs = require('fs')
 const path = require('path')
-const assert = require('assert')
 
 const visualizersPath = path.join(__dirname, 'visualizers')
 
@@ -31,7 +30,9 @@ function commentTemplate (comment) {
 
 
 function walkTree (node, fileData) {
-  if (!node) return ''
+  if (!node || (Array.isArray(node) && !node.length)) {
+    return ''
+  }
 
   if (Array.isArray(node.leadingComments)) {
     if (node.leadingComments.length) {
