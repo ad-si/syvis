@@ -1,19 +1,24 @@
 const specialClassMap = {
   Infinity: 'infinity',
+  undefined: 'undefined',
+  NaN: 'nan',
 }
 
 module.exports = (node) => {
-  let specialClass = specialClassMap[node.name]
+  const classes = ['identifier']
+
+  if (specialClassMap.hasOwnProperty(node.name)) {
+    classes.push(specialClassMap[node.name])
+    node.name = ''
+  }
 
   if (node.isFunctionParameter) {
-    specialClass = 'parameter'
+    classes.push('parameter')
   }
 
   return [
-    'span.identifier',
-    {
-      class: specialClass,
-    },
+    'span',
+    {class: classes.join(' ')},
     node.name,
   ]
 }

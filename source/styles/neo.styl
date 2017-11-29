@@ -486,31 +486,21 @@ button
     margin-left -0.3em
 
 
-
-.openingBracket,
-.closingBracket,
-.arraySeparator
-  color transparent
-
-.assignment,
-.infinity,
-.true,
-.false,
-.equal,
-.bitshift
-  color transparent
-  margin 0 0.2em
-  width 0.8em
-  display inline-block
-  &::before
-    color black
-
-
 .assignment
   font-size 0.8em
   padding 0 0.2em
   &::before
-    content '='
+    color transSilentColor
+    content '\a0=\a0'
+
+.assignmentExpression
+  > .left
+    &::after
+      color transSilentColor
+      content '\a0=\a0'
+
+
+// Literals
 
 .infinity
   font-size 1.4em
@@ -519,11 +509,24 @@ button
     content '∞'
 
 .true::before
-  color green
-  content '✔︎'
+  font-weight 600
+  content 'Yes'
+
 .false::before
-  color red
-  content '✘'
+  font-weight 600
+  content 'No'
+
+.null::before
+  font-weight 600
+  content '∅'
+
+.undefined::before
+  font-weight 600
+  content 'undef'
+
+.nan::before
+  font-weight 600
+  content '🚫'
 
 
 // Operators
@@ -596,6 +599,14 @@ button
 
 .operator-delete::before
   content '\a0⌦\a0'
+
+.operator-typeof::before
+  content '\a0typeof\a0'
+  font-weight 600
+
+.operator-void::before
+  font-weight 600
+  content '\a0void\a0'
 
 
 .error
