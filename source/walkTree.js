@@ -44,14 +44,14 @@ function walkTree (node, fileData) {
       if (node.leadingComments.some(comment => comment.value)) {
         const comments = node.leadingComments
           .map(comment => {
-            if (comment.value === null) return []
+            if (comment.value === null) return ''
             const commentArray = commentTemplate(comment)
             comment.value = null
             return commentArray
           })
 
-        return ['div.commentedSection',
-          ['div.leadingComments', ...comments],
+        return ['.commentedSection',
+          ['.leadingComments', ...comments],
           walkTree(node, fileData),
         ]
       }
@@ -75,7 +75,7 @@ function walkTree (node, fileData) {
 
         node.trailingComments[0].value = null
 
-        return ['div.withTrailingComment',
+        return ['.withTrailingComment',
           walkTree(node, fileData),
           commentArray,
         ]
@@ -96,7 +96,7 @@ function walkTree (node, fileData) {
     let shebang = ''
 
     if (fileData.shebang) {
-      shebang = ['div.shebang', fileData.shebang]
+      shebang = ['.shebang', fileData.shebang]
     }
 
     return ['section.file',
@@ -105,7 +105,7 @@ function walkTree (node, fileData) {
       ...node.body.map(walkTree),
       Array.isArray(node.comments)
         ? [
-          'div.comments',
+          '.comments',
           ...node.comments
             .filter(comment => comment.value)
             .map(comment => {
