@@ -1,7 +1,7 @@
 const walkTree = require('../walkTree')
 
 module.exports = (node) => [
-  '.declarations',
-  ['span.kind.label', node.kind],
+  'div',
+  {class: 'declarations ' + node.kind},
   walkTree(node.declarations),
 ]

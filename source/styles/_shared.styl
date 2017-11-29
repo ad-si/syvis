@@ -7,6 +7,7 @@ backgroundColor = hsl(0, 0, 100%)
 transMutedColor = rgba(0, 0, 0, 0.75)
 transQuietColor = rgba(0, 0, 0, 0.5)
 transSilentColor = rgba(0, 0, 0, 0.25)
+transShadowColor = rgba(0, 0, 0, 0.10)
 
 arrowFuncColor    = hsl( 30, 50%, 92%)
 functionColor     = hsl(  0, 50%, 92%)
@@ -15,6 +16,7 @@ forColor          = hsl(200, 50%, 92%)
 ifColor           = hsl( 60, 50%, 92%)
 declarationsColor = hsl(220, 50%, 92%)
 returnColor       = hsl(140, 50%, 92%)
+objectColor       = hsl(320, 50%, 92%)
 
 stringColor       = hsl(140, 50%, 50%)
 numberColor       = hsl(  0, 70%, 50%)
@@ -24,7 +26,7 @@ fileColor         = silentColor
 
 
 labelStyling()
-  color rgba(0, 0, 0, 0.2)
+  color transSilentColor
   display block
   font-size 0.8em
   text-align right

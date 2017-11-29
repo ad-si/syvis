@@ -56,6 +56,7 @@ button
   padding 0.5em 1em
   margin 2em
 
+
 .file
   border-width 1px
   border-style solid
@@ -64,6 +65,7 @@ button
   padding 1em 1em
   position relative
   font-family 'Source Code Pro', 'Courier New', monospace
+
   > .label
     margin-bottom 1em
     color rgba(primaryColor, 0.8)
@@ -104,7 +106,8 @@ button
 .return,
 .while,
 .arrayExpression,
-.arrayElement
+.arrayElement,
+.objectExpression
   // background-color white !important
   // box-shadow 1px 1px 1px rgba(0, 0, 0, 0.08)
   border-style solid
@@ -137,30 +140,26 @@ button
 .if
   background-color ifColor
   border-color darken(ifColor, 20%)
+  display flex
+  flex-wrap wrap
 
   > header
-    display inline-block
-    vertical-align middle
     margin-right 1em
     &::before
       content 'if'
       color darken(ifColor, 50%)
 
   > .consequent
-    display inline-block
-    margin-right 1em
+    margin 0 1em 0.2em 0
     &::before
       color darken(ifColor, 50%)
       content 'then'
-      display inline-block
       font-weight 600
 
   > .alternate
-    display inline-block
     &::before
       color darken(ifColor, 50%)
       content 'else'
-      display inline-block
       font-weight 600
 
 
@@ -246,6 +245,7 @@ button
 
   & > span:not(:last-of-type)
     &::after
+      color transSilentColor
       content ', '
 
 
@@ -274,6 +274,7 @@ button
 
 .expressionStatement
   padding 0.5em 0 0.5em 1em
+  display block
 
 
 .memberExpression
@@ -306,19 +307,50 @@ button
   display inline-block
   vertical-align middle
   padding 0.1em 0.8em
-  .left,
-  .right
+
+  > .left,
+  > .right
     display inline-block
     vertical-align middle
+
+    > .logicalExpression
+      margin-right -0.7em
+
+
+.awaitExpression
+  &::before
+    content ' await '
+    font-weight 600
 
 
 .declarations
   background-color declarationsColor
   border-color darken(declarationsColor, 5%)
-  padding 0em 2.5em 0.6em 1em
+  padding 0.5em 3em 0.5em 1em
   margin-bottom 0.2em
-  > .label
-    margin-right -2.5em
+
+  &.const,
+  &.let,
+  &.var
+    &::before
+      float right
+      font-size 0.8em
+      color transSilentColor
+      position relative
+      right -3em
+
+  &.const::before
+    content 'const'
+
+  &.let::before
+    content 'let'
+
+  &.var::before
+    content 'var'
+
+  + .function
+    margin-top 2em
+
 
 .declaration
   display flex
@@ -328,6 +360,7 @@ button
   > .identifier
     color darken(declarationsColor, 50%)
     flex-grow 2
+
     &::after
       margin-left 0.6em
       content '='
@@ -342,11 +375,13 @@ button
   display block
   background-color returnColor
   border-color darken(returnColor, 20%)
-  padding 0em 2.5em 0.6em 1em
+  padding 0em 2em 0.6em 1em
 
   &::before
-    content 'return'
-    margin-right -2.5em
+    content '↵'
+    margin-right -2em
+    margin-top 0.5em
+    font-size 2em
     labelStyling()
 
 .comment
@@ -380,15 +415,19 @@ button
 
 
 .objectExpression
-  display table
+  display inline-table
+  background-color objectColor
+  border-color darken(objectColor, 10%)
+  padding 0.2em 0.5em
 
-  &::before
-    color transSilentColor
-    content '{'
+  &:empty
+    &::before
+      color transSilentColor
+      content '{'
 
-  &::after
-    color transSilentColor
-    content '}'
+    &::after
+      color transSilentColor
+      content '}'
 
   > .property
     display table-row
@@ -410,12 +449,16 @@ button
   border-color transSilentColor
   display inline-block
   vertical-align middle
+
   &:empty
     border none
+
     &::before
       content '['
+
     &::after
       content ']'
+
 
 .arrayElement
   border-width 0

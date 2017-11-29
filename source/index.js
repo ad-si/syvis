@@ -1,5 +1,3 @@
-const path = require('path')
-
 const shaven = require('shaven').default
 const esprima = require('esprima')
 
@@ -34,7 +32,7 @@ function visualizeSyntax (fileData) {
 }
 
 
-async function main () {
+async function loadInitialFile () {
   const fileNameResponse = await fetch('/filename')
   const fileName = await fileNameResponse.text()
   const fileContentResponse = await fetch(fileName)
@@ -48,10 +46,7 @@ async function main () {
 }
 
 
-main()
-
-
-fileUrlForm.addEventListener('submit', async event => {
+async function loadFile (event) {
   event.preventDefault()
 
   const fileContentResponse = await fetch('/files/' + fileUrlInput.value)
@@ -63,4 +58,9 @@ fileUrlForm.addEventListener('submit', async event => {
   const shavenArray = visualizeSyntax(fileData)
 
   shaven([outputElement, shavenArray])[0]
-})
+}
+
+
+loadInitialFile()
+
+fileUrlForm.addEventListener('submit', loadFile)
