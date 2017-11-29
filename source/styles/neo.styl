@@ -36,7 +36,7 @@ form
     border-radius 0.5em
     border-color silentColor
     padding 0.5em 1em
-    width 25em
+    width 40em
 
 textarea
   border-width 1px
@@ -264,6 +264,7 @@ button
   > div
     display flex
     align-items center
+    flex-wrap wrap
 
     > .parameters
       color darken(arrowFuncColor, 50%)
@@ -443,6 +444,17 @@ button
 
     > .value
       display table-cell
+
+
+.objectPattern
+  &::before
+    content '{'
+
+  &::after
+    content '}'
+
+  > .shorthand > .value
+    display none
 
 
 .arrayExpression
