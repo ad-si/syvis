@@ -102,13 +102,16 @@ button
 .function,
 .if,
 .return,
-.while
+.while,
+.arrayExpression,
+.arrayElement
   // background-color white !important
   // box-shadow 1px 1px 1px rgba(0, 0, 0, 0.08)
   border-style solid
   border-width 1px
   // border-width 0px !important
   border-radius 3px
+  display block
 
 
 // Padded boxed elements
@@ -130,6 +133,7 @@ button
       margin-right 1em
       font-weight 600
 
+
 .if
   background-color ifColor
   border-color darken(ifColor, 20%)
@@ -137,22 +141,27 @@ button
   > header
     display inline-block
     vertical-align middle
+    margin-right 1em
     &::before
       content 'if'
       color darken(ifColor, 50%)
 
   > .consequent
-    padding 0 0 0 1em
+    display inline-block
+    margin-right 1em
+    &::before
+      color darken(ifColor, 50%)
+      content 'then'
+      display inline-block
+      font-weight 600
 
   > .alternate
-    padding 0 0 0 1em
+    display inline-block
     &::before
       color darken(ifColor, 50%)
       content 'else'
-      display block
+      display inline-block
       font-weight 600
-      margin-bottom 1em
-      margin-left -1em
 
 
 .for
@@ -210,7 +219,7 @@ button
   > header
     > .name
       color darken(functionColor, 50%)
-      font-weight 900
+      font-weight 600
       margin-right 0.5em
 
     > .parameters
@@ -329,9 +338,6 @@ button
     margin-left 0.6em
 
 
-.operator
-  margin 0 0.4em
-
 .return
   display block
   background-color returnColor
@@ -372,26 +378,46 @@ button
     margin-left 1em
     flex-grow 1
 
-.objectExpression:empty
-    &::before
-      content '{'
-    &::after
-      content '}'
 
-.arrayExpression:empty
+.objectExpression
+  &::before
+    color transSilentColor
+    content '{'
+
+  &::after
+    color transSilentColor
+    content '}'
+
+  > .property > .key
+    &::after
+      content ':\a0'
+
+
+.arrayExpression
+  border-color transSilentColor
+  display inline-block
+  vertical-align middle
+  &:empty
+    border none
     &::before
       content '['
     &::after
       content ']'
 
 .arrayElement
-  border-collapse collapse
-  border-color rgba(0,0,0,0.2)
-  border-style solid
-  border-width 1px
-  display block
-  margin-right -1px
-  padding 0 0.5em
+  border-width 0
+  border-radius 0
+  border-bottom-width 1px
+  border-color transSilentColor
+  padding 0.2em 0.5em
+
+  &:last-of-type
+    border-bottom none
+
+  > .arrayExpression
+    margin-left -0.3em
+
+
 
 .openingBracket,
 .closingBracket,
@@ -433,6 +459,9 @@ button
 
 
 // Operators
+
+.operator
+  margin 0 0.4em
 
 .left::after
   font-weight 600
@@ -478,9 +507,17 @@ button
   > .left::after
     content '\a0≫\a0'
 
+.operator-less-than
+  > .left::after
+    content '\a0<\a0'
+
 .operator-less-than-equals
   > .left::after
     content '\a0≤\a0'
+
+.operator-greater-than
+  > .left::after
+    content '\a0>\a0'
 
 .operator-greater-than-equals
   > .left::after
@@ -488,6 +525,9 @@ button
 
 .operator-spread::before
   content '\a0…\a0'
+
+.operator-delete::before
+  content '\a0⌦\a0'
 
 
 .error

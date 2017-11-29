@@ -1,6 +1,6 @@
 const walkTree = require('../walkTree.js')
 
 module.exports = (node) => [
-  'p.expressionStatement',
+  'span.expressionStatement',
   walkTree(node.expression),
 ]
