@@ -55,7 +55,7 @@ app.use('/', express.static('public'))
 
 
 app.get('/filename', (request, response) => {
-  response.send('/files/' + process.argv[2])
+  response.send(process.argv[2])
 })
 
 app.use(

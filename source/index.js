@@ -32,24 +32,12 @@ function visualizeSyntax (fileData) {
 }
 
 
-async function loadInitialFile () {
-  const fileNameResponse = await fetch('/filename')
-  const fileName = await fileNameResponse.text()
-  const fileContentResponse = await fetch(fileName)
-  const fileData = {
-    name: fileName,
-    content: await fileContentResponse.text(),
+async function loadFile (fileUrl) {
+  if (!fileUrl.startsWith('http')) {
+    fileUrl = '/files/' + fileUrl
   }
-  const shavenArray = visualizeSyntax(fileData)
 
-  shaven([outputElement, shavenArray])[0]
-}
-
-
-async function loadFile (event) {
-  event.preventDefault()
-
-  const fileContentResponse = await fetch('/files/' + fileUrlInput.value)
+  const fileContentResponse = await fetch(fileUrl)
   const fileData = {
     name: fileUrlInput.value,
     content: await fileContentResponse.text(),
@@ -61,6 +49,17 @@ async function loadFile (event) {
 }
 
 
+async function loadInitialFile () {
+  const fileNameResponse = await fetch('/filename')
+  const fileName = await fileNameResponse.text()
+
+  loadFile(fileName)
+}
+
+
 loadInitialFile()
 
-fileUrlForm.addEventListener('submit', loadFile)
+fileUrlForm.addEventListener('submit', event => {
+  event.preventDefault()
+  loadFile(fileUrlInput.value)
+})
