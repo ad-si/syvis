@@ -380,6 +380,8 @@ button
 
 
 .objectExpression
+  display table
+
   &::before
     color transSilentColor
     content '{'
@@ -388,9 +390,20 @@ button
     color transSilentColor
     content '}'
 
-  > .property > .key
-    &::after
-      content ':\a0'
+  > .property
+    display table-row
+
+    > .key
+      display table-cell
+      text-align right
+      padding-left 1.2em
+
+      &::after
+        color transSilentColor
+        content ':\a0'
+
+    > .value
+      display table-cell
 
 
 .arrayExpression
