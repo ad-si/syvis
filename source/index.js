@@ -32,9 +32,23 @@ function visualizeSyntax (fileData) {
 }
 
 
+function normalizeUrl (url) {
+  // GitHub specific normalizations
+  const githubMatch = url.match(/^https?:\/\/(github.com)/)
+  return githubMatch
+    ? url
+      .replace(githubMatch[1], 'raw.githubusercontent.com')
+      .replace('/blob', '')
+    : url
+}
+
+
 async function loadFile (fileUrl) {
   if (!fileUrl.startsWith('http')) {
     fileUrl = '/files/' + fileUrl
+  }
+  else {
+    fileUrl = normalizeUrl(fileUrl)
   }
 
   const fileContentResponse = await fetch(fileUrl)
