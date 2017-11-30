@@ -77,7 +77,7 @@ button
     margin-bottom 0.3em
     padding-bottom 0.2em
 
-.string
+.string:not(.tail)
   font-style italic
   color stringColor
   &:empty
@@ -85,6 +85,27 @@ button
       content "'"
     &::after
       content "'"
+
+.templateLiteral
+  > .templateElement
+    &:not(:last-of-type)
+      &::after
+        color mutedColor
+        content "${\a0"
+        font-weight 600
+
+    &:not(:first-of-type)
+      &::before
+        color mutedColor
+        content "\a0}"
+        font-weight 600
+
+  // TODO: Use box for expressions (complicated to implement)
+  // > .templateExpression
+  //   border-width 1px
+  //   border-style solid
+  //   border-color transSilentColor
+  //   border-radius 2px
 
 
 .number
