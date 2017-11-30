@@ -537,9 +537,12 @@ button
     flex-grow 1
 
 
-.objectExpression
+.objectExpression,
+.identifier > .objectPattern
   display inline-table
   background-color objectColor
+  border-width 1px
+  border-style solid
   border-color darken(objectColor, 10%)
   padding 0.2em 0.5em
 
@@ -558,7 +561,6 @@ button
     > .key
       display table-cell
       text-align right
-      padding-left 1.2em
 
       &::after
         color transSilentColor
@@ -568,24 +570,23 @@ button
       display table-cell
 
 
+.identifier > .objectPattern
+  background-color transparent
+  border-color transparent
+
+
 .objectPattern
-  &::before
-    content '{'
-
-  &::after
-    content '}'
-
+  vertical-align middle
   > .property
-    > .value::after
-      content ',\a0'
-
     &.shorthand:not(:last-of-type)
       > .key::after
         content ',\a0'
 
     &.shorthand
-      > .value
-        display none
+      > .key
+        display inline-block
+        visibility hidden
+        width 0
 
 
 .arrayExpression,
