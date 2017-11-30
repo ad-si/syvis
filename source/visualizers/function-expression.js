@@ -2,7 +2,7 @@ const walkTree = require('../walkTree')
 
 module.exports = (node) => [
   'span.functionExpression',
-  ['span.parameters', ...node.params.map(walkTree)],
+  ['span.parameters', walkTree(node.params)],
   ['span', ' => '],
   ['span', walkTree(node.body)],
 ]

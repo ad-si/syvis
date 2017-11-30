@@ -99,6 +99,7 @@ button
 
 // Boxed syntax elements
 .arrowFunctionExpression,
+.classDeclaration
 .declarations,
 .for,
 .function,
@@ -119,6 +120,7 @@ button
 
 // Padded boxed elements
 .arrowFunctionExpression,
+.classDeclaration,
 .for,
 .function,
 .if,
@@ -205,6 +207,7 @@ button
     padding 0.5em 1em
 
 
+
 .function
   background-color functionColor
   border-color darken(functionColor, 10%)
@@ -271,6 +274,34 @@ button
       &::after
         margin 0 1em
         content '⇒'
+
+
+.classDeclaration
+  background-color classColor
+  border-color darken(classColor, 10%)
+  position relative
+  margin-bottom 2em
+
+  &::before
+    content 'class'
+    labelStyling()
+
+  > header
+    > .name,
+    > .superClass
+      color darken(classColor, 50%)
+      font-weight 600
+
+  .superClass
+    &::before
+      color primaryColor
+      content '\a0\65xtends\a0'
+      font-weight 600
+
+.super
+  &::before
+    color primaryColor
+    content '\a0super\a0'
 
 
 .expressionStatement
