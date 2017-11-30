@@ -1,11 +1,10 @@
 @import 'source/styles/_shared'
 
 
-* {
+*
   margin 0
   padding 0
   border 0
-}
 
 body
   color mutedColor
@@ -690,6 +689,10 @@ button
   > .left::after
     content '\a0+\a0'
 
+.operator-subtract
+  > .left::after
+    content '\a0-\a0'
+
 .operator-multiply
   > .left::after
     content '\a0×\a0'
@@ -763,6 +766,11 @@ button
   color gray
   margin-bottom 1em
 
-// .thisExpression
-//  &::after
-//    content 'this'
+
+.containsThisExpression
+  > .property::before
+    content ''
+
+.thisExpression
+  &::after
+    content '@'
