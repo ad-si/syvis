@@ -669,8 +669,10 @@ button
 
 // Operators
 
-.left::after
-  font-weight 600
+.binaryExpression
+  > .left::after
+    font-weight 600
+    content '\a0<operator missing>\a0'
 
 .operator-and
   > .left::after
@@ -687,6 +689,10 @@ button
 .operator-add
   > .left::after
     content '\a0+\a0'
+
+.operator-multiply
+  > .left::after
+    content '\a0×\a0'
 
 .operator-equals
   width 1.5em
