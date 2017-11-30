@@ -1,7 +1,7 @@
 const shaven = require('shaven').default
 const esprima = require('esprima')
 
-const walkTree = require('../walkTree')
+const walkTree = require('./walkTree')
 
 const fileUrlForm = document.getElementById('fileUrl')
 const fileUrlInput = document.querySelector('#fileUrl input')

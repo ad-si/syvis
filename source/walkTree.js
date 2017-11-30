@@ -1,8 +1,7 @@
 const fs = require('fs')
 const path = require('path')
 
-const visualizersPath = path.join(__dirname, 'visualizers')
-
+// Do not refactor as code is analyzed statically and only works this way
 const visualizerNames = fs.readdirSync(path.join(__dirname, 'visualizers'))
 
 const visualizers = {}
@@ -16,7 +15,10 @@ visualizerNames
       .map(capitalize)
       .join('')
 
-    visualizers[nameInCamelCase] = path.join(visualizersPath, name)
+    visualizers[nameInCamelCase] = path.join(
+      path.join(__dirname, 'visualizers'),
+      name
+    )
   })
 
 
@@ -46,9 +48,9 @@ function walkTree (node, fileData) {
 
   // Convert comments in objects to a table friendly format
   if (
-      node.type === 'ObjectExpression' &&
-      node.properties.some(hasLeadingComments)
-    ) {
+    node.type === 'ObjectExpression' &&
+    node.properties.some(hasLeadingComments)
+  ) {
 
     node.properties.forEach((property, propertyIndex) => {
       if (!hasLeadingComments(property)) return
@@ -154,7 +156,8 @@ function walkTree (node, fileData) {
 
 
   if (visualizers[node.type]) {
-    return require(visualizers[node.type])(node)
+    const visualizer = require(visualizers[node.type])
+    return visualizer(node)
   }
   else {
     return ['p.error', node.type]
@@ -162,5 +165,3 @@ function walkTree (node, fileData) {
 }
 
 module.exports = walkTree
-
-
