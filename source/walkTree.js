@@ -25,6 +25,11 @@ function capitalize (word) {
 }
 
 
+function hasLeadingComments (element) {
+  return element.hasOwnProperty('leadingComments')
+}
+
+
 function commentTemplate (comment) {
   return [
     'p&',
@@ -38,6 +43,28 @@ function walkTree (node, fileData) {
   if (!node || (Array.isArray(node) && !node.length)) {
     return ''
   }
+
+  // Convert comments in objects to a table friendly format
+  if (
+      node.type === 'ObjectExpression' &&
+      node.properties.some(hasLeadingComments)
+    ) {
+
+    node.properties.forEach((property, propertyIndex) => {
+      if (!hasLeadingComments(property)) return
+
+      node.properties.splice(
+        propertyIndex,
+        0,
+        property.leadingComments.map(comment => ({
+          type: 'PropertyComment',
+          value: comment.value,
+        }))
+      )
+      delete property.leadingComments
+    })
+  }
+
 
   if (Array.isArray(node.leadingComments)) {
     if (node.leadingComments.length) {

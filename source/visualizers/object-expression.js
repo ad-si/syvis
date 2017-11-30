@@ -1,6 +1,8 @@
 const walkTree = require('../walkTree')
 
-module.exports = (node) => [
-  'span.objectExpression',
-  walkTree(node.properties),
-]
+module.exports = (node) => {
+  return [
+    'span.objectExpression',
+    walkTree(node.properties),
+  ]
+}
