@@ -130,6 +130,7 @@ button
 .return,
 .while,
 .arrayExpression,
+.arrayPattern,
 .arrayElement,
 .objectExpression,
 .tryStatement
@@ -575,7 +576,8 @@ button
     display none
 
 
-.arrayExpression
+.arrayExpression,
+.arrayPattern
   border-color transSilentColor
   display inline-block
   vertical-align middle
@@ -590,11 +592,14 @@ button
       content ']'
 
 
-.arrayElement
+.arrayElement,
+.arrayPattern > *
   border-width 0
   border-radius 0
+  border-style solid
   border-bottom-width 1px
   border-color transSilentColor
+  display block
   padding 0.2em 0.5em
 
   &:last-of-type
@@ -602,6 +607,7 @@ button
 
   > .arrayExpression
     margin-left -0.3em
+
 
 
 .assignment
