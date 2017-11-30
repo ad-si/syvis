@@ -131,6 +131,7 @@ button
 .arrayExpression,
 .arrayElement,
 .objectExpression
+.tryStatement
   // background-color white !important
   // box-shadow 1px 1px 1px rgba(0, 0, 0, 0.08)
   border-style solid
@@ -148,6 +149,7 @@ button
 .function,
 .if,
 .while
+.tryStatement
   padding 0.5em 0.4em 0.4em 1em
   margin-bottom 0.4em
 
@@ -186,6 +188,51 @@ button
       color darken(ifColor, 50%)
       content 'else'
       font-weight 600
+
+
+.tryStatement
+  background-color tryColor
+  border-color darken(tryColor, 10%)
+  display flex
+  flex-wrap wrap
+
+  > .block
+    margin-right 1em
+    &::before
+      color darken(tryColor, 50%)
+      content 'try\a0'
+      font-weight 600
+
+  > .handler
+    margin-right 1em
+    &::before
+      color darken(tryColor, 50%)
+      content 'catch\a0'
+      font-weight 600
+
+    > .catchClause > .param::after
+      color primaryColor
+      content: '\a0⇒'
+      font-weight 600
+
+  > .finalizer
+    &::before
+      color darken(tryColor, 50%)
+      content 'finally\a0'
+      font-weight 600
+
+
+.throwStatement
+  &::before
+    color primaryColor
+    content 'throw\a0'
+    font-weight 600
+
+.breakStatement
+  &::before
+    color primaryColor
+    content 'break\a0'
+    font-weight 600
 
 
 .for
