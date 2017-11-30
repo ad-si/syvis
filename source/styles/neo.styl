@@ -120,7 +120,8 @@ button
 
 // Boxed syntax elements
 .arrowFunctionExpression,
-.classDeclaration
+.classDeclaration,
+.classExpression,
 .declarations,
 .for,
 .function,
@@ -142,6 +143,7 @@ button
 // Padded boxed elements
 .arrowFunctionExpression,
 .classDeclaration,
+.classExpression,
 .for,
 .function,
 .if,
@@ -297,7 +299,8 @@ button
         content '⇒'
 
 
-.classDeclaration
+.classDeclaration,
+.classExpression
   background-color classColor
   border-color darken(classColor, 10%)
   position relative
@@ -546,7 +549,8 @@ button
     color transSilentColor
     content '\a0=\a0'
 
-.assignmentExpression
+.assignmentExpression,
+.assignmentPattern
   > .left
     &::after
       color transSilentColor
