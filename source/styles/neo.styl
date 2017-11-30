@@ -575,8 +575,17 @@ button
   &::after
     content '}'
 
-  > .shorthand > .value
-    display none
+  > .property
+    > .value::after
+      content ',\a0'
+
+    &.shorthand:not(:last-of-type)
+      > .key::after
+        content ',\a0'
+
+    &.shorthand
+      > .value
+        display none
 
 
 .arrayExpression,
