@@ -5,8 +5,6 @@ const options = {
 }
 const instance = browserify('./source/index.js', options)
 
-console.error(getModules())
-
 getModules()
   .forEach(object => {
     const filePath = Object.keys(object)[0]

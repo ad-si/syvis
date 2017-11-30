@@ -15,7 +15,7 @@ docs/$(hiddenPath)/index.html: public/index.html
 	cp $< $@
 
 docs/$(hiddenPath)/index.js: $(jsFiles)
-	node buildIndex.js > $@
+	node buildIndex.js | npx minify > $@
 
 docs/$(hiddenPath)/screen.css: $(stylFiles)
 	npx stylus --compress \
