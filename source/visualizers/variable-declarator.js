@@ -1,7 +1,18 @@
 const walkTree = require('../walkTree')
 
-module.exports = (node) => [
-  '.declaration',
-  ['span.identifier', walkTree(node.id)],
-  node.init ? ['span.init', walkTree(node.init)] : true,
-]
+module.exports = (node) => {
+  const hasInit = Boolean(node.init)
+  const classes = ['declaration']
+
+  if (hasInit) classes.push('hasInit')
+
+  return [
+    'div',
+    {class: classes.join(' ')},
+    ['span.identifier', walkTree(node.id)],
+    ['span.init', hasInit
+      ? walkTree(node.init)
+      : null,
+    ],
+  ]
+}

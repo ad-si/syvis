@@ -77,10 +77,10 @@ button
     margin-bottom 0.3em
     padding-bottom 0.2em
 
-.string:not(.tail)
+.string
   font-style italic
   color stringColor
-  &:empty
+  &:not(.templateElement):empty
     &::before
       content "'"
     &::after
@@ -90,13 +90,13 @@ button
   > .templateElement
     &:not(:last-of-type)
       &::after
-        color mutedColor
+        color transSilentColor
         content "${\a0"
         font-weight 600
 
     &:not(:first-of-type)
       &::before
-        color mutedColor
+        color transSilentColor
         content "\a0}"
         font-weight 600
 
@@ -124,13 +124,14 @@ button
 .classExpression,
 .declarations,
 .for,
+.forOf,
 .function,
 .if,
 .return,
 .while,
 .arrayExpression,
 .arrayElement,
-.objectExpression
+.objectExpression,
 .tryStatement
   // background-color white !important
   // box-shadow 1px 1px 1px rgba(0, 0, 0, 0.08)
@@ -146,9 +147,10 @@ button
 .classDeclaration,
 .classExpression,
 .for,
+.forOf,
 .function,
 .if,
-.while
+.while,
 .tryStatement
   padding 0.5em 0.4em 0.4em 1em
   margin-bottom 0.4em
@@ -245,6 +247,7 @@ button
       > .declarations
         display inline-block
       &::before
+        color darken(forColor, 50%)
         content 'set'
         margin-right 0.5em
         font-weight 600
@@ -252,17 +255,31 @@ button
     > .test
       display block
       &::before
+        color darken(forColor, 50%)
         content 'for'
         margin-right 1em
         font-weight 600
-      // &::after
-      //   content 'do'
-      //   margin-left 1em
-      //   font-weight 600
 
-  > .body,
   > .update
+    font-weight 600
+
+  > .body
     padding 0 0 0 1em
+
+
+.forOf
+  background-color forColor
+  border-color darken(forColor, 10%)
+  > header
+    > .left
+      &::before
+        color darken(forColor, 50%)
+        content '\0000a0for\a0'
+
+    > .right
+      &::before
+        color darken(forColor, 50%)
+        content '\a0of\a0'
 
 
 .while
@@ -381,8 +398,6 @@ button
 
 
 .memberExpression
-  white-space pre
-
   > .property
     &::before
       content '.'
@@ -398,6 +413,7 @@ button
 .callee > .memberExpression > .property
   color hsl(190, 60%, 50%) !important
   &::before
+    white-space pre
     content '\A   .'
     color  transSilentColor
 
@@ -429,8 +445,9 @@ button
 .declarations
   background-color declarationsColor
   border-color darken(declarationsColor, 5%)
+  display inline-block
   padding 0.5em 3em 0.5em 1em
-  margin-bottom 0.2em
+  margin 0 0.5em 0.5em 0
 
   &.const,
   &.let,
@@ -464,14 +481,12 @@ button
     color darken(declarationsColor, 50%)
     flex-grow 2
 
-    &::after
-      margin-left 0.6em
-      content '='
-      color  transSilentColor
+  &.hasInit > .identifier::after
+    content '\a0=\a0'
+    color  transSilentColor
 
   > .init
     flex-grow 3
-    margin-left 0.6em
 
 
 .return
@@ -634,9 +649,6 @@ button
 
 
 // Operators
-
-.operator
-  margin 0 0.4em
 
 .left::after
   font-weight 600
