@@ -12,7 +12,7 @@ all: \
 
 
 docs/$(hiddenPath)/index.html: public/index.html
-	cp $< $@
+	sed 's/{{version}}/$(shell git describe)/' $< > $@
 
 docs/$(hiddenPath)/index.js: $(jsFiles)
 	node buildIndex.js | npx minify > $@
