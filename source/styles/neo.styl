@@ -85,6 +85,13 @@ button
     &::after
       content "'"
 
+
+// Overwrite keys in objects
+.key > .string
+  color inherit
+  font-style inherit
+
+
 .templateLiteral
   > .templateElement
     &:not(:last-of-type)
@@ -561,12 +568,18 @@ button
       display table-cell
       text-align right
 
+    > .separator
+      display table-cell
+      color transSilentColor
       &::after
-        color transSilentColor
         content ':\a0'
 
     > .value
       display table-cell
+
+      // Increase distance between sub objects
+      > .objectExpression
+        margin 0.2em 0
 
 
 .identifier > .objectPattern

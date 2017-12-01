@@ -13,6 +13,7 @@ module.exports = (node) => {
     'span',
     {class: classes.join(' ')},
     ['span.key', walkTree(node.key)],
+    ['span.separator'],
     ['span.value', walkTree(node.value)],
   ]
 }

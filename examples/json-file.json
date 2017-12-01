@@ -1,0 +1,6 @@
+{
+  "name": "example",
+  "version": "1.0.0",
+  "description": "This is just a JSON example",
+  "main": "index.js"
+}
