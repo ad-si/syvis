@@ -1,3 +1,6 @@
+// TODO: Use native URL module when browserify supports it
+const URL = require('whatwg-url').URL
+
 const shaven = require('shaven').default
 const esprima = require('esprima')
 
@@ -8,8 +11,16 @@ const fileUrlInput = document.querySelector('#fileUrl input')
 const outputElement = document.getElementById('output')
 
 
+function toHtmlError (error) {
+  return `<p class=error>${error}</p>`
+}
+
 function visualizeSyntax (fileData) {
-  const output = []
+  // Workaround to render JSON
+  if (fileData.url.pathname.endsWith('.json')) {
+    fileData.content = '(' + fileData.content + ')'
+  }
+
   const indexOfFirstNewline = fileData.content.indexOf('\n')
 
   if (fileData.content.startsWith('#!')) {
@@ -17,46 +28,58 @@ function visualizeSyntax (fileData) {
     fileData.content = fileData.content.slice(indexOfFirstNewline)
   }
 
-  const syntaxTree = esprima.parse(fileData.content, {
+  const esprimaOptions = {
     loc: true,
     range: false,
     attachComment: true,
     tolerant: true,
-  })
+  }
 
-  outputElement.innerHTML = ''
+  try {
+    const syntaxTree = esprima.parse(fileData.content, esprimaOptions)
 
-  output.push(walkTree(syntaxTree, fileData))
+    if (esprimaOptions.errors) {
+      console.error(esprimaOptions.errors)
+      outputElement.innerHTML = toHtmlError(esprimaOptions.errors)
+      return
+    }
 
-  return output
+    outputElement.innerHTML = ''
+
+    return [walkTree(syntaxTree, fileData)]
+  }
+  catch (error) {
+    console.error(error)
+    outputElement.innerHTML = toHtmlError(error)
+    return
+  }
 }
 
 
-function normalizeUrl (url) {
+function toNormalizedUrl (urlString) {
+  const fileUrl = new URL(urlString)
+
   // GitHub specific normalizations
-  const githubMatch = url.match(/^https?:\/\/(github.com)/)
-  return githubMatch
-    ? url
-      .replace(githubMatch[1], 'raw.githubusercontent.com')
-      .replace('/blob', '')
-    : url
+  if (fileUrl.hostname === 'github.com') {
+    fileUrl.hostname = 'raw.githubusercontent.com'
+    fileUrl.pathname = fileUrl.pathname.replace('/blob/', '/')
+  }
+
+  return fileUrl
 }
 
 
-async function loadFile (fileUrl) {
-  if (!fileUrl.startsWith('http')) {
-    fileUrl = '/files/' + fileUrl
-  }
-  else {
-    fileUrl = normalizeUrl(fileUrl)
-  }
+async function loadFile (filePath) {
+  const fileUrl = filePath.startsWith('http')
+    ? toNormalizedUrl(filePath)
+    : toNormalizedUrl(window.location + 'files/' + filePath)
 
-  const fileContentResponse = await fetch(fileUrl)
+  const fileContentResponse = await fetch(fileUrl.href)
   const fileData = {
-    name: fileUrlInput.value,
+    url: fileUrl,
+    path: filePath,
     content: await fileContentResponse.text(),
   }
-  console.info(fileData)
   const shavenArray = visualizeSyntax(fileData)
 
   shaven([outputElement, shavenArray])[0]

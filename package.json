@@ -26,7 +26,8 @@
     "express": "^4.16.2",
     "serve-favicon": "^2.4.5",
     "shaven": "^1.1.0",
-    "stylus": "^0.54.5"
+    "stylus": "^0.54.5",
+    "whatwg-url": "^6.3.0"
   },
   "devDependencies": {
     "babel-minify": "^0.2.0",

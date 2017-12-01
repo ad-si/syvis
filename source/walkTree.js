@@ -130,7 +130,7 @@ function walkTree (node, fileData) {
 
     return ['section.file',
       shebang,
-      ['span.label', fileData ? fileData.name : false],
+      ['span.label', fileData ? fileData.path : false],
       ...node.body.map(walkTree),
       Array.isArray(node.comments)
         ? [

@@ -753,20 +753,6 @@ button
   content '\a0void\a0'
 
 
-.error
-  color red
-  background-color rgb(250,200,200)
-  border-width 1px
-  border-style solid
-  border-color rgb(230,180,180)
-  border-radius 3px
-  padding 0.2em 1em
-
-.shebang
-  color gray
-  margin-bottom 1em
-
-
 .containsThisExpression
   > .property::before
     content ''
@@ -774,3 +760,21 @@ button
 .thisExpression
   &::after
     content '@'
+
+.shebang
+  color gray
+  margin-bottom 1em
+
+
+
+errorRed = rgb(250,200,200)
+
+.error
+  color darken(errorRed, 50%)
+  background-color errorRed
+  border-width 1px
+  border-style solid
+  border-color darken(errorRed, 50%)
+  border-radius 3px
+  font-size 1rem
+  padding 1em 2em
