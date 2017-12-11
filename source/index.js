@@ -75,6 +75,15 @@ async function loadFile (filePath) {
     : toNormalizedUrl(window.location + 'files/' + filePath)
 
   const fileContentResponse = await fetch(fileUrl.href)
+
+  if (!fileContentResponse || !fileContentResponse.ok) {
+    outputElement.innerHTML = toHtmlError(
+      `Error while trying to load ${fileUrl}: ${fileContentResponse.statusText}`
+    )
+    return
+  }
+
+  console.dir(fileContentResponse, {colors: true, depth: null})
   const fileData = {
     url: fileUrl,
     path: filePath,
