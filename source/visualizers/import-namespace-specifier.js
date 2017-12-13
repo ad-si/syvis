@@ -1,6 +1,6 @@
 const walkTree = require('../walkTree')
 
 module.exports = (node) => [
-  'span.importDefaultSpecifier',
+  'span.importNamespaceSpecifier',
   ['span.local', walkTree(node.local)],
 ]

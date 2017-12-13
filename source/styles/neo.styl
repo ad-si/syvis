@@ -178,7 +178,34 @@ button
 
 .importDeclaration
   .specifiers::before
-    content 'import'
+    color silentColor
+    content 'import '
+
+  > .source::before
+    color silentColor
+    content ' from '
+
+
+.importNamespaceSpecifier
+  &::before
+    color silentColor
+    content ' * as '
+
+
+.importSpecifier
+  &::before
+    color silentColor
+    content ' { '
+  &::after
+    color silentColor
+    content ' } '
+
+  > .local
+    &::before
+      color silentColor
+      content ' as '
+
+
 .exportNamedDeclaration
   .specifiers::before
     color silentColor
