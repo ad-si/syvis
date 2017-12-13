@@ -9,7 +9,7 @@ module.exports = (node) => {
   return [
     'div',
     {class: classes.join(' ')},
-    ['span.identifier', walkTree(node.id)],
+    walkTree(node.id),
     ['span.init', hasInit
       ? walkTree(node.init)
       : null,

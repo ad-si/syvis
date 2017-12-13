@@ -142,17 +142,17 @@ button
 .while,
 .arrayExpression,
 .arrayPattern,
-.arrayElement,
 .objectExpression,
-.tryStatement
+.tryStatement,
 .switchStatement,
+.expressionStatement
   // background-color white !important
   // box-shadow 1px 1px 1px rgba(0, 0, 0, 0.08)
-  border-style solid
-  border-width 1px
+  border-style solid !important
+  border-width 1px !important
   // border-width 0px !important
-  border-radius 3px
-  display block
+  border-radius 3px !important
+  display block !important
 
 
 // Padded boxed elements
@@ -166,7 +166,7 @@ button
 .method,
 .if,
 .while,
-.tryStatement
+.tryStatement,
 .switchStatement
   padding 0.5em 0.4em 0.4em 1em
   margin-bottom 0.4em
@@ -178,7 +178,6 @@ button
 
     &::before
       display inline-block
-      margin-right 1em
       font-weight 600
 
 
@@ -276,22 +275,23 @@ button
   flex-wrap wrap
 
   > header
-    margin-right 1em
     &::before
-      content 'if'
+      content 'if\a0'
       color darken(ifColor, 50%)
+      font-weight 600
 
   > .consequent
     margin 0 1em 0.2em 0
     &::before
       color darken(ifColor, 50%)
       content 'then'
+      display block
       font-weight 600
 
   > .alternate
     &::before
       color darken(ifColor, 50%)
-      content 'else'
+      content 'else\a0'
       font-weight 600
 
 
@@ -391,7 +391,8 @@ button
 
   > header
     &::before
-      content 'while'
+      color transSilentColor
+      content 'while\a0'
 
   > .body
     padding 0.5em 1em
@@ -539,8 +540,11 @@ button
 
 
 .expressionStatement
-  padding 0.5em 0 0.5em 1em
+  background-color expressionColor
+  border-color darken(expressionColor, 10%)
   display block
+  padding 0.1em 0.2em
+  margin 0 0.2em 0.2em 0
 
 
 .memberExpression
@@ -591,28 +595,30 @@ button
 .declarations
   background-color declarationsColor
   border-color darken(declarationsColor, 5%)
-  display inline-block
-  padding 0.5em 3em 0.5em 1em
-  margin 0 0.5em 0.5em 0
+  display inline-block !important
+  margin 0 0.4em 0.4em 0
+  padding 0.2em 0.5em
 
-  &.const,
+  &.const
+    .declaration.hasInit > .identifier::after
+      content '\a0:=\a0'
+      color  transSilentColor
+
   &.let,
   &.var
+    .declaration.hasInit > .identifier::after
+      content '\a0:\a0'
+      color  transSilentColor
+
+  &.var
+    padding 0.2em 1.5em 0.2em 0.5em
     &::before
+      color transSilentColor
+      content 'var'
       float right
       font-size 0.8em
-      color transSilentColor
       position relative
-      right -3em
-
-  &.const::before
-    content 'const'
-
-  &.let::before
-    content 'let'
-
-  &.var::before
-    content 'var'
+      right -1.5em
 
   + .function
     margin-top 2em
@@ -626,10 +632,6 @@ button
   > .identifier
     color darken(declarationsColor, 50%)
     flex-grow 2
-
-  &.hasInit > .identifier::after
-    content '\a0=\a0'
-    color  transSilentColor
 
   > .init
     flex-grow 3
