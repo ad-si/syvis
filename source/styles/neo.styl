@@ -179,9 +179,48 @@ button
 .importDeclaration
   .specifiers::before
     content 'import'
+.exportNamedDeclaration
+  .specifiers::before
+    color silentColor
+    content 'export '
 
   .source::before
-    content 'from'
+    color silentColor
+    content ' from '
+
+
+.exportDefaultDeclaration
+  &::before
+    color silentColor
+    content 'export default '
+
+
+.exportAllDeclaration
+  &::before
+    color silentColor
+    content 'export default '
+
+
+.exportNamespaceSpecifier
+  &::before
+    color silentColor
+    content ' * as '
+
+
+.exportSpecifier
+  &::before
+    color silentColor
+    content ' { '
+  &::after
+    color silentColor
+    content ' } '
+
+  > .exported
+    &::before
+      color silentColor
+      content ' as '
+
+
 
 
 .if
