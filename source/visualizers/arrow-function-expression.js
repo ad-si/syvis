@@ -9,7 +9,9 @@ module.exports = node => {
     'div',
     {class: classes.join(' ')},
     ['div', // Used for flex layout
-      ['.parameters', walkTree(node.params)],
+      ['.paramsWrapper', // Used for flex layout
+        ['.params', walkTree(node.params)],
+      ],
       ['.body', walkTree(node.body)],
     ],
   ]

@@ -129,12 +129,14 @@ button
 
 // Boxed syntax elements
 .arrowFunctionExpression,
+.functionExpression,
 .classDeclaration,
 .classExpression,
 .declarations,
 .for,
 .forOf,
 .function,
+.method,
 .if,
 .return,
 .while,
@@ -155,11 +157,13 @@ button
 
 // Padded boxed elements
 .arrowFunctionExpression,
+.functionExpression,
 .classDeclaration,
 .classExpression,
 .for,
 .forOf,
 .function,
+.method,
 .if,
 .while,
 .tryStatement
@@ -393,6 +397,28 @@ button
     padding 0.5em 1em
 
 
+.method
+  background-color methodColor
+  border-color darken(methodColor, 10%)
+  position relative
+  margin-bottom 2em
+
+  &::before
+    content 'method'
+    labelStyling()
+
+  .name
+    color darken(methodColor, 50%)
+    font-weight 600
+    margin-right 0.5em
+
+  > .functionExpression
+    border none !important
+    background none
+
+    > div > .paramsWrapper > .params
+      color darken(methodColor, 50%) !important
+
 
 .function
   background-color functionColor
@@ -410,7 +436,7 @@ button
       font-weight 600
       margin-right 0.5em
 
-    > .parameters
+    > .params
       color gray
       &::before
         content '('
@@ -422,23 +448,33 @@ button
           content ', '
 
 
-.functionExpression .params,
 .arguments
-  &::before
-    color transSilentColor
-    content '( '
+  &:empty
+    &::before
+      color transSilentColor
+      content '()'
 
-  &::after
-    color transSilentColor
-    content ' )'
+  &:not(:empty)
+    &::before
+      color transSilentColor
+      content '( '
 
-  & > span:not(:last-of-type)
     &::after
       color transSilentColor
-      content ', '
+      content ' )'
+
+    & > span:not(:last-of-type)
+      margin-right 0.6em
+
+  > span
+    display inline-block
+    border-bottom 1px solid transShadowColor
+    margin-bottom 0.1em
+    padding 0 0.2em
 
 
-.arrowFunctionExpression
+.arrowFunctionExpression,
+.functionExpression
   background-color arrowFuncColor
   border-color darken(arrowFuncColor, 10%)
   display inline-block
@@ -448,18 +484,30 @@ button
     &::before
       content 'async'
       margin-right 0.5em
-      font-weight 900
 
   > div
     display flex
     align-items center
     flex-wrap wrap
 
-    > .parameters
-      color darken(arrowFuncColor, 50%)
-      &::after
-        margin 0 1em
-        content '⇒'
+    > div
+      display flex
+      align-items center
+      flex-wrap wrap
+
+      > .params
+        color darken(arrowFuncColor, 50%)
+        display flex
+        flex-direction column
+
+        &:empty::after
+          content '()'
+
+    > .paramsWrapper::after
+      color transSilentColor
+      content '=>'
+      display block
+      margin 0 1em
 
 
 .classDeclaration,
@@ -481,9 +529,8 @@ button
 
   .superClass
     &::before
-      color primaryColor
-      content '\a0\65xtends\a0'
-      font-weight 600
+      color silentColor
+      content '\0000a0extends\a0'
 
 .super
   &::before

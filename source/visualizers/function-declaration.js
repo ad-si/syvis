@@ -13,7 +13,7 @@ module.exports = (node) => {
     'section.code.function',
     ['header',
       ['span.name', walkTree(node.id)],
-      ['span.parameters', walkTree(markAsFunctionParameter(node.params))],
+      ['span.params', walkTree(markAsFunctionParameter(node.params))],
     ],
     ['div', node.body ? walkTree(node.body) : null],
   ]
