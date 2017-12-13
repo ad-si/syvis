@@ -143,6 +143,7 @@ button
 .arrayElement,
 .objectExpression,
 .tryStatement
+.switchStatement,
   // background-color white !important
   // box-shadow 1px 1px 1px rgba(0, 0, 0, 0.08)
   border-style solid
@@ -162,6 +163,7 @@ button
 .if,
 .while,
 .tryStatement
+.switchStatement
   padding 0.5em 0.4em 0.4em 1em
   margin-bottom 0.4em
 
@@ -248,6 +250,19 @@ button
       content ' as '
 
 
+.switchStatement
+  background-color ifColor
+  border-color darken(ifColor, 20%)
+
+  > .discriminant
+    &::before
+      color darken(ifColor, 50%)
+      content 'switch '
+
+  > .test
+    &::after
+      color darken(ifColor, 50%)
+      content ' -> '
 
 
 .if
