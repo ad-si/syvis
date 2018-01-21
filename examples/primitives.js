@@ -44,6 +44,10 @@ const arrayPattern = ([xValue, yValue]) =>
   const assignmentInBlock = 'indeed'
 }
 
+// Empty Statement
+
+;
+
 
 // Assignment Expressions
 

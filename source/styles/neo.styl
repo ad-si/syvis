@@ -571,6 +571,12 @@ button
     color primaryColor
     content '\a0super\a0'
 
+.emptyStatement
+  &::before
+    color darken(errorRed, 50%)
+    content '<empty statement>\a0'
+
+
 
 .blockStatement
   background-color blockColor
@@ -1020,8 +1026,6 @@ button
   margin-bottom 1em
 
 
-
-errorRed = rgb(250,200,200)
 
 .error
   color darken(errorRed, 50%)
