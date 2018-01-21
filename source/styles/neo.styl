@@ -140,6 +140,7 @@ button
 .if,
 .return,
 .while,
+.do-while,
 .arrayExpression,
 .arrayPattern,
 .objectExpression,
@@ -166,6 +167,7 @@ button
 .method,
 .if,
 .while,
+.do-while,
 .tryStatement,
 .switchStatement
   padding 0.5em 0.4em 0.4em 1em
@@ -385,17 +387,40 @@ button
         content '\a0of\a0'
 
 
-.while
+.while,
+.do-while
   background-color whileColor
   border-color darken(whileColor, 10%)
 
+.while
   > header
     &::before
-      color transSilentColor
+      color darken(whileColor, 50%)
       content 'while\a0'
 
   > .body
     padding 0.5em 1em
+
+
+.do-while
+  paddingY = 0.5em
+  paddingX = 1em
+
+  > .body,
+  > footer
+    padding paddingY paddingX
+    &::before
+      color darken(whileColor, 50%)
+      font-weight 600
+      position relative
+      right paddingX
+      bottom paddingY
+
+  > .body::before
+    content 'do\a0'
+
+  > footer::before
+    content 'while\a0'
 
 
 .method
