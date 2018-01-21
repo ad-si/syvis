@@ -5,9 +5,9 @@
   "main": "source/index.js",
   "bin": "source/cli.js",
   "scripts": {
-    "lint": "eslint --max-warnings 0 .",
-    "postinstall": "cp node_modules/shaven/shaven.js public",
-    "build": "stylus --compress < source/screen.styl > public/screen.css"
+    "lint": "eslint --max-warnings=0 .",
+    "test": "yarn lint",
+    "postinstall": "cp node_modules/shaven/shaven.js public"
   },
   "keywords": [
     "syntax",

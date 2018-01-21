@@ -83,7 +83,6 @@ async function loadFile (filePath) {
     return
   }
 
-  console.dir(fileContentResponse, {colors: true, depth: null})
   const fileData = {
     url: fileUrl,
     path: filePath,
