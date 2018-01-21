@@ -65,7 +65,7 @@ button
   position relative
   font-family 'Source Code Pro', 'Courier New', monospace
 
-  > .label
+  > .blockLabel
     margin-bottom 1em
     color rgba(primaryColor, 0.8)
 
@@ -123,12 +123,13 @@ button
 .regex
   color regexColor
 
-.label
+.blockLabel
   labelStyling()
 
 
 // Boxed syntax elements
 .arrowFunctionExpression,
+.blockStatement,
 .functionExpression,
 .classDeclaration,
 .classExpression,
@@ -158,6 +159,7 @@ button
 
 // Padded boxed elements
 .arrowFunctionExpression,
+.blockStatement,
 .functionExpression,
 .classDeclaration,
 .classExpression,
@@ -181,6 +183,10 @@ button
     &::before
       display inline-block
       font-weight 600
+
+  > .body > .blockStatement
+    background-color transparent
+    border-color transparent
 
 
 .importDeclaration
@@ -564,6 +570,13 @@ button
     content '\a0super\a0'
 
 
+.blockStatement
+  background-color blockColor
+  border-color darken(blockColor, 10%)
+  display block
+  padding 0.1em 0.2em
+  margin 0 0.2em 0.2em 0
+
 .expressionStatement
   background-color expressionColor
   border-color darken(expressionColor, 10%)
@@ -689,7 +702,7 @@ button
 .commentedSection
   margin-top 1em
 
-.label + .commentedSection,
+.blockLabel + .commentedSection,
 .body > .commentedSection:first-child
   margin-top 0 !important
 

@@ -130,7 +130,7 @@ function walkTree (node, fileData) {
 
     return ['section.file',
       shebang,
-      ['span.label', fileData ? fileData.path : false],
+      ['span.blockLabel', fileData ? fileData.path : false],
       ...node.body.map(walkTree),
       Array.isArray(node.comments)
         ? [
@@ -144,16 +144,6 @@ function walkTree (node, fileData) {
         : true,
     ]
   }
-
-  if (node.type === 'BlockStatement') {
-    if (node.body.length) {
-      return node.body.map(walkTree)
-    }
-    else {
-      return ''
-    }
-  }
-
 
   if (visualizers[node.type]) {
     const visualizer = require(visualizers[node.type])

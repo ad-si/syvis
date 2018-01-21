@@ -38,8 +38,14 @@ const arrowFunction = xValue =>
 const arrayPattern = ([xValue, yValue]) =>
   xValue + yValue
 
+// Block Statement
 
-// Assignment expressions
+{
+  const assignmentInBlock = 'indeed'
+}
+
+
+// Assignment Expressions
 
 let valueA = 1
 let valueB = 1
