@@ -130,6 +130,7 @@ button
 // Boxed syntax elements
 .arrowFunctionExpression,
 .blockStatement,
+.labeledStatement,
 .functionExpression,
 .classDeclaration,
 .classExpression,
@@ -160,6 +161,7 @@ button
 // Padded boxed elements
 .arrowFunctionExpression,
 .blockStatement,
+.labeledStatement,
 .functionExpression,
 .classDeclaration,
 .classExpression,
@@ -576,6 +578,22 @@ button
   display block
   padding 0.1em 0.2em
   margin 0 0.2em 0.2em 0
+
+
+.labeledStatement
+  background-color blockColor
+  border-color darken(blockColor, 10%)
+  > header > .label
+    &::after
+      content ':\a0'
+
+
+.continueStatement
+  &::before
+    color primaryColor
+    content 'continue\a0'
+    font-weight 600
+
 
 .expressionStatement
   background-color expressionColor
