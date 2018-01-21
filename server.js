@@ -1,8 +1,8 @@
 const path = require('path')
-const fs = require('fs')
 
 // const esprima = require('esprima')
 const express = require('express')
+const morgan = require('morgan') // logger
 const stylus = require('stylus')
 const serveFavicon = require('serve-favicon')
 const browserifyMiddleware = require('browserify-middleware')
@@ -10,8 +10,9 @@ const browserifyMiddleware = require('browserify-middleware')
 const getModules = require('./getModules')
 
 const app = express()
-const port = 3001
+const port = process.env.PORT || 3001
 
+app.use(morgan('dev'))
 
 app.use(serveFavicon(path.resolve(__dirname, 'images', 'favicon.ico')))
 app.use(stylus.middleware({
@@ -38,7 +39,9 @@ app.use(
   express.static('.', {index: false})
 )
 
-
 app.listen(port, () => {
-  console.info(`Syvis is listening at http://localhost:${port}`)
+  console.info(
+    `Syvis is listening on http://localhost:${port
+    } in ${app.get('env')} mode`
+  )
 })
