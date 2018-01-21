@@ -1,2 +1,8 @@
 language: node_js
 node_js: stable
+
+# Use Ubuntu 14.04
+dist: trusty
+
+# Run in Docker container (fast startup time, good for jobs < 3 min)
+sudo: false
