@@ -1,10 +1,15 @@
 /* eslint-disable no-unused-vars, quotes */
+var varInteger = 123
+let letInteger = 123
+const constInteger = 123
 
-const integer = 123
 const float = 123.456
 const notANumber = NaN
 const emptyString = ''
-const string = 'This is a string'
+const string = 'This is valA string'
+const longString = 'This is a very long string. \
+  It is used to test the line wrapping behavior of syvis. \
+  Some more text to make the line even longer.'
 const templateString = `This is also just a string`
 const templateWithExpressions = `This is a ${'VE' + 'RY'} special string`
 const taggedTemplateString = String.raw `Also ${'VE' + 'RY'} special`
@@ -32,3 +37,22 @@ const arrowFunction = xValue =>
   xValue * xValue
 const arrayPattern = ([xValue, yValue]) =>
   xValue + yValue
+
+
+// Assignment expressions
+
+let valueA = 1
+let valueB = 1
+
+valueA = valueB
+valueA += valueB
+valueA -= valueB
+valueA *= valueB
+valueA /= valueB
+valueA %= valueB
+valueA <<= valueB
+valueA >>= valueB
+valueA >>>= valueB
+valueA &= valueB
+valueA |= valueB
+valueA ^= valueB

@@ -782,11 +782,58 @@ button
 
 .assignmentExpression,
 .assignmentPattern
-  > .left
-    &::after
-      color transSilentColor
-      content '\a0=\a0'
+  > .left::after
+    color transSilentColor
+    content '\a0=\a0'
 
+  // Make unusual assignment expression more visibile
+  &[class*="assign-"]
+    > .left::after
+      color transQuietColor !important
+
+.assign-add
+  > .left::after
+    content '\a0+=\a0'
+
+.assign-subtract
+  > .left::after
+    content '\a0-=\a0'
+
+.assign-multiply
+  > .left::after
+    content '\a0*=\a0'
+
+.assign-divide
+  > .left::after
+    content '\a0/=\a0'
+
+.assign-remainder
+  > .left::after
+    content '\a0%=\a0'
+
+.assign-shift-left
+  > .left::after
+    content '\a0<<=\a0'
+
+.assign-shift-right
+  > .left::after
+    content '\a0>>=\a0'
+
+.assign-shift-right-unsigned
+  > .left::after
+    content '\a0>>>=\a0'
+
+.assign-bit-and
+  > .left::after
+    content '\a0&=\a0'
+
+.assign-bit-or
+  > .left::after
+    content '\a0|=\a0'
+
+.assign-bit-xor
+  > .left::after
+    content '\a0^=\a0'
 
 // Literals
 
