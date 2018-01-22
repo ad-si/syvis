@@ -136,6 +136,7 @@ button
 .classExpression,
 .declarations,
 .for,
+.forIn,
 .forOf,
 .function,
 .method,
@@ -166,6 +167,7 @@ button
 .classDeclaration,
 .classExpression,
 .for,
+.forIn,
 .forOf,
 .function,
 .method,
@@ -380,6 +382,7 @@ button
     padding 0 0 0 1em
 
 
+.forIn,
 .forOf
   background-color forColor
   border-color darken(forColor, 10%)
@@ -392,7 +395,16 @@ button
     > .right
       &::before
         color darken(forColor, 50%)
-        content '\a0of\a0'
+
+.forIn
+  > header
+    > .right::before
+      content '\a0in\a0'
+
+.forOf
+  > header
+    > .right::before
+      content '\a0of\a0'
 
 
 .while,
