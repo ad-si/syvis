@@ -29,6 +29,9 @@ app.use(
 )
 app.use('/', express.static('public'))
 
+const cmSource = 'node_modules/codemirror'
+app.use('/theme/default.css', express.static(`${cmSource}/lib/codemirror.css`))
+
 
 app.get('/filename', (request, response) => {
   response.send(process.argv[2])

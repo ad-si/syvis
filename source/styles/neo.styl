@@ -1,61 +1,3 @@
-@import 'source/styles/_shared'
-
-
-*
-  margin 0
-  padding 0
-  border 0
-
-body
-  color mutedColor
-  font-size 12px
-  font-family sans-serif
-  background-color backgroundColor
-
-main
-  width 50em
-  padding 2em 1em 5em 1em
-  margin 0 auto
-
-h1
-  font-size 3em
-  margin-bottom 0.5em
-
-h2
-  margin-bottom 1em
-
-p
-  margin-bottom 0.5em
-
-form
-  display inline-block
-  input[type=text]
-    border-width 1px
-    border-style solid
-    border-radius 0.5em
-    border-color silentColor
-    padding 0.5em 1em
-    width 40em
-
-textarea
-  border-width 1px
-  border-style solid
-  border-color gray
-  display none //block
-  padding 1em
-  border-radius 0.4em
-  vertical-align top
-
-button
-  border-width 1px
-  border-style solid
-  border-color silentColor
-  border-radius 0.5em
-  cursor pointer
-  padding 0.5em 1em
-  margin 2em
-
-
 .file
   border-width 1px
   border-style solid
@@ -75,6 +17,17 @@ button
     // border-bottom-width 1px
     margin-bottom 0.3em
     padding-bottom 0.2em
+
+
+// Interaction
+button.edit
+  border-radius 0.2em
+  margin 0.2em 0.4em
+  padding 0.2em 0.4em
+
+.CodeMirror
+  height: auto
+
 
 .string
   font-style italic

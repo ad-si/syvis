@@ -5,8 +5,6 @@ module.exports = (expression) => {
   const classes = ['assignmentExpression']
   const operator = operatorMap.binary[expression.operator]
 
-  console.info(operator, expression.operator)
-
   if (operator) classes.push(operator)
 
   return [

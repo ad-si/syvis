@@ -3,6 +3,7 @@ const URL = require('whatwg-url').URL
 
 const shaven = require('shaven').default
 const esprima = require('esprima')
+const esprimaDefaults = require('./esprima-defaults')
 
 const walkTree = require('./walkTree')
 
@@ -27,17 +28,10 @@ function renderSyntax (fileData) {
     fileData.content = fileData.content.slice(indexOfFirstNewline)
   }
 
-  const esprimaOptions = {
-    loc: true,
-    range: false,
-    attachComment: true,
-    tolerant: true,
-  }
+  const syntaxTree = esprima.parse(fileData.content, esprimaDefaults)
 
-  const syntaxTree = esprima.parse(fileData.content, esprimaOptions)
-
-  if (esprimaOptions.errors) {
-    return esprimaOptions.errors
+  if (esprimaDefaults.errors) {
+    return esprimaDefaults.errors
   }
   else {
     return [walkTree(syntaxTree, fileData)]
@@ -63,13 +57,20 @@ function toNormalizedUrl (urlString) {
 function toFileUrl (filePath) {
   return filePath.startsWith('http')
     ? toNormalizedUrl(filePath)
-    : toNormalizedUrl(`${window.location}files/${filePath}`)
+    : toNormalizedUrl(`${window.location.origin}/files/${filePath}`)
 }
 
 
 // :: String -> Eff (Result Error FileData)
 async function loadFile (fileUrl, filePath) {
-  const fileContentResponse = await fetch(fileUrl.href)
+  let fileContentResponse
+  try {
+    fileContentResponse = await fetch(fileUrl.href)
+  }
+  catch (error) {
+    error.message = `Tried to load "${fileUrl}":${error.message}`
+    return error
+  }
 
   if (!fileContentResponse || !fileContentResponse.ok) {
     return new Error(
@@ -94,13 +95,13 @@ async function loadAndRender (filePath) {
   outputElement.innerHTML = ''
 
   if (result instanceof Error) {
-    outputElement.innerHtml = toHtmlError(result)
+    outputElement.innerHTML = toHtmlError(result)
   }
   else {
     const shavenArray = renderSyntax(result)
 
     if (shavenArray.errors) {
-      outputElement.innerHtml = toHtmlError(result)
+      outputElement.innerHTML = toHtmlError(result)
     }
     else {
       shaven([outputElement, shavenArray])[0]
@@ -127,4 +128,11 @@ async function main () {
 }
 
 
-main()
+try {
+  main()
+}
+catch (error) {
+  document
+    .getElementById('output')
+    .innerHTML = toHtmlError(error)
+}

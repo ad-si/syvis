@@ -1,6 +1,45 @@
 const fs = require('fs')
 const path = require('path')
 
+const shaven = require('shaven').default
+const esprima = require('esprima')
+const esprimaDefaults = require('./esprima-defaults')
+
+const codemirror = require('codemirror')
+require('codemirror/mode/javascript/javascript.js')
+
+
+function onEdit (fileData, editEvent) {
+  editEvent.target.textContent = 'visualize'
+  editEvent.target.removeEventListener('click', onEdit)
+  const container = editEvent.target.parentNode.parentNode
+    .querySelector('.body')
+  container.innerHTML = ''
+
+  const editor = codemirror(
+    container,
+    {
+      value: fileData.content,
+      mode: 'javascript',
+      lineNumbers: true,
+    }
+  )
+
+  function reVisualize (event) {
+    event.target.removeEventListener('click', reVisualize)
+    container.innerHTML = ''
+    fileData.content = editor.getValue()
+    const ast = esprima.parse(fileData.content, esprimaDefaults)
+    const outputElement = document.getElementById('output')
+    outputElement.innerHTML = ''
+    shaven([outputElement, [walkTree(ast, fileData)]])
+  }
+
+  editEvent.target.addEventListener('click', reVisualize)
+}
+
+
+
 // Do not refactor as code is analyzed statically and only works this way
 const visualizerNames = fs.readdirSync(path.join(__dirname, 'visualizers'))
 
@@ -130,18 +169,30 @@ function walkTree (node, fileData) {
 
     return ['section.file',
       shebang,
-      ['span.blockLabel', fileData ? fileData.path : false],
-      ...node.body.map(walkTree),
-      Array.isArray(node.comments)
-        ? [
-          '.comments',
-          ...node.comments
-            .filter(comment => comment.value)
-            .map(comment => {
-              return commentTemplate(comment)
-            }),
-        ]
-        : true,
+      ['header',
+        fileData ? fileData.path : false,
+        ['button.edit',
+          'edit',
+          element => {
+            element.addEventListener('click', clickEvent =>
+              onEdit(fileData, clickEvent)
+            )
+          },
+        ],
+      ],
+      ['.body',
+        ...node.body.map(walkTree),
+        Array.isArray(node.comments)
+          ? [
+            '.comments',
+            ...node.comments
+              .filter(comment => comment.value)
+              .map(comment => {
+                return commentTemplate(comment)
+              }),
+          ]
+          : true,
+      ],
     ]
   }
 

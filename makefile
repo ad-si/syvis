@@ -19,5 +19,5 @@ docs/$(hiddenPath)/index.js: $(jsFiles)
 
 docs/$(hiddenPath)/screen.css: $(stylFiles)
 	npx stylus --compress \
-		< source/styles/neo.styl \
+		< source/styles/main.styl \
 		> $@
