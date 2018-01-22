@@ -504,10 +504,12 @@ button
     &::before
       color transSilentColor
       content '( '
+      vertical-align top
 
     &::after
       color transSilentColor
       content ' )'
+      vertical-align top
 
     & > span:not(:last-of-type)
       margin-right 0.6em
@@ -634,12 +636,22 @@ button
         content ']'
 
 
-.callee > .memberExpression > .property
-  color hsl(190, 60%, 50%) !important
-  &::before
-    white-space pre
-    content '\A   .'
-    color  transSilentColor
+.callee
+  vertical-align top
+
+  > .memberExpression > .property
+    color hsl(190, 60%, 50%) !important
+    &::before
+      white-space pre
+      content '\A   .'
+      color  transSilentColor
+
+
+// TODO: Design wrapper for arguments first
+// .callExpression
+//   > span
+//     display inline-block
+//     vertical-align middle
 
 
 .logicalExpression
