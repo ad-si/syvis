@@ -12,7 +12,6 @@
   "keywords": [
     "syntax",
     "highlighting",
-    "syntax",
     "visualizing"
   ],
   "author": "Adrian Sieber",
@@ -26,7 +25,7 @@
     "express": "^4.16.2",
     "morgan": "^1.9.0",
     "serve-favicon": "^2.4.5",
-    "shaven": "^1.1.0",
+    "shaven": "1.2.0",
     "stylus": "^0.54.5",
     "whatwg-url": "^6.4.0"
   },

@@ -6,16 +6,15 @@ const esprima = require('esprima')
 
 const walkTree = require('./walkTree')
 
-const fileUrlForm = document.getElementById('fileUrl')
-const fileUrlInput = document.querySelector('#fileUrl input')
-const outputElement = document.getElementById('output')
 
-
+// :: Error -> HtmlString
 function toHtmlError (error) {
-  return `<p class=error>${error}</p>`
+  return `<p class=error>${error.message}</p>`
 }
 
-function visualizeSyntax (fileData) {
+
+// :: String -> Result Error ShavenArray
+function renderSyntax (fileData) {
   // Workaround to render JSON
   if (fileData.url.pathname.endsWith('.json')) {
     fileData.content = '(' + fileData.content + ')'
@@ -35,27 +34,18 @@ function visualizeSyntax (fileData) {
     tolerant: true,
   }
 
-  try {
-    const syntaxTree = esprima.parse(fileData.content, esprimaOptions)
+  const syntaxTree = esprima.parse(fileData.content, esprimaOptions)
 
-    if (esprimaOptions.errors) {
-      console.error(esprimaOptions.errors)
-      outputElement.innerHTML = toHtmlError(esprimaOptions.errors)
-      return
-    }
-
-    outputElement.innerHTML = ''
-
-    return [walkTree(syntaxTree, fileData)]
+  if (esprimaOptions.errors) {
+    return esprimaOptions.errors
   }
-  catch (error) {
-    console.error(error)
-    outputElement.innerHTML = toHtmlError(error)
-    return
+  else {
+    return [walkTree(syntaxTree, fileData)]
   }
 }
 
 
+// :: String -> String
 function toNormalizedUrl (urlString) {
   const fileUrl = new URL(urlString)
 
@@ -69,18 +59,22 @@ function toNormalizedUrl (urlString) {
 }
 
 
-async function loadFile (filePath) {
-  const fileUrl = filePath.startsWith('http')
+// :: String -> String
+function toFileUrl (filePath) {
+  return filePath.startsWith('http')
     ? toNormalizedUrl(filePath)
-    : toNormalizedUrl(window.location + 'files/' + filePath)
+    : toNormalizedUrl(`${window.location}files/${filePath}`)
+}
 
+
+// :: String -> Eff (Result Error FileData)
+async function loadFile (fileUrl, filePath) {
   const fileContentResponse = await fetch(fileUrl.href)
 
   if (!fileContentResponse || !fileContentResponse.ok) {
-    outputElement.innerHTML = toHtmlError(
+    return new Error(
       `Error while trying to load ${fileUrl}: ${fileContentResponse.statusText}`
     )
-    return
   }
 
   const fileData = {
@@ -88,23 +82,49 @@ async function loadFile (filePath) {
     path: filePath,
     content: await fileContentResponse.text(),
   }
-  const shavenArray = visualizeSyntax(fileData)
-
-  shaven([outputElement, shavenArray])[0]
+  return fileData
 }
 
 
-async function loadInitialFile () {
-  const fileNameResponse = await fetch('/filename')
-  const fileName = await fileNameResponse.text()
+// :: String -> Eff
+async function loadAndRender (filePath) {
+  const fileUrl = toFileUrl(filePath)
+  const result = await loadFile(fileUrl, filePath)
+  const outputElement = document.getElementById('output')
+  outputElement.innerHTML = ''
 
-  loadFile(fileName)
+  if (result instanceof Error) {
+    outputElement.innerHtml = toHtmlError(result)
+  }
+  else {
+    const shavenArray = renderSyntax(result)
+
+    if (shavenArray.errors) {
+      outputElement.innerHtml = toHtmlError(result)
+    }
+    else {
+      shaven([outputElement, shavenArray])[0]
+    }
+  }
 }
 
 
-loadInitialFile()
+// :: Eff
+async function main () {
+  const filePathResponse = await fetch('/filename')
+  const filePath = await filePathResponse.text()
 
-fileUrlForm.addEventListener('submit', event => {
-  event.preventDefault()
-  loadFile(fileUrlInput.value)
-})
+  await loadAndRender(filePath)
+
+  const fileUrlForm = document.getElementById('fileUrl')
+
+  fileUrlForm.addEventListener('submit', async (event) => {
+    event.preventDefault()
+    const fileUrlInput = event.target.querySelector('input')
+
+    await loadAndRender(fileUrlInput.value)
+  })
+}
+
+
+main()
