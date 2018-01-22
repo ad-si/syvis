@@ -951,6 +951,20 @@ button
 
 
 // Operators
+// Check out /source/operatorMap.js for complete list
+
+// Add parentheses to clarify precedence
+
+.binaryExpression
+  > .left::before
+    content '('
+    color transSilentColor
+
+  > .right::after
+    content ')'
+    color transSilentColor
+
+
 
 .binaryExpression
   > .left::after
@@ -980,6 +994,18 @@ button
 .operator-multiply
   > .left::after
     content '\a0×\a0'
+
+.operator-divide
+  > .left::after
+    content '\a0/\a0'
+
+.operator-remainder
+  > .left::after
+    content '\a0%\a0'
+
+.operator-exponent
+  > .left::after
+    content '\a0**\a0'
 
 .operator-equals
   width 1.5em

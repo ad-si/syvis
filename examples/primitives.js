@@ -2,11 +2,11 @@
 var varInteger = 123
 let letInteger = 123
 const constInteger = 123
-
 const float = 123.456
 const notANumber = NaN
 const emptyString = ''
 const string = 'This is valA string'
+const stringConcat = 'This' + 'is' + 'a' + 'string' + 'as' + 'well'
 const longString = 'This is a very long string. \
   It is used to test the line wrapping behavior of syvis. \
   Some more text to make the line even longer.'
