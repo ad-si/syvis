@@ -34,7 +34,7 @@ function hasLeadingComments (element) {
 
 function commentTemplate (comment) {
   return [
-    'p&',
+    'p',
     {class: 'comment ' + comment.type.toLowerCase()},
     comment.value.replace(/\n/g, '<br>'),
   ]
