@@ -45,23 +45,28 @@ chokidar source/styles \
 
 ## Related
 
+- [Barista] - Implementation toolkit for AST editors.
+- [Citrus] - Programming language and user interface toolkit.
+  (https://youtu.be/YIlYJCwIXLs)
 - [Codemirror Blocks] - Drag-and-drop editing for functional languages.
 - [CodeWorld] - Educational computer programming environment using Haskell.
 - [Future Programming Webassembly Life After JavaScript][FWA]
 - [Glance] - Visual syntax for Haskell.
 - [Lamdu] -
 - [Mbeddr]
-- [Moonchild] - Projection editor.
+- [Moonchild] - Projection editor (https://vimeo.com/97711824).
 - [Programming Beyond Text: The Parsing Problem][Parsing Problem]
 - [Treeline] - Develop backend apps in your web browser.
 - [Unison]
 
+[Barista]: https://www.youtube.com/watch?v=gAxjUh9d2YI
+[Citrus]: https://github.com/andyjko/citrus-barista
 [CodeWorld]: https://github.com/google/codeworld
 [FWA]: http://sitepoint.com/future-programming-webassembly-life-after-javascript
 [Glance]: https://github.com/rgleichman/glance
 [Lamdu]: http://www.lamdu.org
 [Mbeddr]: http://mbeddr.com
-[Moonchild]: https://vimeo.com/97711824
+[Moonchild]: https://github.com/harc/moonchild
 [Parsing Problem]: http://joshondesign.com/2016/06/13/the_parsing_problem
 [Treeline]: https://treeline.io
 [Unison]: http://unisonweb.org
@@ -120,6 +125,7 @@ Links on how to code on mobile/touch devices
   2. Patches (e.g. change a string)
   3. Minor changes (e.g. write a function)
   4. Major changes (e.g. restructure code)
+- https://meemoo.org/
 
   => Code editor should be optimized for this interaction pattern
 - Minimap
@@ -163,6 +169,11 @@ Links on how to code on mobile/touch devices
 
 ### People
 
-- monoidmusician <https://github.com/MonoidMusician/purescript-datagen> -
-  I wish I had time and skillz to make my AST editor actually happen
+- [Monoid Musician] - I wish I had time and skillz to make my AST editor
+  actually happen (https://github.com/MonoidMusician/purescript-datagen)
+- [Andres J. Ko] - Associate Professor at University of Washington
+- [Patrick Dubory] - Programmer and interaction designer based in Munich.
 
+[Monoid Musician]: monoidmusician
+[Patrick Dubory]: https://dubroy.com
+[Andres J. Ko]: https://faculty.washington.edu/ajko
