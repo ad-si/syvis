@@ -1,3 +1,6 @@
+// @flow
+import type {FileData} from './types.js'
+
 // TODO: Use native URL module when browserify supports it
 const URL = require('whatwg-url').URL
 
@@ -6,12 +9,7 @@ const esprima = require('esprima')
 const esprimaDefaults = require('./esprima-defaults')
 
 const walkTree = require('./walkTree')
-
-
-// :: Error -> HtmlString
-function toHtmlError (error) {
-  return `<p class=error>${error.message}</p>`
-}
+const toHtmlError = require('./toHtmlError')
 
 
 // :: String -> Result Error ShavenArray
@@ -28,13 +26,18 @@ function renderSyntax (fileData) {
     fileData.content = fileData.content.slice(indexOfFirstNewline)
   }
 
-  const syntaxTree = esprima.parse(fileData.content, esprimaDefaults)
+  try {
+    const syntaxTree = esprima.parse(fileData.content, esprimaDefaults)
 
-  if (esprimaDefaults.errors) {
-    return esprimaDefaults.errors
+    if (esprimaDefaults.errors) {
+      return esprimaDefaults.errors
+    }
+    else {
+      return walkTree(syntaxTree, fileData)
+    }
   }
-  else {
-    return [walkTree(syntaxTree, fileData)]
+  catch (error) {
+    return error
   }
 }
 
@@ -62,7 +65,7 @@ function toFileUrl (filePath) {
 
 
 // :: String -> Eff (Result Error FileData)
-async function loadFile (fileUrl, filePath) {
+async function loadFile (fileUrl, filePath) : Promise<FileData | Error> {
   let fileContentResponse
   try {
     fileContentResponse = await fetch(fileUrl.href)
@@ -78,10 +81,11 @@ async function loadFile (fileUrl, filePath) {
     )
   }
 
-  const fileData = {
+  const fileData : FileData = {
     url: fileUrl,
     path: filePath,
     content: await fileContentResponse.text(),
+    shebang: '',
   }
   return fileData
 }
@@ -92,6 +96,9 @@ async function loadAndRender (filePath) {
   const fileUrl = toFileUrl(filePath)
   const result = await loadFile(fileUrl, filePath)
   const outputElement = document.getElementById('output')
+  if (!outputElement) {
+    throw new Error('Element #output does not exist')
+  }
   outputElement.innerHTML = ''
 
   if (result instanceof Error) {
@@ -100,8 +107,8 @@ async function loadAndRender (filePath) {
   else {
     const shavenArray = renderSyntax(result)
 
-    if (shavenArray.errors) {
-      outputElement.innerHTML = toHtmlError(result)
+    if (shavenArray.errors != null) {
+      outputElement.innerHTML = toHtmlError(new Error(result))
     }
     else {
       shaven([outputElement, shavenArray])[0]
@@ -118,10 +125,19 @@ async function main () {
   await loadAndRender(filePath)
 
   const fileUrlForm = document.getElementById('fileUrl')
+  if (!fileUrlForm) {
+    throw new Error('Element "#fileUrl" does not exist')
+  }
 
   fileUrlForm.addEventListener('submit', async (event) => {
     event.preventDefault()
+    if (!(event.target instanceof window.Element)) {
+      throw new Error(String(event.target) + ' should be instance of Element')
+    }
     const fileUrlInput = event.target.querySelector('input')
+    if (!fileUrlInput) {
+      throw new Error('Element "input" does not exist')
+    }
 
     await loadAndRender(fileUrlInput.value)
   })
@@ -132,7 +148,10 @@ try {
   main()
 }
 catch (error) {
-  document
-    .getElementById('output')
-    .innerHTML = toHtmlError(error)
+  const outputElement = document.getElementById('output')
+  if (!outputElement) {
+    throw new Error('Element "#output" does not exist')
+  }
+
+  outputElement.innerHTML = toHtmlError(error)
 }

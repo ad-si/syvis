@@ -1,3 +1,5 @@
+// @flow
+
 /* eslint-disable indent */
 module.exports.binary = {
     ',': 'comma',

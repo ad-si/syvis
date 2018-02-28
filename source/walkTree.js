@@ -1,23 +1,29 @@
-const fs = require('fs')
-const path = require('path')
+// @flow
+import type {FileData, Node, Comment} from './types.js'
 
 const shaven = require('shaven').default
 const esprima = require('esprima')
-const esprimaDefaults = require('./esprima-defaults')
-
 const codemirror = require('codemirror')
-require('codemirror/mode/javascript/javascript.js')
+// require('codemirror/mode/javascript/javascript.js')
+
+const esprimaDefaults = require('./esprima-defaults')
+const toHtmlError = require('./toHtmlError.js')
+const visualizers = require('./visualizers.js')
 
 
-function onEdit (fileData, editEvent) {
+function onEdit (fileData: FileData, editEvent) {
   editEvent.target.textContent = 'visualize'
   editEvent.target.removeEventListener('click', onEdit)
-  const container = editEvent.target.parentNode.parentNode
-    .querySelector('.body')
-  container.innerHTML = ''
+  const fileContainer = editEvent.target.parentNode.parentNode
+  const renderingContainer = fileContainer.querySelector('.body')
+  renderingContainer.style.display = 'none'
+
+  const editorContainer = document.createElement('div')
+  editorContainer.className = 'editor'
+  fileContainer.append(editorContainer)
 
   const editor = codemirror(
-    container,
+    editorContainer,
     {
       value: fileData.content,
       mode: 'javascript',
@@ -26,43 +32,31 @@ function onEdit (fileData, editEvent) {
   )
 
   function reVisualize (event) {
-    event.target.removeEventListener('click', reVisualize)
-    container.innerHTML = ''
     fileData.content = editor.getValue()
-    const ast = esprima.parse(fileData.content, esprimaDefaults)
     const outputElement = document.getElementById('output')
-    outputElement.innerHTML = ''
-    shaven([outputElement, [walkTree(ast, fileData)]])
+    if (!outputElement) {
+      throw new Error('Element #output does not exist')
+    }
+
+    try {
+      event.target.removeEventListener('click', reVisualize)
+      const ast = esprima.parse(fileData.content, esprimaDefaults)
+      const rendering = walkTree(ast, fileData)
+
+      outputElement.innerHTML = ''
+      // renderingContainer.style.display = 'initial'
+      // editorContainer.style.display = 'initial'
+
+      shaven([outputElement, rendering])
+    }
+    catch (error) {
+      const div = document.createElement('div')
+      div.innerHTML = toHtmlError(error)
+      fileContainer.prepend(div)
+    }
   }
 
   editEvent.target.addEventListener('click', reVisualize)
-}
-
-
-
-// Do not refactor as code is analyzed statically and only works this way
-const visualizerNames = fs.readdirSync(path.join(__dirname, 'visualizers'))
-
-const visualizers = {}
-visualizerNames
-  .filter(name => /.+\.js$/i.test(name))
-  .forEach(name => {
-
-    const nameInCamelCase = name
-      .replace('.js', '')
-      .split('-')
-      .map(capitalize)
-      .join('')
-
-    visualizers[nameInCamelCase] = path.join(
-      path.join(__dirname, 'visualizers'),
-      name
-    )
-  })
-
-
-function capitalize (word) {
-  return word[0].toUpperCase() + word.substr(1)
 }
 
 
@@ -71,28 +65,37 @@ function hasLeadingComments (element) {
 }
 
 
-function commentTemplate (comment) {
+function commentTemplate (comment: Comment) {
   return [
     'p',
     {class: 'comment ' + comment.type.toLowerCase()},
-    comment.value.replace(/\n/g, '<br>'),
+    comment.value != null
+      ? comment.value.replace(/\n/g, '<br>')
+      : '',
   ]
 }
 
 
-function walkTree (node, fileData) {
-  if (!node || (Array.isArray(node) && !node.length)) {
-    return ''
+function walkTree (node?: Node, fileData?: FileData): mixed[] {
+  if (node == null) {
+    return []
   }
 
-  // Convert comments in objects to a table friendly format
-  if (
+  else if (Array.isArray(node) && !node.length) {
+    return []
+  }
+
+  else if (
+    // Convert comments in objects to a table friendly format
     node.type === 'ObjectExpression' &&
+    node.properties &&
+    typeof node.properties === 'function' &&
     node.properties.some(hasLeadingComments)
   ) {
 
     node.properties.forEach((property, propertyIndex) => {
       if (!hasLeadingComments(property)) return
+      if (!node || !node.properties) return
 
       node.properties.splice(
         propertyIndex,
@@ -110,11 +113,12 @@ function walkTree (node, fileData) {
   if (Array.isArray(node.leadingComments)) {
     if (node.leadingComments.length) {
       if (node.leadingComments.some(comment => comment.value)) {
-        const comments = node.leadingComments
+
+        const comments = (node.leadingComments || [])
           .map(comment => {
             if (comment.value === null) return ''
             const commentArray = commentTemplate(comment)
-            comment.value = null
+            comment.value = ''
             return commentArray
           })
 
@@ -130,8 +134,13 @@ function walkTree (node, fileData) {
     }
   }
 
-  if (Array.isArray(node.trailingComments)) {
-    if (node.loc.end.line === node.trailingComments[0].loc.end.line) {
+  if (node.trailingComments && Array.isArray(node.trailingComments)) {
+    if (
+      node.loc &&
+      node.trailingComments[0] &&
+      node.trailingComments[0].loc &&
+      (node.loc.end.line === node.trailingComments[0].loc.end.line)
+    ) {
       if (
         node.trailingComments[0].value !== null &&
         node.trailingComments[0].type === 'Line'
@@ -140,8 +149,9 @@ function walkTree (node, fileData) {
           'span.trailing.comment',
           node.trailingComments[0].value.trim(),
         ]
-
-        node.trailingComments[0].value = null
+        if (node.trailingComments) {
+          node.trailingComments[0].value = null
+        }
 
         return ['.withTrailingComment',
           walkTree(node, fileData),
@@ -150,20 +160,15 @@ function walkTree (node, fileData) {
       }
     }
     else {
-      node.trailingComments = 'null'
+      node.trailingComments = []
       return walkTree(node, fileData)
     }
-  }
-
-
-  if (Array.isArray(node) && node.length) {
-    return node.map(walkTree)
   }
 
   if (node.type === 'Program') {
     let shebang = ''
 
-    if (fileData.shebang) {
+    if (fileData && fileData.shebang) {
       shebang = ['.shebang', fileData.shebang]
     }
 
@@ -173,15 +178,15 @@ function walkTree (node, fileData) {
         fileData ? fileData.path : false,
         ['button.edit',
           'edit',
-          element => {
-            element.addEventListener('click', clickEvent =>
-              onEdit(fileData, clickEvent)
-            )
+          (element : Element) => {
+            // element.addEventListener('click', (clickEvent : MouseEvent) =>
+            //   onEdit(fileData, clickEvent)
+            // )
           },
         ],
       ],
       ['.body',
-        ...node.body.map(walkTree),
+        ...(node.body || []).map(x => walkTree(x)),
         Array.isArray(node.comments)
           ? [
             '.comments',
@@ -196,9 +201,17 @@ function walkTree (node, fileData) {
     ]
   }
 
-  if (visualizers[node.type]) {
-    const visualizer = require(visualizers[node.type])
-    return visualizer(node)
+
+  function deCapitalize (text) {
+    return text
+      .slice(0, 1)
+      .toLowerCase() + text.slice(1)
+  }
+
+  const currentVisualizer = visualizers[deCapitalize(node.type)]
+
+  if (currentVisualizer) {
+    return currentVisualizer(node)
   }
   else {
     return ['p.error', node.type]

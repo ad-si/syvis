@@ -1,9 +1,11 @@
 #! /usr/bin/env node
 
+// @flow
+
 const stream = require('stream')
 const esprima = require('esprima')
 const shaven = require('shaven')
-const walkTree = require('./walkTree')
+const walkTree = require('./walkTree.js')
 
 let internalBuffer = ''
 
