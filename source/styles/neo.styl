@@ -22,6 +22,7 @@
 // Interaction
 button.edit
   border-radius 0.2em
+  border-width 0
   margin 0.2em 0.4em
   padding 0.2em 0.4em
 
@@ -598,6 +599,8 @@ button.edit
       white-space pre
       content '\A   .'
       color  transSilentColor
+    &::after
+      content ''
 
 
 // TODO: Design wrapper for arguments first

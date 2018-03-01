@@ -1,0 +1,28 @@
+// @flow
+
+const path = require('path')
+const fs = require('fs')
+
+function getModules () {
+  const sourcePath = __dirname
+  const indexPath = path.join(sourcePath, 'index.js')
+  const walkTreePath = path.join(sourcePath, 'walkTree.js')
+  const visualizersPath = path.join(sourcePath, 'visualizers')
+  const mainModule = {
+    [indexPath]: {
+      run: true,
+    },
+  }
+  const walkTreeModule = {
+    [walkTreePath]: {
+      expose: './walkTree.js',
+    },
+  }
+
+  return [
+    mainModule,
+    walkTreeModule,
+  ]
+}
+
+module.exports = getModules

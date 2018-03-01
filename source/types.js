@@ -31,7 +31,7 @@ export type Node = {
   argument?: Node,
   arguments?: Node[],
   block?: Node,
-  body?: Node[],
+  body?: Node[] | Node,
   callee?: Node,
   cases?: Node,
   comments?: Comment[],
@@ -110,90 +110,90 @@ export type FileData = {
 // }
 
 
-type Position = {
+export type Position = {
   line: number,
   column: number,
 }
 
-type SourceLocation = {
+export type SourceLocation = {
   start: Position,
   end: Position,
   source?: string | null,
 }
 
 
-type BindingPattern = ArrayPattern | ObjectPattern
+export type BindingPattern = ArrayPattern | ObjectPattern
 
-type Expression =
-  | ThisExpression
+export type Expression =
+  | ArrayExpression
+  | ArrowFunctionExpression
+  | AssignmentExpression
+  | AwaitExpression
+  | BinaryExpression
+  | CallExpression
+  | ClassExpression
+  | ConditionalExpression
+  | FunctionExpression
   | Identifier
   | Literal
-  | ArrayExpression
-  | ObjectExpression
-  | FunctionExpression
-  | ArrowFunctionExpression
-  | ClassExpression
-  | TaggedTemplateExpression
+  | LogicalExpression
   | MemberExpression
-  | Super
   | MetaProperty
   | NewExpression
-  | CallExpression
-  | UpdateExpression
-  | AwaitExpression
-  | UnaryExpression
-  | BinaryExpression
-  | LogicalExpression
-  | ConditionalExpression
-  | YieldExpression
-  | AssignmentExpression
+  | ObjectExpression
   | SequenceExpression
+  | Super
+  | TaggedTemplateExpression
+  | ThisExpression
+  | UnaryExpression
+  | UpdateExpression
+  | YieldExpression
 
 
-type ArrayPattern = {
+export type ArrayPattern = {
   type: 'ArrayPattern',
   elements: ArrayPatternElement[],
 }
 
 
-type ArrayPatternElement =
+export type ArrayPatternElement =
   | AssignmentPattern
   | Identifier
   | BindingPattern
   | RestElement
   | null
 
-type RestElement = {
+export type RestElement = {
   type: 'RestElement',
   argument: Identifier | BindingPattern,
 }
 
 
-type AssignmentPattern = {
+export type AssignmentPattern = {
   type: 'AssignmentPattern',
   left: Identifier | BindingPattern,
   right: Expression,
 }
 
 
-type ObjectPattern = {
+export type ObjectPattern = {
   type: 'ObjectPattern',
   properties: Property[],
 }
 
 
-type ThisExpression = {
+export type ThisExpression = {
   type: 'ThisExpression',
 }
 
 
-type Identifier = {
+export type Identifier = {
   type: 'Identifier',
   name: string,
 }
 
 
-type Literal = {
+export type Literal = {
   type: 'Literal',
   value: boolean | number | string | RegExp | null,
   raw: string,
@@ -201,22 +201,22 @@ type Literal = {
 }
 
 
-type ArrayExpression = {
+export type ArrayExpression = {
   type: 'ArrayExpression',
   elements: ArrayExpressionElement[],
 }
 
 
-type ArrayExpressionElement = Expression | SpreadElement
+export type ArrayExpressionElement = Expression | SpreadElement
 
 
-type ObjectExpression = {
+export type ObjectExpression = {
   type: 'ObjectExpression',
   properties: Property[],
 }
 
 
-type Property = {
+export type Property = {
   type: 'Property',
   key: Identifier | Literal,
   computed: boolean,
@@ -227,7 +227,7 @@ type Property = {
 }
 
 
-type FunctionExpression = {
+export type FunctionExpression = {
   type: 'FunctionExpression',
   id: Identifier | null,
   params: FunctionParameter[],
@@ -238,13 +238,13 @@ type FunctionExpression = {
 }
 
 
-type FunctionParameter =
+export type FunctionParameter =
   | AssignmentPattern
   | Identifier
   | BindingPattern
 
 
-type ArrowFunctionExpression = {
+export type ArrowFunctionExpression = {
   type: 'ArrowFunctionExpression',
   id: Identifier | null,
   params: FunctionParameter[],
@@ -255,7 +255,7 @@ type ArrowFunctionExpression = {
 }
 
 
-type ClassExpression = {
+export type ClassExpression = {
   type: 'ClassExpression',
   id: Identifier | null,
   superClass: Identifier | null,
@@ -263,12 +263,12 @@ type ClassExpression = {
 }
 
 
-type ClassBody = {
+export type ClassBody = {
   type: 'ClassBody',
   body: MethodDefinition[],
 }
 
-type MethodDefinition = {
+export type MethodDefinition = {
   type: 'MethodDefinition',
   key: Expression | null,
   computed: boolean,
@@ -278,27 +278,27 @@ type MethodDefinition = {
 }
 
 
-type TaggedTemplateExpression = {
+export type TaggedTemplateExpression = {
   type: 'TaggedTemplateExpression',
   +tag: Expression,
   +quasi: TemplateLiteral,
 }
 
 
-type TemplateElement = {
+export type TemplateElement = {
   type: 'TemplateElement',
   value: { cooked: string; raw: string },
   tail: boolean,
 }
 
-type TemplateLiteral = {
+export type TemplateLiteral = {
   type: 'TemplateLiteral',
   quasis: TemplateElement[],
   expressions: Expression[],
 }
 
 
-type MemberExpression = {
+export type MemberExpression = {
   type: 'MemberExpression',
   computed: boolean,
   object: Expression,
@@ -306,44 +306,44 @@ type MemberExpression = {
 }
 
 
-type Super = {
+export type Super = {
   type: 'Super',
 }
 
 
-type MetaProperty = {
+export type MetaProperty = {
   type: 'MetaProperty',
   meta: Identifier,
   property: Identifier,
 }
 
 
-type CallExpression = {
+export type CallExpression = {
   type: 'CallExpression',
   callee: Expression | Import,
   arguments: ArgumentListElement[],
 }
 
-type NewExpression = {
+export type NewExpression = {
   type: 'NewExpression',
   callee: Expression,
   arguments: ArgumentListElement[],
 }
 
 
-type Import = {
+export type Import = {
   type: 'Import',
 }
 
-type ArgumentListElement = Expression | SpreadElement
+export type ArgumentListElement = Expression | SpreadElement
 
-type SpreadElement = {
+export type SpreadElement = {
   type: 'SpreadElement',
   argument: Expression,
 }
 
 
-type UpdateExpression = {
+export type UpdateExpression = {
   type: 'UpdateExpression',
   operator: '++' | '--',
   argument: Expression,
@@ -351,13 +351,13 @@ type UpdateExpression = {
 }
 
 
-type AwaitExpression = {
+export type AwaitExpression = {
   type: 'AwaitExpression',
   argument: Expression,
 }
 
 
-type UnaryExpression = {
+export type UnaryExpression = {
   type: 'UnaryExpression',
   operator: '+' | '-' | '~' | '!' | 'delete' | 'void' | 'typeof',
   argument: Expression,
@@ -365,7 +365,7 @@ type UnaryExpression = {
 }
 
 
-type BinaryExpression = {
+export type BinaryExpression = {
   type: 'BinaryExpression',
   operator: 'instanceof' | 'in' | '+' | '-' | '*' | '/' | '%' | '**' |
     '|' | '^' | '&' | '==' | '!=' | '===' | '!==' |
@@ -375,7 +375,7 @@ type BinaryExpression = {
 }
 
 
-type LogicalExpression = {
+export type LogicalExpression = {
   type: 'LogicalExpression',
   operator: '||' | '&&',
   left: Expression,
@@ -383,7 +383,7 @@ type LogicalExpression = {
 }
 
 
-type ConditionalExpression = {
+export type ConditionalExpression = {
   type: 'ConditionalExpression',
   test: Expression,
   consequent: Statement,
@@ -391,14 +391,14 @@ type ConditionalExpression = {
 }
 
 
-type YieldExpression = {
+export type YieldExpression = {
   type: 'YieldExpression',
   argument: Expression | null,
   delegate: boolean,
 }
 
 
-type AssignmentExpression = {
+export type AssignmentExpression = {
   type: 'AssignmentExpression',
   operator: '=' | '*=' | '**=' | '/=' | '%=' | '+=' | '-=' |
     '<<=' | '>>=' | '>>>=' | '&=' | '^=' | '|=',
@@ -407,13 +407,13 @@ type AssignmentExpression = {
 }
 
 
-type SequenceExpression = {
+export type SequenceExpression = {
   type: 'SequenceExpression',
   expressions: Expression[],
 }
 
 
-type Statement =
+export type Statement =
   | BlockStatement
   | BreakStatement
   | ContinueStatement
@@ -435,29 +435,29 @@ type Statement =
   | WhileStatement
   | WithStatement
 
-type Declaration =
+export type Declaration =
   | ClassDeclaration
   | FunctionDeclaration
   | VariableDeclaration
 
-type StatementListItem =
+export type StatementListItem =
   | Declaration
   | Statement
 
 
-type BlockStatement = {
+export type BlockStatement = {
   type: 'BlockStatement',
   body: StatementListItem[],
 }
 
 
-type BreakStatement = {
+export type BreakStatement = {
   type: 'BreakStatement',
   label: Identifier | null,
 }
 
 
-type ClassDeclaration = {
+export type ClassDeclaration = {
   type: 'ClassDeclaration',
   id: Identifier | null,
   superClass: Identifier | null,
@@ -465,37 +465,37 @@ type ClassDeclaration = {
 }
 
 
-type ContinueStatement = {
+export type ContinueStatement = {
   type: 'ContinueStatement',
   label: Identifier | null,
 }
 
 
-type DebuggerStatement = {
+export type DebuggerStatement = {
   type: 'DebuggerStatement',
 }
 
 
-type DoWhileStatement = {
+export type DoWhileStatement = {
   type: 'DoWhileStatement',
   body: Statement,
   test: Expression,
 }
 
 
-type EmptyStatement = {
+export type EmptyStatement = {
   type: 'EmptyStatement',
 }
 
 
-type ExpressionStatement = {
+export type ExpressionStatement = {
   type: 'ExpressionStatement',
   expression: Expression,
   directive?: string,
 }
 
 
-type ForStatement = {
+export type ForStatement = {
   type: 'ForStatement',
   init: Expression | VariableDeclaration | null,
   test: Expression | null,
@@ -504,7 +504,7 @@ type ForStatement = {
 }
 
 
-type ForInStatement = {
+export type ForInStatement = {
   type: 'ForInStatement',
   left: Expression,
   right: Expression,
@@ -513,7 +513,7 @@ type ForInStatement = {
 }
 
 
-type ForOfStatement = {
+export type ForOfStatement = {
   type: 'ForOfStatement',
   left: Expression,
   right: Expression,
@@ -521,7 +521,7 @@ type ForOfStatement = {
 }
 
 
-type FunctionDeclaration = {
+export type FunctionDeclaration = {
   type: 'FunctionDeclaration',
   id: Identifier | null,
   params: FunctionParameter[],
@@ -532,7 +532,7 @@ type FunctionDeclaration = {
 }
 
 
-type IfStatement = {
+export type IfStatement = {
   type: 'IfStatement',
   test: Expression,
   consequent: Statement,
@@ -540,40 +540,40 @@ type IfStatement = {
 }
 
 
-type LabeledStatement = {
+export type LabeledStatement = {
   type: 'LabeledStatement',
   label: Identifier,
   body: Statement,
 }
 
 
-type ReturnStatement = {
+export type ReturnStatement = {
   type: 'ReturnStatement',
   argument: Expression | null,
 }
 
 
-type SwitchStatement = {
+export type SwitchStatement = {
   type: 'SwitchStatement',
   discriminant: Expression,
   cases: SwitchCase[],
 }
 
 
-type SwitchCase = {
+export type SwitchCase = {
   type: 'SwitchCase',
   test: Expression,
   consequent: Statement[],
 }
 
 
-type ThrowStatement = {
+export type ThrowStatement = {
   type: 'ThrowStatement',
   argument: Expression,
 }
 
 
-type TryStatement = {
+export type TryStatement = {
   type: 'TryStatement',
   block: BlockStatement,
   handler: CatchClause | null,
@@ -581,67 +581,69 @@ type TryStatement = {
 }
 
 
-type CatchClause = {
+export type CatchClause = {
   type: 'CatchClause',
   param: Identifier | BindingPattern,
   body: BlockStatement,
 }
 
 
-type VariableDeclaration = {
+export type VariableDeclaration = {
   type: 'VariableDeclaration',
   declarations: VariableDeclarator[],
   kind: 'var' | 'const' | 'let',
 }
 
 
-type VariableDeclarator = {
+export type VariableDeclarator = {
   type: 'VariableDeclarator',
   id: Identifier | BindingPattern,
   init: Expression | null,
 }
 
 
-type WhileStatement = {
+export type WhileStatement = {
   type: 'WhileStatement',
   test: Expression,
   body: Statement,
 }
 
 
-type WithStatement = {
+export type WithStatement = {
   type: 'WithStatement',
   object: Expression,
   body: Statement,
 }
 
 
-type ScriptProgram = {
+export type ScriptProgram = {
   type: 'Program',
   sourceType: 'script',
   body: StatementListItem[],
 }
 
-type Program = {
+
+export type Program = {
   type: 'Program',
   sourceType: 'module',
   body: ModuleItem[],
 }
 
-type ModuleItem =
+
+export type ModuleItem =
   | ImportDeclaration
   | ExportDeclaration
   | StatementListItem
 
 
-type ImportDeclaration = {
+export type ImportDeclaration = {
   type: 'ImportDeclaration',
   specifiers: ImportSpecifier[],
   source: Literal,
 }
 
 
-type ImportSpecifier = {
+export type ImportSpecifier = {
   type:
     | 'ImportSpecifier'
     | 'ImportDefaultSpecifier'
@@ -651,18 +653,18 @@ type ImportSpecifier = {
 }
 
 
-type ExportDeclaration =
+export type ExportDeclaration =
   | ExportAllDeclaration
   | ExportDefaultDeclaration
   | ExportNamedDeclaration
 
 
-type ExportAllDeclaration = {
+export type ExportAllDeclaration = {
   type: 'ExportAllDeclaration',
   source: Literal,
 }
 
-type ExportDefaultDeclaration = {
+export type ExportDefaultDeclaration = {
   type: 'ExportDefaultDeclaration',
   declaration:
     | Identifier
@@ -672,7 +674,7 @@ type ExportDefaultDeclaration = {
     | FunctionDeclaration,
 }
 
-type ExportNamedDeclaration = {
+export type ExportNamedDeclaration = {
   type: 'ExportNamedDeclaration',
   declaration: ClassDeclaration
     | FunctionDeclaration
@@ -682,7 +684,7 @@ type ExportNamedDeclaration = {
 }
 
 
-type ExportSpecifier = {
+export type ExportSpecifier = {
   type: 'ExportSpecifier',
   exported: Identifier,
   local: Identifier,

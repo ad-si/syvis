@@ -6,14 +6,22 @@ const URL = require('whatwg-url').URL
 
 const shaven = require('shaven').default
 const esprima = require('esprima')
-const esprimaDefaults = require('./esprima-defaults')
+const esprimaDefaults = require('./esprima-defaults.js')
 
-const walkTree = require('./walkTree')
-const toHtmlError = require('./toHtmlError')
+const walkTree = require('./walkTree.js')
+const toHtmlError = require('./toHtmlError.js')
+const devMode = window.location.hostname === 'localhost'
 
 
-// :: String -> Result Error ShavenArray
-function renderSyntax (fileData) {
+function log (...args) {
+  if (devMode) console.info(...arguments)
+}
+
+
+console.log(walkTree)
+
+
+function renderSyntax (fileData: FileData): mixed[] | Error {
   // Workaround to render JSON
   if (fileData.url.pathname.endsWith('.json')) {
     fileData.content = '(' + fileData.content + ')'
@@ -28,12 +36,15 @@ function renderSyntax (fileData) {
 
   try {
     const syntaxTree = esprima.parse(fileData.content, esprimaDefaults)
+    log(syntaxTree)
 
     if (esprimaDefaults.errors) {
       return esprimaDefaults.errors
     }
     else {
-      return walkTree(syntaxTree, fileData)
+      const vDomArray = walkTree(syntaxTree, fileData)
+      log(vDomArray)
+      return vDomArray
     }
   }
   catch (error) {
@@ -42,8 +53,7 @@ function renderSyntax (fileData) {
 }
 
 
-// :: String -> String
-function toNormalizedUrl (urlString) {
+function toNormalizedUrl (urlString: string): string {
   const fileUrl = new URL(urlString)
 
   // GitHub specific normalizations
@@ -56,16 +66,16 @@ function toNormalizedUrl (urlString) {
 }
 
 
-// :: String -> String
-function toFileUrl (filePath) {
+function toFileUrl (filePath: string): string {
   return filePath.startsWith('http')
     ? toNormalizedUrl(filePath)
     : toNormalizedUrl(`${window.location.origin}/files/${filePath}`)
 }
 
 
-// :: String -> Eff (Result Error FileData)
-async function loadFile (fileUrl, filePath) : Promise<FileData | Error> {
+async function loadFile (fileUrl: URL, filePath: string)
+  : Promise<FileData | Error>
+{
   let fileContentResponse
   try {
     fileContentResponse = await fetch(fileUrl.href)
@@ -91,8 +101,7 @@ async function loadFile (fileUrl, filePath) : Promise<FileData | Error> {
 }
 
 
-// :: String -> Eff
-async function loadAndRender (filePath) {
+async function loadAndRender (filePath: string) {
   const fileUrl = toFileUrl(filePath)
   const result = await loadFile(fileUrl, filePath)
   const outputElement = document.getElementById('output')

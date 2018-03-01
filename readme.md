@@ -32,7 +32,7 @@ npm start -- path/to/javascript/file.js
 chokidar source/styles \
   --initial \
   --polling \
-  --command 'stylus < source/styles/neo.styl > public/screen.css'
+  --command 'stylus < source/styles/main.styl > public/screen.css'
 ```
 
 
