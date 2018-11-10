@@ -1,11 +1,14 @@
+// One chaining call
 'a-file.js'.toLowerCase()
 
 
+// Two chaining calls
 'a-file.js'
   .toLowerCase()
   .replace('.js', '')
 
 
+// Several chaining calls
 'a-file.js'
   .toLowerCase()
   .replace('.js', '')
