@@ -38,12 +38,55 @@ chokidar source/styles \
 
 ## User Interface
 
-- https://haltu.github.io/muuri
+- [muuri] - Responsive, sortable, filterable and drag-able grid layouts
+
+[muuri]: https://haltu.github.io/muuri
+
+
+## Advantages Over Normal Code
+
+1. Easier readable - Humans are made to recognize visual patterns.
+1. Customizable
+  - Consumer is not dependent on the author to choose appropriate formatting
+  - Uncommon formatting preferences can be satisfied
+1. Less error prone -
+  Erroneous and dangerous code can be additionally highlighted
+1. Better storage possibilities
+  - Code could be stored and transmitted in a minified format
+    (all insignificant whitespace removed)
+1.
+
+
+## Abstract
+
+In most programming languages
+the semantic meaning of a program is disconnected from
+the formatting of the code and the naming of variables and keywords.
+This means semantically equivalent code can be written in a vastly
+different textual representations.
+This poses problems in terms of readability and understandability
+of code.
+Even minor modifications of punctuation or formatting in comparison to
+a developers familiar style can drastically decrease the performance.
+In order to mitigate these problems I propose to visualize code
+in a graphical and deterministic way.
+Instead of relying on the author of the code to format it in a acceptable
+manner, each developer can choose a visualization of their liking.
+This has the potential to decrease the error rate and
+increase the development speed of programmers.
+
+
+## Future Work
+
+- Touch based
+- Drag and drop
 
 
 ---
 
-## Related
+## Related Work
+
+### Misc
 
 - [Barista] - Implementation toolkit for AST editors.
 - [Citrus] - Programming language and user interface toolkit.
@@ -58,8 +101,10 @@ chokidar source/styles \
 - [Programming Beyond Text: The Parsing Problem][Parsing Problem]
 - [Treeline] - Develop backend apps in your web browser.
 - [Unison]
+- [Braces be gone] - Moves braces in Java to the edge of the code.
 
 [Barista]: https://www.youtube.com/watch?v=gAxjUh9d2YI
+[Braces be gone]: https://github.com/ollef/braces-be-gone
 [Citrus]: https://github.com/andyjko/citrus-barista
 [CodeWorld]: https://github.com/google/codeworld
 [FWA]: http://sitepoint.com/future-programming-webassembly-life-after-javascript
@@ -100,37 +145,30 @@ Links on how to code on mobile/touch devices
 [flux]: https://www.uni-ulm.de/en/in/pm/research/projects/flux/
 
 
-## Talks
+### Talks
 
 - [The Future of Programming][future-of-programming]
 
 [future-of-programming]: https://vimeo.com/71278954
 
 
-## TODO
+### Online IDEs
 
-- Search for more information about "Projection editor"
-- Checkout marco röders project "codb"
-- https://stackoverflow.com/questions/26848419/syntax-highlighting-with-text-style-instead-of-colors
-- https://softwareengineering.stackexchange.com/questions/87077/how-can-a-code-editor-effectively-hint-at-code-nesting-level-without-using-ind
-- jGRASP
-- http://www.andrewbragdon.com/codebubbles_site.asp
-- https://www.touchdevelop.com
-- https://harc.github.io/seymour-live2017
-- `lively.openComponentInWindow('my-component')`
-- `lively.html.registerButtons`
-- Make histogram of line lengths => find 90% percentile and use for formatting
-- Hierarchy of code interaction:
-  1. Reading
-  2. Patches (e.g. change a string)
-  3. Minor changes (e.g. write a function)
-  4. Major changes (e.g. restructure code)
-- https://meemoo.org/
+- [CodeSandbox] - Online editor that helps you create web applications.
+- [observablehq] - Interactive notebooks for data analysis, visualization, and exploration
+- [Onelang] - Cross compile/transpile code to several languages online.
+- [runkit] - Interactive notebooks with very version of every npm package pre-installed.
+- [meemoo] - Online flow based creative tool maker.
+- [livecode] - Develop apps "live", using a visual workflow language syntax.
+- [touchdevelop] - Adaptive editor with support for drag & drop but also normal code.
 
-  => Code editor should be optimized for this interaction pattern
-- Minimap
-- Feature flags
-- https://github.com/livecode/livecode
+[touchdevelop]: https://www.touchdevelop.com
+[livecode]: https://github.com/livecode/livecode
+[meemoo]: https://meemoo.org
+[CodeSandbox]: https://codesandbox.io
+[observablehq]: https://beta.observablehq.com
+[Onelang]: https://ide.onelang.io
+[runkit]: https://runkit.com/home
 
 
 ### Visual Programming Languages for Haskell or Haskell-like Languages
@@ -144,6 +182,8 @@ Links on how to code on mobile/touch devices
 - Vital ([archive.org link](http://web.archive.org/web/20140715033114/http://www.cs.kent.ac.uk/projects/vital))
 - A Visual Programming Environment for Functional Languages
   ([pdf](http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.85.1317&rep=rep1&type=pdf))
+- https://github.com/pkamenarsky/typedraw - Visually describe Haskell/Purescript/Elm types
+
 
 
 ### Other Functional Visual Programming Languages
@@ -165,15 +205,56 @@ Links on how to code on mobile/touch devices
   ([pdf](http://www.inf.usi.ch/faculty/lanza/Downloads/Mine2015b.pdf))
   ([papers that cite it](https://scholar.google.com/scholar?cites=14130154900663939563&as_sdt=2005&sciodt=0,5&hl=en))
 - [Evidence-based programming language design](https://www.quorumlanguage.com/evidence.html)
+- [Language design for programming reliability]
+  > semicolon as separator is about ten times more prone to error
+  > than semicolon as terminator
+- [Code Bubbles] - Rethinking the User Interface Paradigm of Integrated Development Environments.
+
+[Code Bubbles]: http://www.andrewbragdon.com/codebubbles_site.asp
+[Language design for programming reliability]: http://ieeexplore.ieee.org/document/6312838
 
 
-### People
+## People
 
 - [Monoid Musician] - I wish I had time and skillz to make my AST editor
   actually happen (https://github.com/MonoidMusician/purescript-datagen)
 - [Andres J. Ko] - Associate Professor at University of Washington
 - [Patrick Dubory] - Programmer and interaction designer based in Munich.
+- http://stevekrouse.com - Author of http://futureofcoding.org
 
 [Monoid Musician]: monoidmusician
 [Patrick Dubory]: https://dubroy.com
 [Andres J. Ko]: https://faculty.washington.edu/ajko
+
+
+
+## TODO
+
+- Search for more information about "Projection editor"
+- Checkout marco röders project "codb"
+- https://stackoverflow.com/questions/26848419/syntax-highlighting-with-text-style-instead-of-colors
+- https://softwareengineering.stackexchange.com/questions/87077/how-can-a-code-editor-effectively-hint-at-code-nesting-level-without-using-ind
+- jGRASP
+- https://harc.github.io/seymour-live2017
+- `lively.openComponentInWindow('my-component')`
+- `lively.html.registerButtons`
+- Make histogram of line lengths => find 90% percentile and use for formatting
+- Hierarchy of code interaction:
+  1. Reading
+  2. Patches (e.g. change a string)
+  3. Minor changes (e.g. write a function)
+  4. Major changes (e.g. restructure code)
+  => Code editor should be optimized for this interaction pattern
+- Minimap
+- Feature flags
+- http://www.esterel-technologies.com/products/scade-suite/software-prototyping-desgin/scade-suite-advanced-modeler/
+- https://www.ansys.com/products/embedded-software/ansys-scade-suite
+- https://blog.janestreet.com/putting-the-i-back-in-ide-towards-a-github-explorer/
+- http://futureofcoding.org -
+- https://codeocean.com - cloud-based computational reproducibility platform
+- http://glench.github.io/fuzzyset.js/ui/ - A Human-Readable Interactive Representation of a Code Library
+- http://penrose.ink/ - Create diagrams by typing mathematical notation in plain text.
+- https://github.com/SamyPesse/codemirror-widgets
+- https://github.com/LivelyKernel/lively4-projectional-editor
+- http://bl.ocks.org/jasongrout/5378313
+
