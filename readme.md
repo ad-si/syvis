@@ -28,6 +28,17 @@ npm start -- path/to/javascript/file.js
 
 ## Development
 
+Start development environment:
+
+```shell
+docker run \
+  --interactive \
+  --tty \
+  --volume "$PWD":/syvis \
+  --rm \
+  node bash
+```
+
 ```shell
 chokidar source/styles \
   --initial \
@@ -93,12 +104,14 @@ increase the development speed of programmers.
   (https://youtu.be/YIlYJCwIXLs)
 - [Codemirror Blocks] - Drag-and-drop editing for functional languages.
 - [CodeWorld] - Educational computer programming environment using Haskell.
+- [Dhall PureScript] - Structural editor for Dhall written in PureScript.
 - [Future Programming Webassembly Life After JavaScript][FWA]
 - [Glance] - Visual syntax for Haskell.
 - [Lamdu] -
 - [Mbeddr]
 - [Moonchild] - Projection editor (https://vimeo.com/97711824).
 - [Programming Beyond Text: The Parsing Problem][Parsing Problem]
+- [PureScript Datagen] - Generating data types in a live-coding environment.
 - [Treeline] - Develop backend apps in your web browser.
 - [Unison]
 - [Braces be gone] - Moves braces in Java to the edge of the code.
@@ -107,12 +120,14 @@ increase the development speed of programmers.
 [Braces be gone]: https://github.com/ollef/braces-be-gone
 [Citrus]: https://github.com/andyjko/citrus-barista
 [CodeWorld]: https://github.com/google/codeworld
+[Dhall PureScript]: https://monoidmusician.github.io/dhall-purescript
 [FWA]: http://sitepoint.com/future-programming-webassembly-life-after-javascript
 [Glance]: https://github.com/rgleichman/glance
 [Lamdu]: http://www.lamdu.org
 [Mbeddr]: http://mbeddr.com
 [Moonchild]: https://github.com/harc/moonchild
 [Parsing Problem]: http://joshondesign.com/2016/06/13/the_parsing_problem
+[PureScript Datagen]: https://github.com/MonoidMusician/purescript-datagen
 [Treeline]: https://treeline.io
 [Unison]: http://unisonweb.org
 [Codemirror Blocks]: http://bootstrapworld.github.io/codemirror-blocks
@@ -216,16 +231,15 @@ Links on how to code on mobile/touch devices
 
 ## People
 
-- [Monoid Musician] - I wish I had time and skillz to make my AST editor
-  actually happen (https://github.com/MonoidMusician/purescript-datagen)
+- [Monoid Musician] - [purescript-datagen]
 - [Andres J. Ko] - Associate Professor at University of Washington
 - [Patrick Dubory] - Programmer and interaction designer based in Munich.
-- http://stevekrouse.com - Author of http://futureofcoding.org
+- [Steve Krouse] - Author of Future of Coding.
 
 [Monoid Musician]: monoidmusician
 [Patrick Dubory]: https://dubroy.com
 [Andres J. Ko]: https://faculty.washington.edu/ajko
-
+[Steve Krouse]: http://futureofcoding.org
 
 
 ## TODO
@@ -244,6 +258,7 @@ Links on how to code on mobile/touch devices
   2. Patches (e.g. change a string)
   3. Minor changes (e.g. write a function)
   4. Major changes (e.g. restructure code)
+  5. Create a new project
   => Code editor should be optimized for this interaction pattern
 - Minimap
 - Feature flags

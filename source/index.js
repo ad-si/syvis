@@ -18,9 +18,6 @@ function log (...args) {
 }
 
 
-console.log(walkTree)
-
-
 function renderSyntax (fileData: FileData): mixed[] | Error {
   // Workaround to render JSON
   if (fileData.url.pathname.endsWith('.json')) {
@@ -128,10 +125,21 @@ async function loadAndRender (filePath: string) {
 
 // :: Eff
 async function main () {
-  const filePathResponse = await fetch('/filename')
-  const filePath = await filePathResponse.text()
+  const fileUrlInput = document.getElementById('fileUrlInput')
+  if (!fileUrlInput) {
+    throw new Error('Input element for file URL does not exist')
+  }
 
-  await loadAndRender(filePath)
+  const filePathResponse = await fetch('/filename')
+
+  if (filePathResponse.ok) {
+    const filePath = await filePathResponse.text()
+
+    await loadAndRender(filePath)
+  }
+  else {
+    await loadAndRender(fileUrlInput.value)
+  }
 
   const fileUrlForm = document.getElementById('fileUrl')
   if (!fileUrlForm) {
@@ -142,10 +150,6 @@ async function main () {
     event.preventDefault()
     if (!(event.target instanceof window.Element)) {
       throw new Error(String(event.target) + ' should be instance of Element')
-    }
-    const fileUrlInput = event.target.querySelector('input')
-    if (!fileUrlInput) {
-      throw new Error('Element "input" does not exist')
     }
 
     await loadAndRender(fileUrlInput.value)

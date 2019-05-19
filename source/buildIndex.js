@@ -3,7 +3,7 @@ const browserify = require('browserify')
 const options = {
   transform: ['brfs'],
 }
-const instance = browserify('./source/index.js', options)
+const instance = browserify('./build/index.js', options)
 
 getModules()
   .forEach(object => {
