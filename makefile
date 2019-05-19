@@ -21,8 +21,8 @@ docs/$(hiddenPath)/index.html: public/index.html | docs/ErZoPhsMTcDvGT9pZswo
 
 # Build JavaScript file for deployment
 docs/$(hiddenPath)/index.js: node_modules build $(jsFiles) | docs/ErZoPhsMTcDvGT9pZswo
-	node build/buildIndex.js > $@
-# 	node build/buildIndex.js > | npx minify > $@
+# 	node build/buildIndex.js > $@
+	node build/buildIndex.js | npx minify > $@
 
 
 # Build CSS file for deployment
