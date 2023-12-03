@@ -1,35 +1,97 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset=utf-8>
-    <title>Syntax Visualizer</title>
-    <link rel=stylesheet href=screen.css media=screen>
-    <link rel=stylesheet href=theme/default.css>
-  </head>
-  <body>
-    <main>
-      <h1>Syvis</h1>
+
+<head>
+  <meta charset="utf-8" />
+  <title>Syntax Visualizer</title>
+  <link rel="stylesheet" href="./screen.css" media="screen" />
+</head>
+
+<body>
+  <main>
+    <header>
+      <div>
+        <h1>Syvis</h1>
+        <small>Version: <strong><code>{{version}}</code></strong></small>
+      </div>
       <h2>The JavaScript Syntax Visualizer</h2>
-      <p>
-        <small>Version <code>{{version}}</code></small>
-      </p>
+    </header>
 
-      <form id=fileUrl>
-        <input
-          id=fileUrlInput
-          type=text
-          name=fileUrl
-          placeholder="URL to a JavaScript or JSON file"
-          value="https://github.com/ad-si/shaven/blob/master/source/library/server.js"
-        >
-        <button id=visualizeButton type=submit>Visualize</button>
-      </form>
+    <hr />
 
-      <br>
+    <form id="formForExample">
+      <fieldset>
+        <legend>Pick one of the examples:</legend>
+        <br />
 
-      <div id=output class=syvis></div>
-    </main>
+        <span>
+          <input
+            type="radio"
+            name="example"
+            id="example1"
+            value="ifElse"
+            checked
+          >
+          <label for="example1">Example 1</label>
+        </span>
 
-    <script src=index.js></script>
-  </body>
+        <span>
+          <input
+            type="radio"
+            name="example"
+            id="example2"
+            value="addFunction"
+          >
+          <label for="example2">Example 2</label>
+        </span>
+
+        <span>
+          <input
+            type="radio"
+            name="example"
+            id="example3"
+            value="chaining"
+          >
+          <label for="example3">Example 3</label>
+        </span>
+
+        <span>
+          <input
+            type="radio"
+            name="example"
+            id="example4"
+            value="loops"
+          >
+          <label for="example4">Example 4</label>
+        </span>
+      </fieldset>
+    </form>
+
+    <br>
+    <br>
+    <p>OR</p>
+    <br>
+
+    <p>Enter the URL to a JavaScript or JSON file:</p>
+
+    <form id="fileUrl">
+      <input
+        id="fileUrlInput"
+        type="text"
+        name="fileUrl"
+        placeholder="URL to a JavaScript or JSON file"
+      />
+      <button id="visualizeButton" type="submit">
+        Visualize
+      </button>
+    </form>
+
+    <br />
+
+    <div id="output" class="syvis"></div>
+  </main>
+
+  <script src="./index.js"></script>
+</body>
+
 </html>

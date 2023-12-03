@@ -135,9 +135,13 @@ increase the development speed of programmers.
 
 ### Visual Programming
 
+- [Alice] - Object based educational programming language plus IDE.
 - [Node-RED] - Flow-based programming for the Internet of Things
+- [Greenfoot Frames] - Frame based editing environment.
 
+[Alice]: http://www.alice.org
 [Node-RED]:https://nodered.org
+[Greenfoot Frames]: https://www.greenfoot.org/frames/
 
 
 ### Mobile Coding
@@ -231,15 +235,27 @@ Links on how to code on mobile/touch devices
 
 ## People
 
-- [Monoid Musician] - [purescript-datagen]
-- [Andres J. Ko] - Associate Professor at University of Washington
+- [Andres J. Ko] - Associate Professor at University of Washington.
+- [Chaim Gingold] - Turns technology into delightful experiences and transformative tools.
+- [Monoid Musician] - Developer of [purescript-datagen].
 - [Patrick Dubory] - Programmer and interaction designer based in Munich.
+- [Paul Chiusano] - Founder of [Unison].
 - [Steve Krouse] - Author of Future of Coding.
 
+[Andres J. Ko]: https://faculty.washington.edu/ajko
+[Chaim Gingold]: http://chaim.io
 [Monoid Musician]: monoidmusician
 [Patrick Dubory]: https://dubroy.com
-[Andres J. Ko]: https://faculty.washington.edu/ajko
+[Paul Chiusano]: https://pchiusano.github.io
 [Steve Krouse]: http://futureofcoding.org
+
+
+## More Resources
+
+- https://github.com/ivanreese/visual-programming-codex
+- https://github.com/hypotext/notation
+- http://chaim.io/download/Gingold%20(2017)%20Gadget%20(1)%20Survey.pdf
+- http://blog.interfacevision.com/design/design-visual-progarmming-languages-snapshots
 
 
 ## TODO

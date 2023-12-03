@@ -1,51 +1,51 @@
-hiddenPath := ErZoPhsMTcDvGT9pZswo
-targetPath := docs/$(hiddenPath)
+.PHONY: help
+help: makefile
+	@tail -n +4 makefile | grep ".PHONY"
+
+
 jsFiles := $(shell find ./source -iname '*.js')
 stylFiles := $(shell find ./source -iname '*.styl')
 entryPoint := $$(pwd)/source/index.js
 
 
+node_modules: package.json package-lock.json
+	npm install
+
+
 # Build all files for deployment
 .PHONY: all
 all: \
-	$(targetPath)/index.html \
-	$(targetPath)/index.js \
-	$(targetPath)/screen.css \
-	docs/CNAME
+	build/index.html \
+	build/index.js \
+	build/screen.css \
+	build/CNAME
 
 
 # Build HTML file for deployment
-docs/$(hiddenPath)/index.html: public/index.html | docs/ErZoPhsMTcDvGT9pZswo
+build/index.html: public/index.html | build
 	sed 's/{{version}}/$(shell git describe)/' $< > $@
 
 
-# Build JavaScript file for deployment
-docs/$(hiddenPath)/index.js: node_modules build $(jsFiles) | docs/ErZoPhsMTcDvGT9pZswo
-# 	node build/buildIndex.js > $@
-	node build/buildIndex.js | npx minify > $@
-
-
 # Build CSS file for deployment
-docs/$(hiddenPath)/screen.css: $(stylFiles) | docs/ErZoPhsMTcDvGT9pZswo
-	npx stylus --compress \
+build/screen.css: $(stylFiles) | build
+	bunx stylus --compress \
 		< source/styles/main.styl \
 		> $@
 
 
-node_modules:
-	yarn install
-
-build: source
-	yarn flow-remove-types \
-		--out-dir $@ \
-		$<
+build/index.js: source build/shaven.js | build
+	bun build $< --outfile $@
 
 
-docs/ErZoPhsMTcDvGT9pZswo:
+build/shaven.js: node_modules/shaven/build/browser.js
+	cp $< $@
+
+
+build:
 	-mkdir -p $@
 
 
-docs/CNAME: | docs/ErZoPhsMTcDvGT9pZswo
+build/CNAME: | build
 	echo "syvis.surge.sh" > $@
 
 
@@ -60,9 +60,24 @@ deploy:
 		--rm andthensome/alpine-surge-bash
 
 
+.PHONY: dev
+dev:
+	bun x parcel serve build/index.html
+
+
+.PHONY: test
+test:
+	bun test
+
+
+.PHONY: postinstall
+postinstall:
+	cp node_modules/shaven/shaven.js public
+
 
 .PHONY: clean
 clean:
-	-rm -r node_modules
+	-rm -r .parcel-cache
 	-rm -r build
-	-rm -r docs
+	-rm -r dist
+	-rm -r node_modules
