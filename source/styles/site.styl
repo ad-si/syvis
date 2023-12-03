@@ -14,6 +14,11 @@ body
     padding 2em 1em 5em 1em
     margin 0 auto
 
+    > header > div
+      display: flex
+      justify-content: space-between
+      align-items: center
+
 h1
   font-size 3em
   margin-bottom 0.5em
@@ -24,8 +29,17 @@ h2
 p
   margin-bottom 0.5em
 
+hr
+  border-top 1px
+  border-style solid
+  border-color silentColor
+  margin 1em 0
+
 form#fileUrl
-  display inline-block
+  flex 1 1 auto
+  display flex
+  gap 1em
+
   input[type=text]
     border-width 1px
     border-style solid
@@ -41,4 +55,14 @@ form#fileUrl
     border-radius 0.5em
     cursor pointer
     padding 0.5em 1em
-    margin 2em
+
+fieldset
+  span
+    display: inline-block
+    margin-right: 1rem
+
+  span
+  label
+  input[type=radio]
+    cursor pointer
+
