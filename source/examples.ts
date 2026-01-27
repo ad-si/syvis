@@ -19,6 +19,18 @@ function add (x, y) {
 }
 `
 
+export const simpleObject = `
+const person = {
+  name: "John",
+  birthday: new Date("1985-07-15"),
+  gender: "male",
+  size: 1750,
+  isSmoker: false,
+}
+
+console.info(person)
+`
+
 export const chaining = `
 // Chaining several methods
 "a-file.js"

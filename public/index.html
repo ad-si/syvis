@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8" />
   <title>Syntax Visualizer</title>
-  <link rel="stylesheet" href="./screen.css" media="screen" />
+  <link rel="stylesheet" href="../source/styles/main.styl" media="screen" />
 </head>
 
 <body>
@@ -22,9 +22,8 @@
     <form id="formForExample">
       <fieldset>
         <legend>Pick one of the examples:</legend>
-        <br />
 
-        <span>
+        <label>
           <input
             type="radio"
             name="example"
@@ -32,38 +31,48 @@
             value="ifElse"
             checked
           >
-          <label for="example1">Example 1</label>
-        </span>
+          <span>if … else</span>
+        </label>
 
-        <span>
+        <label>
           <input
             type="radio"
             name="example"
             id="example2"
             value="addFunction"
           >
-          <label for="example2">Example 2</label>
-        </span>
+          <span>function add(a, b)</span>
+        </label>
 
-        <span>
+        <label>
           <input
             type="radio"
             name="example"
             id="example3"
-            value="chaining"
+            value="simpleObject"
           >
-          <label for="example3">Example 3</label>
-        </span>
+          <span>Simple object</span>
+        </label>
 
-        <span>
+        <label>
           <input
             type="radio"
             name="example"
             id="example4"
+            value="chaining"
+          >
+          <span>Chaining</span>
+        </label>
+
+        <label>
+          <input
+            type="radio"
+            name="example"
+            id="example5"
             value="loops"
           >
-          <label for="example4">Example 4</label>
-        </span>
+          <span>Loops</span>
+        </label>
       </fieldset>
     </form>
 
@@ -86,12 +95,42 @@
       </button>
     </form>
 
+    <hr />
+
+    <form id="formForTheme">
+      <fieldset>
+        <legend>Pick a visualization theme:</legend>
+        <label>
+          <input
+            type="radio"
+            name="theme"
+            id="themeBasic"
+            value="themeBasic"
+            checked
+          >
+          <span>Basic</span>
+        </label>
+
+        <label>
+          <input
+            type="radio"
+            name="theme"
+            id="themeNeo"
+            value="themeNeo"
+          >
+          <span>Neo</span>
+        </label>
+      </fieldset>
+    </form>
+
+    <hr />
+
     <br />
 
     <div id="output" class="syvis"></div>
   </main>
 
-  <script src="./index.js"></script>
+  <script type="module" src="../source/index.ts"></script>
 </body>
 
 </html>

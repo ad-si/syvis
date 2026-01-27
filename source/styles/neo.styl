@@ -1,39 +1,4 @@
-.file
-  border-width 1px
-  border-style solid
-  border-color fileColor
-  border-radius 0.5em
-  position relative
-  font-family 'Source Code Pro', 'Courier New', monospace
-
-  > .blockLabel
-    margin-bottom 1em
-    color rgba(primaryColor, 0.8)
-
-  > header
-    font-weight: 600
-    background-color: lighten(fileColor, 80%)
-    border-bottom-color rgba(0, 0, 0, 0.1)
-    border-bottom-style solid
-    border-bottom-width 1px
-    margin-bottom 0.3em
-    border-radius: 0.5em 0.5em 0 0
-    padding 0.4rem 1rem
-    display flex
-    align-items center
-    justify-content space-between
-
-  > .body
-    padding 1em 1em
-
-
-// Interaction
-button.edit
-  border: 1px solid hsl(0, 0%, 80%)
-  border-radius 0.2em
-  margin 0.2em 0.4em
-  padding 0.2em 0.4em
-  cursor pointer
+@import './base'
 
 .CodeMirror
   height: auto
@@ -653,8 +618,8 @@ button.edit
 
   &.const
     .declaration.hasInit > .identifier::after
-      content '\a0:=\a0'
-      color  transSilentColor
+      content '\a0=\a0'
+      color transQuietColor
 
   &.let,
   &.var

@@ -1,0 +1,1122 @@
+// Lisp Theme
+// Visualizes JavaScript code using Lisp's parentheses style
+
+@import './_shared'
+
+// Lisp-inspired colors
+lispBackground    = hsl(45, 30%, 96%)
+lispParen         = hsl(0, 0%, 50%)
+lispKeyword       = hsl(280, 60%, 45%)
+lispFunction      = hsl(210, 70%, 45%)
+lispString        = hsl(120, 40%, 40%)
+lispNumber        = hsl(30, 80%, 45%)
+lispComment       = hsl(0, 0%, 55%)
+lispSpecial       = hsl(340, 60%, 45%)
+
+// Override shared colors
+primaryColor        = hsl(0, 0%, 15%)
+backgroundColor     = lispBackground
+
+transMutedColor     = rgba(0, 0, 0, 0.75)
+transQuietColor     = rgba(0, 0, 0, 0.5)
+transSilentColor    = rgba(0, 0, 0, 0.25)
+transShadowColor    = rgba(0, 0, 0, 0.10)
+
+// Muted block colors for Lisp style
+expressionColor   = transparent
+blockColor        = transparent
+returnColor       = transparent
+tryColor          = transparent
+ifColor           = transparent
+whileColor        = transparent
+objectColor       = hsla(45, 50%, 85%, 0.5)
+arrowFuncColor    = transparent
+functionColor     = transparent
+classColor        = transparent
+methodColor       = transparent
+forColor          = transparent
+declarationsColor = transparent
+
+stringColor       = lispString
+numberColor       = lispNumber
+regexColor        = hsl(0, 60%, 50%)
+
+fileColor         = hsl(45, 20%, 80%)
+errorRed          = hsl(0, 70%, 90%)
+
+
+// Paren styling helper
+parenOpen()
+  color lispParen
+  font-weight 400
+
+parenClose()
+  color lispParen
+  font-weight 400
+
+
+// Use the shared file wrapper with Lisp colors
+fileWrapper(
+  fileBorderColor: fileColor,
+  fileHeaderBg: darken(lispBackground, 5%),
+  fileBg: lispBackground,
+  textColor: primaryColor,
+  buttonBorderColor: hsl(45, 20%, 70%),
+  buttonBg: darken(lispBackground, 3%),
+  buttonTextColor: primaryColor,
+  codeViewBg: darken(lispBackground, 2%),
+  codeViewBorder: hsl(45, 20%, 80%),
+  codeViewText: primaryColor
+)
+
+// Additional Lisp-specific body styling
+.file > .body
+  line-height 1.6
+
+
+// Remove all boxes, use parentheses instead
+.arrowFunctionExpression,
+.blockStatement,
+.labeledStatement,
+.functionExpression,
+.classDeclaration,
+.classExpression,
+.declarations,
+.for,
+.forIn,
+.forOf,
+.function,
+.method,
+.if,
+.return,
+.while,
+.doWhile,
+.arrayExpression,
+.arrayPattern,
+.objectExpression,
+.tryStatement,
+.switchStatement,
+.expressionStatement
+  border none !important
+  background transparent !important
+  display block
+  padding-left 1.5em
+  margin 0.2em 0
+
+
+.string
+  color stringColor
+  font-style normal
+  &::before
+    content '"'
+  &::after
+    content '"'
+  &:not(.templateElement):empty
+    &::before
+      content '""'
+    &::after
+      content ''
+
+
+.key > .string
+  color inherit
+  &::before,
+  &::after
+    content ''
+
+
+.templateLiteral
+  &::before
+    parenOpen()
+    content '(template '
+  &::after
+    parenClose()
+    content ')'
+
+  > .templateElement
+    color stringColor
+    &:not(:last-of-type)::after
+      color lispSpecial
+      content ' ${'
+    &:not(:first-of-type)::before
+      color lispSpecial
+      content '} '
+
+
+.number
+  color numberColor
+
+.regex
+  color regexColor
+  &::before
+    content '#/'
+  &::after
+    content '/'
+
+
+// Import/Export as S-expressions
+.importDeclaration
+  &::before
+    parenOpen()
+    content '(import '
+  &::after
+    parenClose()
+    content ')'
+
+  .specifiers::before
+    content ''
+
+  > .source
+    color stringColor
+    &::before
+      content ':from '
+
+
+.importNamespaceSpecifier
+  &::before
+    content ':as '
+
+
+.importSpecifier
+  &::before
+    content ''
+  &::after
+    content ''
+
+  > .local::before
+    content ' :as '
+
+
+.exportNamedDeclaration
+  &::before
+    parenOpen()
+    content '(export '
+  &::after
+    parenClose()
+    content ')'
+
+  .specifiers::before
+    content ''
+
+  .source::before
+    content ':from '
+
+
+.exportDefaultDeclaration
+  &::before
+    parenOpen()
+    content '(export-default '
+  &::after
+    parenClose()
+    content ')'
+
+
+.exportAllDeclaration
+  &::before
+    parenOpen()
+    content '(export-all '
+  &::after
+    parenClose()
+    content ')'
+
+
+// Control flow as S-expressions
+.switchStatement
+  &::before
+    parenOpen()
+    content '(case '
+  &::after
+    parenClose()
+    content ')'
+
+  > .discriminant::after
+    content ''
+
+  > .test::after
+    content ''
+
+
+.if
+  display block !important
+  &::before
+    parenOpen()
+    content '(if '
+  &::after
+    parenClose()
+    content ')'
+
+  > header.test
+    display inline
+    &::before
+      parenOpen()
+      content '('
+    &::after
+      parenClose()
+      content ') '
+
+  > .consequent
+    display inline
+    &::before
+      parenOpen()
+      content '('
+    &::after
+      parenClose()
+      content ') '
+
+  > .alternate
+    display inline
+    &::before
+      parenOpen()
+      content '('
+    &::after
+      parenClose()
+      content ')'
+    &:empty
+      display none
+
+
+.tryStatement
+  display block !important
+  &::before
+    parenOpen()
+    content '(try '
+  &::after
+    parenClose()
+    content ')'
+
+  > .block
+    display block
+    &::before
+      content ''
+
+  > .handler
+    display block
+    margin-left 1em
+    &::before
+      parenOpen()
+      content '(catch '
+    &::after
+      parenClose()
+      content ')'
+
+    > .catchClause > .param::after
+      content ''
+
+  > .finalizer
+    display block
+    margin-left 1em
+    &::before
+      parenOpen()
+      content '(finally '
+    &::after
+      parenClose()
+      content ')'
+
+
+.throwStatement
+  &::before
+    parenOpen()
+    content '(throw '
+  &::after
+    parenClose()
+    content ')'
+
+.breakStatement
+  &::before
+    parenOpen()
+    content '(break'
+  &::after
+    parenClose()
+    content ')'
+
+
+.for
+  &::before
+    parenOpen()
+    content '(for '
+  &::after
+    parenClose()
+    content ')'
+
+  > header
+    > .init
+      display inline
+      &::before
+        parenOpen()
+        content '(init '
+      &::after
+        parenClose()
+        content ') '
+      > .declarations
+        display inline
+
+    > .test
+      display inline
+      &::before
+        parenOpen()
+        content '(test '
+      &::after
+        parenClose()
+        content ') '
+
+  > .update
+    display inline
+    &::before
+      parenOpen()
+      content '(update '
+    &::after
+      parenClose()
+      content ')'
+
+  > .body
+    display block
+    padding-left 1em
+
+
+.forIn,
+.forOf
+  > header
+    > .left::before
+      content ''
+    > .right::before
+      content ':in '
+
+.forIn
+  &::before
+    parenOpen()
+    content '(for-in '
+  &::after
+    parenClose()
+    content ')'
+
+.forOf
+  &::before
+    parenOpen()
+    content '(for-of '
+  &::after
+    parenClose()
+    content ')'
+
+
+.while
+  &::before
+    parenOpen()
+    content '(while '
+  &::after
+    parenClose()
+    content ')'
+
+  > header::before
+    content ''
+
+  > .body
+    display block
+    padding-left 1em
+
+
+.doWhile
+  &::before
+    parenOpen()
+    content '(do-while '
+  &::after
+    parenClose()
+    content ')'
+
+  > .body
+    display block
+    &::before
+      content ''
+
+  > footer
+    &::before
+      content ':while '
+
+
+// Functions as S-expressions
+.method
+  &::before
+    parenOpen()
+    content '(method '
+  &::after
+    parenClose()
+    content ')'
+
+  .name
+    color lispFunction
+    font-weight 600
+
+  > .functionExpression
+    border none !important
+    background none !important
+
+    > div > .paramsWrapper > .params
+      color lispKeyword
+
+
+.function
+  &::before
+    parenOpen()
+    content '(defun '
+  &::after
+    parenClose()
+    content ')'
+
+  > header
+    > .name
+      color lispFunction
+      font-weight 600
+
+    > .params
+      color lispKeyword
+      &::before
+        parenOpen()
+        content '('
+      &::after
+        parenClose()
+        content ')'
+
+      > .parameter:not(:last-of-type)::after
+        content ' '
+
+
+.arguments
+  &::before
+    parenOpen()
+    content '('
+  &::after
+    parenClose()
+    content ')'
+  &:empty
+    &::before
+      content '()'
+    &::after
+      content ''
+
+  > span
+    display inline
+    border none
+    padding 0
+    margin-right 0.5em
+
+
+.arrowFunctionExpression,
+.functionExpression
+  display inline !important
+  &::before
+    parenOpen()
+    content '(lambda '
+  &::after
+    parenClose()
+    content ')'
+
+  &.async::before
+    content '(async-lambda '
+
+  > div
+    display inline
+
+    > div
+      display inline
+
+      > .params
+        color lispKeyword
+        display inline
+        &::before
+          parenOpen()
+          content '('
+        &::after
+          parenClose()
+          content ') '
+        &:empty::after
+          content '() '
+
+    > .paramsWrapper::after
+      content ''
+
+
+.classDeclaration,
+.classExpression
+  &::before
+    parenOpen()
+    content '(defclass '
+  &::after
+    parenClose()
+    content ')'
+
+  > header
+    > .name
+      color lispFunction
+      font-weight 600
+
+  .superClass
+    &::before
+      content ':extends '
+
+
+.super::before
+  color lispSpecial
+  content 'super'
+
+.emptyStatement::before
+  color lispComment
+  content '; empty'
+
+
+.blockStatement
+  padding-left 1em
+
+.labeledStatement
+  &::before
+    parenOpen()
+    content '(label '
+  &::after
+    parenClose()
+    content ')'
+
+  > header > .label::after
+    content ' '
+
+
+.continueStatement
+  &::before
+    parenOpen()
+    content '(continue'
+  &::after
+    parenClose()
+    content ')'
+
+
+.expressionStatement
+  padding 0.1em 0
+
+
+.memberExpression
+  > .property::before
+    content '.'
+
+  &.computed > .property
+    &::before
+      content '['
+    &::after
+      content ']'
+
+
+.callee > .memberExpression > .property
+  color lispFunction
+  &::before
+    content '.'
+
+
+.logicalExpression
+  border none
+  padding 0
+
+  > .left,
+  > .right
+    display inline
+
+
+.awaitExpression
+  &::before
+    parenOpen()
+    content '(await '
+  &::after
+    parenClose()
+    content ')'
+
+
+.declarations
+  display inline !important
+  padding 0
+  margin 0
+
+  &::before
+    parenOpen()
+  &::after
+    parenClose()
+    content ')'
+
+  &.const::before
+    content '(const '
+
+  &.let::before
+    content '(let '
+
+  &.var::before
+    content '(var '
+
+  .declaration.hasInit > .identifier::after
+    content ' '
+
+
+.declaration
+  display inline
+
+  > .identifier
+    color lispKeyword
+
+  > .init
+    display inline
+
+
+.return
+  display inline-block
+  padding 0
+  &::before
+    parenOpen()
+    content '(return '
+  &::after
+    parenClose()
+    content ')'
+
+
+.comment,
+.propertyComment
+  display block
+  border none
+  padding 0
+  color lispComment
+  font-size 0.9em
+  margin 0.3em 0
+  &::before
+    content '; '
+
+.commentedSection
+  margin-top 0.5em
+
+.withTrailingComment
+  display block
+
+  .trailing.comment
+    display inline
+    margin-left 1em
+
+
+// Objects as association lists
+.objectExpression,
+.identifier > .objectPattern
+  display inline
+  background transparent
+  border none
+  padding 0
+
+  &::before
+    parenOpen()
+    content "'("
+  &::after
+    parenClose()
+    content ')'
+
+  &:empty
+    &::before
+      content "'()"
+    &::after
+      content ''
+
+  > .property
+    display inline
+
+    > .key
+      display inline
+      color lispKeyword
+      &::before
+        content '('
+
+    > .separator
+      display inline
+      &::after
+        content ' . '
+
+    > .value
+      display inline
+      &::after
+        content ') '
+
+
+.identifier > .objectPattern
+  background transparent
+
+
+.objectPattern
+  > .property
+    &.shorthand > .key
+      display inline
+      visibility visible
+      width auto
+
+
+// Arrays as lists
+.arrayExpression,
+.arrayPattern
+  border none
+  display inline
+
+  &::before
+    parenOpen()
+    content "'("
+  &::after
+    parenClose()
+    content ')'
+
+  &:empty
+    &::before
+      content "'()"
+    &::after
+      content ''
+
+
+.arrayElement,
+.arrayPattern > *
+  border none
+  display inline
+  padding 0
+  margin-right 0.5em
+
+
+.assignment
+  &::before
+    content ' <- '
+
+.assignmentExpression,
+.assignmentPattern
+  &::before
+    parenOpen()
+    content '(setf '
+  &::after
+    parenClose()
+    content ')'
+
+  > .left::after
+    content ' '
+
+.assign-add
+  &::before
+    content '(incf '
+  > .left::after
+    content ' '
+
+.assign-subtract
+  &::before
+    content '(decf '
+  > .left::after
+    content ' '
+
+
+// Literals
+.infinity::before
+  content 'most-positive-fixnum'
+
+.true::before
+  color lispSpecial
+  content 't'
+
+.false::before
+  color lispSpecial
+  content 'nil'
+
+.null::before
+  color lispSpecial
+  content 'nil'
+
+.undefined::before
+  color lispComment
+  content 'nil'
+
+.nan::before
+  content 'NaN'
+
+
+// Operators as prefix functions
+.binaryExpression
+  > .left::before
+    content ''
+  > .right::after
+    content ''
+  > .left::after
+    content ''
+
+.operator-and
+  &::before
+    parenOpen()
+    content '(and '
+  &::after
+    parenClose()
+    content ')'
+  > .left::after
+    content ' '
+
+.operator-or
+  &::before
+    parenOpen()
+    content '(or '
+  &::after
+    parenClose()
+    content ')'
+  > .left::after
+    content ' '
+
+.operator-not
+  &::before
+    parenOpen()
+    content '(not '
+  &::after
+    parenClose()
+    content ')'
+
+.operator-add
+  &::before
+    parenOpen()
+    content '(+ '
+  &::after
+    parenClose()
+    content ')'
+  > .left::after
+    content ' '
+
+.operator-subtract
+  &::before
+    parenOpen()
+    content '(- '
+  &::after
+    parenClose()
+    content ')'
+  > .left::after
+    content ' '
+
+.operator-multiply
+  &::before
+    parenOpen()
+    content '(* '
+  &::after
+    parenClose()
+    content ')'
+  > .left::after
+    content ' '
+
+.operator-divide
+  &::before
+    parenOpen()
+    content '(/ '
+  &::after
+    parenClose()
+    content ')'
+  > .left::after
+    content ' '
+
+.operator-remainder
+  &::before
+    parenOpen()
+    content '(mod '
+  &::after
+    parenClose()
+    content ')'
+  > .left::after
+    content ' '
+
+.operator-exponent
+  &::before
+    parenOpen()
+    content '(expt '
+  &::after
+    parenClose()
+    content ')'
+  > .left::after
+    content ' '
+
+.operator-equals,
+.operator-equals-strict
+  &::before
+    parenOpen()
+    content '(eq '
+  &::after
+    parenClose()
+    content ')'
+  > .left::after
+    content ' '
+
+.operator-equals-not,
+.operator-equals-strict-not
+  &::before
+    parenOpen()
+    content '(not (eq '
+  &::after
+    parenClose()
+    content '))'
+  > .left::after
+    content ' '
+
+.operator-less-than
+  &::before
+    parenOpen()
+    content '(< '
+  &::after
+    parenClose()
+    content ')'
+  > .left::after
+    content ' '
+
+.operator-less-than-equals
+  &::before
+    parenOpen()
+    content '(<= '
+  &::after
+    parenClose()
+    content ')'
+  > .left::after
+    content ' '
+
+.operator-greater-than
+  &::before
+    parenOpen()
+    content '(> '
+  &::after
+    parenClose()
+    content ')'
+  > .left::after
+    content ' '
+
+.operator-greater-than-equals
+  &::before
+    parenOpen()
+    content '(>= '
+  &::after
+    parenClose()
+    content ')'
+  > .left::after
+    content ' '
+
+.operator-shift-left
+  &::before
+    parenOpen()
+    content '(ash '
+  &::after
+    parenClose()
+    content ')'
+  > .left::after
+    content ' '
+
+.operator-shift-right
+  &::before
+    parenOpen()
+    content '(ash '
+  &::after
+    parenClose()
+    content ' -)'
+  > .left::after
+    content ' '
+
+.operator-spread
+  &::before
+    content ',@'
+
+.operator-delete
+  &::before
+    parenOpen()
+    content '(remhash '
+  &::after
+    parenClose()
+    content ')'
+
+.operator-typeof
+  &::before
+    parenOpen()
+    content '(type-of '
+  &::after
+    parenClose()
+    content ')'
+
+.operator-void
+  &::before
+    parenOpen()
+    content '(progn '
+  &::after
+    parenClose()
+    content ' nil)'
+
+
+.containsThisExpression > .property::before
+  content ''
+
+.thisExpression::after
+  content 'self'
+
+.shebang
+  color lispComment
+  margin-bottom 1em
+  &::before
+    content '; '
+
+
+.error
+  color darken(errorRed, 60%)
+  background-color errorRed
+  border 1px solid darken(errorRed, 30%)
+  border-radius 3px
+  padding 1em 2em
+
+
+// Call expressions
+.callExpression
+  > .callee::before
+    parenOpen()
+    content '('
+  > .arguments::after
+    parenClose()
+    content ''
+  > .arguments
+    &::before
+      content ''
+    &::after
+      content ')'
+
+
+// New expressions
+.newExpression
+  &::before
+    parenOpen()
+    content '(make-instance '
+  &::after
+    parenClose()
+    content ')'
+
+
+// Conditional/ternary - (if (test) (action1) (action2))
+.conditionalExpression
+  &::before
+    parenOpen()
+    content '(if '
+  &::after
+    parenClose()
+    content ')'
+
+  // Hide the ? and : separators
+  > .separator-question,
+  > .separator-colon
+    display none
+
+  // test clause
+  > .test
+    &::before
+      parenOpen()
+      content '('
+    &::after
+      parenClose()
+      content ') '
+
+  // consequent (action1)
+  > .consequent
+    &::before
+      parenOpen()
+      content '('
+    &::after
+      parenClose()
+      content ') '
+
+  // alternate (action2)
+  > .alternate
+    &::before
+      parenOpen()
+      content '('
+    &::after
+      parenClose()
+      content ')'
