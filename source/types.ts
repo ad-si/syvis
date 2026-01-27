@@ -1,4 +1,4 @@
-export type ShavenArray = [string?, ...any[]]
+export type ShavenArray = [(string | HTMLElement)?, ...any[]]
 
 export type ShavenObject = {
   rootElement: string
