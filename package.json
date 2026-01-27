@@ -2,8 +2,10 @@
   "name": "syvis",
   "version": "0.0.0",
   "description": "Forget syntax highlighting. Syntax visualization is the real deal!",
-  "main": "source/index.js",
-  "bin": "source/cli.js",
+  "source": "public/index.html",
+  "bin": {
+    "syvis": "source/cli.js"
+  },
   "keywords": [
     "syntax",
     "highlighting",
@@ -13,24 +15,25 @@
   "license": "UNLICENSED",
   "private": "true",
   "dependencies": {
-    "codemirror": "^6.0.1",
+    "codemirror": "^6.0.2",
     "esprima": "^4.0.1",
-    "express": "^4.18.2",
-    "morgan": "^1.10.0",
-    "serve-favicon": "^2.5.0",
+    "express": "^5.1.0",
+    "morgan": "^1.10.1",
+    "serve-favicon": "^2.5.1",
     "shaven": "2.1.0",
-    "stylus": "^0.62.0"
+    "stylus": "^0.64.0"
   },
   "devDependencies": {
-    "@types/node": "^20.10.1",
-    "@typescript-eslint/parser": "^5.62.0",
-    "eslint": "^8.54.0",
-    "eslint-config-javascript": "^2.1.0",
-    "parcel": "^2.10.3",
-    "prettier": "^2.8.8",
-    "prettier-eslint": "^16.1.2",
-    "typescript": "^4.9.5",
-    "vue-eslint-parser": "^9.3.2"
+    "@parcel/transformer-stylus": "^2.16.0",
+    "@types/node": "^24.9.1",
+    "@typescript-eslint/parser": "^8.46.2",
+    "eslint": "^9.38.0",
+    "eslint-config-javascript": "^3.0.0",
+    "parcel": "^2.16.0",
+    "prettier": "^3.6.2",
+    "prettier-eslint": "^16.4.2",
+    "typescript": "^5.9.3",
+    "vue-eslint-parser": "^10.2.0"
   },
   "eslintConfig": {
     "extends": "eslint-config-javascript"
