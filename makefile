@@ -62,11 +62,12 @@ deploy:
 
 .PHONY: dev
 dev:
-	bun x parcel serve build/index.html
+	bunx parcel serve public/index.html
 
 
 .PHONY: test
 test:
+	bunx tsc --noEmit
 	bun test
 
 

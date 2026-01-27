@@ -1,11 +1,7 @@
-import path from "path"
-import fs from "fs"
-
 export function getModules () {
-  const sourcePath = __dirname
-  const indexPath = path.join(sourcePath, "index.js")
-  const walkTreePath = path.join(sourcePath, "walkTree.js")
-  const visualizersPath = path.join(sourcePath, "visualizers")
+  const sourcePath = new URL(".", import.meta.url).pathname
+  const indexPath = `${sourcePath}index.js`
+  const walkTreePath = `${sourcePath}walkTree.js`
   const mainModule = {
     [indexPath]: {
       run: true,

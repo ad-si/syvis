@@ -1,4 +1,4 @@
-export const binary = {
+export const binary: Record<string, string> = {
   ",": "comma",
   "...": "spread",
 
@@ -50,7 +50,7 @@ export const binary = {
   in: "in",
 }
 
-export const unary = {
+export const unary: Record<string, string> = {
   "!": "not",
 
   "+": "plus",

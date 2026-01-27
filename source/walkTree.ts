@@ -1,7 +1,7 @@
 import type { FileData, Node, Comment, ShavenArray } from "./types.js"
 
-import * as shaven from "shaven"
-import esprima from "esprima"
+import shaven from "shaven"
+import * as esprima from "esprima"
 import * as codemirror from "codemirror"
 // require('codemirror/mode/javascript/javascript.js')
 
@@ -34,8 +34,8 @@ function arrayPattern (node: Node) {
 
 function arrowFunctionExpression (node: Node) {
   const classes = ["arrowFunctionExpression"]
-  if (node.async != null) classes.push("async")
-  if (node.generator != null) classes.push("generator")
+  if ((node as any).async != null) classes.push("async")
+  if ((node as any).generator != null) classes.push("generator")
 
   return [
     "div",
@@ -294,7 +294,8 @@ function functionDeclaration (node: Node): any[] {
 
 function functionExpression (node: Node) {
   const shavenArray = arrowFunctionExpression(node)
-  shavenArray[1].class = shavenArray[1].class.replace(
+  const attrs = shavenArray[1] as any
+  attrs.class = attrs.class.replace(
     "arrowFunctionExpression",
     "functionExpression",
   )
@@ -368,21 +369,21 @@ function labeledStatement (node: Node) {
 }
 
 function literal (node: Node) {
-  let nodeType = typeof node.value
+  let nodeType: string = typeof node.value
   const classes = ["literal"]
 
-  if (node.regex != null) nodeType = "regex"
+  if ((node as any).regex != null) nodeType = "regex"
   else if (node.value === null) nodeType = "null"
 
   classes.push(nodeType)
 
-  if (node.value === true) classes.push("true")
-  if (node.value === false) classes.push("false")
+  if (node.value === true as any) classes.push("true")
+  if (node.value === false as any) classes.push("false")
 
   return [
     "span",
     { class: classes.join(" ") },
-    node.regex != null
+    (node as any).regex != null
       ? String(node.value)
       : ["boolean", "null"].includes(nodeType)
         ? ""
@@ -407,7 +408,7 @@ function logicalExpression (node: Node) {
 
 function memberExpression (node: Node) {
   const classes = ["memberExpression"]
-  if (node.computed != null) classes.push("computed")
+  if ((node as any).computed != null) classes.push("computed")
   if (node.object && node.object.type === "ThisExpression") {
     classes.push("containsThisExpression")
   }
@@ -460,8 +461,8 @@ function propertyComment (node: Node) {
 function property (node: Node) {
   const classes = ["property", node.kind]
 
-  if (node.method != null) classes.push("method")
-  if (node.shorthand != null) classes.push("shorthand")
+  if ((node as any).method != null) classes.push("method")
+  if ((node as any).shorthand != null) classes.push("shorthand")
 
   return [
     "span",
@@ -511,7 +512,7 @@ function taggedTemplateExpression (node: Node) {
 function templateElement (node: Node) {
   const classes = ["templateElement", "string"]
 
-  if (node.tail != null) classes.push("tail")
+  if ((node as any).tail != null) classes.push("tail")
 
   return [
     "span",
@@ -669,6 +670,57 @@ const visualizers = {
   whileStatement,
 }
 
+function showCode (fileData: FileData, clickEvent: MouseEvent) {
+  const button = clickEvent.target as HTMLElement
+  const fileContainer = button.parentNode?.parentNode as HTMLElement
+  const visualizationBody = fileContainer?.querySelector(".body") as HTMLElement
+
+  // Check if code view already exists
+  const existingCodeView = fileContainer?.querySelector(".code-view") as HTMLElement
+
+  if (existingCodeView) {
+    // Toggle between code and visualization
+    const isCodeVisible = existingCodeView.style.display !== "none"
+
+    if (isCodeVisible) {
+      // Show visualization, hide code
+      existingCodeView.style.display = "none"
+      if (visualizationBody) {
+        visualizationBody.style.display = "block"
+      }
+      button.textContent = "show code"
+    }
+    else {
+      // Show code, hide visualization
+      existingCodeView.style.display = "block"
+      if (visualizationBody) {
+        visualizationBody.style.display = "none"
+      }
+      button.textContent = "show visualization"
+    }
+  }
+  else {
+    // Create new code view
+    const codeView = document.createElement("pre")
+    codeView.className = "code-view"
+    const codeElement = document.createElement("code")
+    codeElement.textContent = fileData.content
+    codeView.appendChild(codeElement)
+
+    // Insert after header
+    const header = fileContainer?.querySelector("header")
+    if (header && header.nextSibling) {
+      fileContainer.insertBefore(codeView, header.nextSibling)
+    }
+
+    // Hide visualization and show code
+    if (visualizationBody) {
+      visualizationBody.style.display = "none"
+    }
+    button.textContent = "show visualization"
+  }
+}
+
 function onEdit (fileData: FileData, editEvent) {
   editEvent.target.textContent = "visualize"
   editEvent.target.removeEventListener("click", onEdit)
@@ -680,7 +732,7 @@ function onEdit (fileData: FileData, editEvent) {
   editorContainer.className = "editor"
   fileContainer.append(editorContainer)
 
-  const editor = codemirror(editorContainer, {
+  const editor = (codemirror as any)(editorContainer, {
     value: fileData.content,
     mode: "javascript",
     lineNumbers: true,
@@ -696,13 +748,13 @@ function onEdit (fileData: FileData, editEvent) {
     try {
       event.target.removeEventListener("click", reVisualize)
       const ast = esprima.parse(fileData.content, esprimaDefaults)
-      const rendering = walkTree(ast, fileData)
+      const rendering = walkTree(ast as unknown as Node, fileData)
 
       outputElement.innerHTML = ""
       // renderingContainer.style.display = 'initial'
       // editorContainer.style.display = 'initial'
 
-      shaven([outputElement, rendering])
+      shaven([outputElement, rendering] as any)
     }
     catch (error) {
       const div = document.createElement("div")
@@ -734,7 +786,7 @@ export function walkTree (node?: Node, fileData?: FileData): ShavenArray {
     // Convert comments in objects to a table friendly format
     node.type === "ObjectExpression" &&
     node.properties &&
-    typeof node.properties === "function" &&
+    Array.isArray(node.properties) &&
     node.properties.some(hasLeadingComments)
   ) {
     node.properties.forEach((property, propertyIndex) => {
@@ -744,10 +796,10 @@ export function walkTree (node?: Node, fileData?: FileData): ShavenArray {
       node.properties.splice(
         propertyIndex,
         0,
-        property.leadingComments.map((comment) => ({
+        ...property.leadingComments.map((comment: any) => ({
           type: "PropertyComment",
           value: comment.value,
-        })),
+        } as any)),
       )
       delete property.leadingComments
     })
@@ -779,7 +831,7 @@ export function walkTree (node?: Node, fileData?: FileData): ShavenArray {
   // TODO: Properly handle node.trailingComments
 
   if (node.type === "Program") {
-    let shebang = ""
+    let shebang: any = ""
 
     if (fileData && fileData.shebang) {
       shebang = [".shebang", fileData.shebang]
@@ -805,13 +857,12 @@ export function walkTree (node?: Node, fileData?: FileData): ShavenArray {
         "header",
         fileData ? fileData.path : false,
         [
-          "button.edit",
-          "edit",
+          "button.code",
+          "show code",
           (element: HTMLElement) => {
             element.addEventListener("click", (clickEvent: MouseEvent) => {
-              console.info("Edit button clicked")
-              window.alert("TODO: Implement edit functionality")
-              // onEdit(fileData, clickEvent)
+              clickEvent.preventDefault()
+              showCode(fileData, clickEvent)
             })
           },
         ],
@@ -821,6 +872,9 @@ export function walkTree (node?: Node, fileData?: FileData): ShavenArray {
   }
 
   function deCapitalize (text) {
+    if (!text || typeof text !== 'string') {
+      return ''
+    }
     return text.slice(0, 1)
       .toLowerCase() + text.slice(1)
   }

@@ -1,29 +1,21 @@
 #! /usr/bin/env bun run
 
-import stream from "stream"
-import esprima from "esprima"
+import * as esprima from "esprima"
 import shaven from "shaven"
+import type { Node } from "./types.js"
 import { walkTree } from "./walkTree.js"
 
-let internalBuffer = ""
-
-function transform (
-  chunk: { toString: () => string },
-  _encoding: string,
-  done: () => void,
-) {
-  internalBuffer = internalBuffer.concat(chunk.toString())
-  this.push("")
-  done()
+async function readStdin (): Promise<string> {
+  const chunks: Uint8Array[] = []
+  for await (const chunk of process.stdin) {
+    chunks.push(chunk)
+  }
+  return Buffer.concat(chunks).toString("utf-8")
 }
 
-function flush (done: () => void) {
-  const ast = esprima.parse(internalBuffer)
-  this.push(JSON.stringify(walkTree(ast), null, 2))
-  this.push(shaven(walkTree(ast))[0])
-  done()
-}
+const input = await readStdin()
+const ast = esprima.parse(input) as unknown as Node
+const result = walkTree(ast)
 
-process.stdin
-  .pipe(new stream.Transform({ transform, flush }))
-  .pipe(process.stdout)
+console.log(JSON.stringify(result, null, 2))
+console.log(shaven(result as any)[0])
