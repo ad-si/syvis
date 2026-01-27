@@ -1,54 +1,5 @@
-.file
-  border-width 1px
-  border-style solid
-  border-color fileColor
-  border-radius 0.5em
-  position relative
-  font-family 'Source Code Pro', 'Courier New', monospace
-
-  > .blockLabel
-    margin-bottom 1em
-    color rgba(primaryColor, 0.8)
-
-  > header
-    font-weight: 600
-    background-color: lighten(fileColor, 80%)
-    border-bottom-color rgba(0, 0, 0, 0.1)
-    border-bottom-style solid
-    border-bottom-width 1px
-    margin-bottom 0.3em
-    border-radius: 0.5em 0.5em 0 0
-    padding 0.4rem 1rem
-    display flex
-    align-items center
-    justify-content space-between
-
-  > .body
-    padding 1em 1em
-
-// Button and code view (non-theme-specific)
-button.code
-  border-width 1px
-  border-style solid
-  border-color silentColor
-  border-radius 0.5em
-  cursor pointer
-  padding 0.5em 1em
-
-.code-view
-  background-color hsl(0, 0%, 98%)
-  border: 1px solid hsl(0, 0%, 85%)
-  border-radius 0.3em
-  padding 1em
-  margin 0.5em 1em
-  overflow-x auto
-  font-family 'Source Code Pro', 'Courier New', monospace
-  font-size 0.9em
-  line-height 1.4
-  &.hidden
-    display none
-  code
-    color hsl(0, 0%, 20%)
+// Use shared file wrapper with default colors
+fileWrapper()
 
 .string
   font-style italic
@@ -541,6 +492,8 @@ button.code
     white-space pre
     content '\A   .'
     color  transSilentColor
+  &::after
+    content ''
 
 
 .logicalExpression
@@ -635,6 +588,10 @@ button.code
   margin 0.5em 0
   &::first-letter
     text-transform uppercase
+
+.commentSeparator
+  display block
+  height 1em
 
 .commentedSection
   margin-top 1em
@@ -877,6 +834,20 @@ button.code
 .operator-void::before
   font-weight 600
   content '\a0void\a0'
+
+
+// Conditional/ternary expression - default styling shows ? and :
+.conditionalExpression
+  > .test,
+  > .consequent,
+  > .alternate
+    display inline
+
+  > .separator-question
+    color transSilentColor
+
+  > .separator-colon
+    color transSilentColor
 
 
 .containsThisExpression

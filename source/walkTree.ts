@@ -34,8 +34,11 @@ function arrayPattern (node: Node) {
 
 function arrowFunctionExpression (node: Node) {
   const classes = ["arrowFunctionExpression"]
-  if ((node as any).async != null) classes.push("async")
-  if ((node as any).generator != null) classes.push("generator")
+  if ((node as any).async) classes.push("async")
+  if ((node as any).generator) classes.push("generator")
+
+  const markedParams = markAsFunctionParameter(node.params)
+    .map((x) => walkTree(x))
 
   return [
     "div",
@@ -46,7 +49,7 @@ function arrowFunctionExpression (node: Node) {
         ".paramsWrapper", // Used for flex layout
         [
           ".params",
-          "", // ...(node.params || []).map(x => walkTree(x))
+          ...markedParams,
         ],
       ],
       [".body", ...ensureNodeArray(node.body)
@@ -172,11 +175,11 @@ function classExpression (node: Node) {
 function conditionalExpression (node: Node) {
   return [
     "span.conditionalExpression",
-    ["span", walkTree(node.test)],
-    ["span", " ? "],
-    ["span", walkTree(node.consequent)],
-    ["span", " : "],
-    ["span", walkTree(node.alternate)],
+    ["span.test", walkTree(node.test)],
+    ["span.separator-question", " ? "],
+    ["span.consequent", walkTree(node.consequent)],
+    ["span.separator-colon", " : "],
+    ["span.alternate", walkTree(node.alternate)],
   ]
 }
 
@@ -408,7 +411,7 @@ function logicalExpression (node: Node) {
 
 function memberExpression (node: Node) {
   const classes = ["memberExpression"]
-  if ((node as any).computed != null) classes.push("computed")
+  if ((node as any).computed) classes.push("computed")
   if (node.object && node.object.type === "ThisExpression") {
     classes.push("containsThisExpression")
   }
@@ -778,6 +781,9 @@ function commentTemplate (comment: Comment) {
   ]
 }
 
+// Track comments rendered locally to avoid duplicates in global section
+const renderedCommentLines = new Set<number>()
+
 export function walkTree (node?: Node, fileData?: FileData): ShavenArray {
   if (node == null) {
     return []
@@ -808,16 +814,61 @@ export function walkTree (node?: Node, fileData?: FileData): ShavenArray {
   if (Array.isArray(node.leadingComments)) {
     if (node.leadingComments.length) {
       if (node.leadingComments.some((comment) => comment.value)) {
-        const comments = (node.leadingComments || []).map((comment) => {
-          if (comment.value == null) return ""
-          const commentArray = commentTemplate(comment)
-          comment.value = ""
-          return commentArray
+        // Group comments that are separated by empty lines
+        const commentGroups: Comment[][] = []
+        let currentGroup: Comment[] = []
+
+        node.leadingComments.forEach((comment, index) => {
+          if (comment.value == null) return
+
+          // Track this comment's line to exclude from global comments section
+          if (comment.loc?.end?.line) {
+            renderedCommentLines.add(comment.loc.end.line)
+          }
+
+          if (index === 0) {
+            currentGroup.push(comment)
+          }
+          else {
+            const prevComment = node.leadingComments![index - 1]
+            const prevEndLine = prevComment.loc?.end?.line ?? 0
+            const currStartLine = comment.loc?.start?.line ?? 0
+
+            // If there's a gap of more than 1 line, start a new group
+            if (currStartLine - prevEndLine > 1) {
+              if (currentGroup.length > 0) {
+                commentGroups.push(currentGroup)
+              }
+              currentGroup = [comment]
+            }
+            else {
+              currentGroup.push(comment)
+            }
+          }
         })
+
+        // Don't forget the last group
+        if (currentGroup.length > 0) {
+          commentGroups.push(currentGroup)
+        }
+
+        // Render each group, with groups separated by .commentSeparator
+        const commentElements: any[] = []
+        commentGroups.forEach((group, groupIndex) => {
+          if (groupIndex > 0) {
+            commentElements.push([".commentSeparator"])
+          }
+          group.forEach((comment) => {
+            commentElements.push(commentTemplate(comment))
+          })
+        })
+
+        // Delete to prevent infinite recursion on the recursive walkTree call
+        delete node.leadingComments
 
         return [
           ".commentedSection",
-          [".leadingComments", ...comments],
+          [".leadingComments", ...commentElements],
           walkTree(node, fileData),
         ]
       }
@@ -839,16 +890,63 @@ export function walkTree (node?: Node, fileData?: FileData): ShavenArray {
 
     const bodyElements = ensureNodeArray(node.body)
       .map((x) => walkTree(x))
-    const comments = Array.isArray(node.comments)
-      ? [
-        ".comments",
-        ...node.comments
-          .filter((comment) => comment.value)
-          .map((comment) => {
-            return commentTemplate(comment)
-          }),
-      ]
-      : true
+    // Filter out comments already rendered locally (via leadingComments)
+    const globalComments = Array.isArray(node.comments)
+      ? node.comments.filter((comment) =>
+          comment.value != null &&
+          comment.value !== "" &&
+          !renderedCommentLines.has(comment.loc?.end?.line)
+        )
+      : []
+    // Clear the set for the next file
+    renderedCommentLines.clear()
+
+    // Group global comments that are separated by empty lines
+    let comments: any = true
+    if (globalComments.length > 0) {
+      const commentGroups: Comment[][] = []
+      let currentGroup: Comment[] = []
+
+      globalComments.forEach((comment, index) => {
+        if (index === 0) {
+          currentGroup.push(comment)
+        }
+        else {
+          const prevComment = globalComments[index - 1]
+          const prevEndLine = prevComment.loc?.end?.line ?? 0
+          const currStartLine = comment.loc?.start?.line ?? 0
+
+          // If there's a gap of more than 1 line, start a new group
+          if (currStartLine - prevEndLine > 1) {
+            if (currentGroup.length > 0) {
+              commentGroups.push(currentGroup)
+            }
+            currentGroup = [comment]
+          }
+          else {
+            currentGroup.push(comment)
+          }
+        }
+      })
+
+      // Don't forget the last group
+      if (currentGroup.length > 0) {
+        commentGroups.push(currentGroup)
+      }
+
+      // Render each group, with groups separated by .commentSeparator
+      const commentElements: any[] = []
+      commentGroups.forEach((group, groupIndex) => {
+        if (groupIndex > 0) {
+          commentElements.push([".commentSeparator"])
+        }
+        group.forEach((comment) => {
+          commentElements.push(commentTemplate(comment))
+        })
+      })
+
+      comments = [".comments", ...commentElements]
+    }
 
     return [
       "section.file",

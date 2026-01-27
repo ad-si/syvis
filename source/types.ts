@@ -10,7 +10,7 @@ export type ShavenObject = {
 export type Comment = {
   type: string
   value: string | null
-  loc: { end: { line: number } }
+  loc: { start: { line: number }; end: { line: number } }
 }
 
 export type Node = {

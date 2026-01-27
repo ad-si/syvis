@@ -884,8 +884,7 @@
 // Operators
 // Check out /source/operatorMap.js for complete list
 
-// Add parentheses to clarify precedence
-
+// Add parentheses to clarify precedence (but not in if conditions)
 .binaryExpression
   > .left::before
     content '('
@@ -895,7 +894,12 @@
     content ')'
     color transSilentColor
 
+.if > header .binaryExpression
+  > .left::before
+    content ''
 
+  > .right::after
+    content ''
 
 .binaryExpression
   > .left::after

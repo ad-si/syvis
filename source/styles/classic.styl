@@ -1,6 +1,11 @@
-@import ./_shared
-@import ./base
+@import './_shared'
 
+// Classic theme - displays JavaScript in traditional code formatting
+// Example output:
+// // A simple add function
+// function add (x, y) {
+//   return x + y
+// }
 
 * {
   margin 0
@@ -8,19 +13,32 @@
   border 0
 }
 
+primaryColor = hsl(0, 0%, 20%)
+backgroundColor = hsl(0, 0%, 100%)
+silentColor = hsl(0, 0%, 75%)
+commentColor = hsl(0, 0%, 50%)
+
+// Syntax highlighting colors
+keywordColor = hsl(280, 70%, 45%)      // purple for keywords
+functionNameColor = hsl(210, 70%, 45%) // blue for function names
+stringColor = hsl(30, 80%, 45%)        // orange for strings
+numberColor = hsl(180, 60%, 40%)       // teal for numbers
+operatorColor = hsl(0, 0%, 30%)        // dark gray for operators
+
 body
   color primaryColor
-  font-size 13px
+  font-size 14px
   font-family sans-serif
   background-color backgroundColor
+  line-height 1.5
 
 main
-  width 50em
+  width 60em
   padding 2em 1em 5em 1em
   margin 0 auto
 
 h1
-  font-size 3em
+  font-size 2em
   margin-bottom 0.5em
 
 h2
@@ -43,7 +61,7 @@ textarea
   border-width 1px
   border-style solid
   border-color gray
-  display none //block
+  display none
   padding 1em
   border-radius 0.4em
   vertical-align top
@@ -55,365 +73,811 @@ button
   border-radius 0.5em
   cursor pointer
   padding 0.5em 1em
-  margin 2em
+  margin 0
 
-.string
-  font-style italic
-  font-weight 700
-  color stringColor
+// File wrapper - use shared mixin for proper encapsulation
+fileWrapper()
 
-.number
-  color numberColor
+// Apply monospace font only to code content inside .file .body
+.file > .body
+  font-family 'Source Code Pro', 'Courier New', Consolas, monospace
+  white-space pre-wrap
 
-.regex
-  color regexColor
-
-.label
-  labelStyling()
-
-
-// Boxed syntax elements
+// Reset all special boxes - display inline
 .arrowFunctionExpression,
 .declarations,
 .for,
+.forOf,
 .function,
+.functionExpression,
+.method,
+.classDeclaration,
+.classExpression,
 .if,
 .return,
-.while
-  // background-color white !important
-  // box-shadow 1px 1px 1px rgba(0, 0, 0, 0.08)
-  border-style solid
-  border-width 1px
-  // border-width 0px !important
-  border-radius 3px
+.while,
+.tryStatement,
+.switchStatement,
+.expressionStatement,
+.objectExpression,
+.arrayExpression
+  background none !important
+  border none !important
+  padding 0 !important
+  margin 0 !important
+  display inline !important
+  border-radius 0 !important
 
+// Strings
+.string
+  color stringColor
+  &::before
+    content "'"
+  &::after
+    content "'"
 
-// Padded boxed elements
-.arrowFunctionExpression,
-.for,
-.function,
-.if,
-.while
-  padding 0.5em 0.4em 0.4em 1em
-  margin-bottom 0.4em
+.string:empty
+  &::before
+    content "'"
+  &::after
+    content "'"
 
-  > header
-    > div
-      display inline-block
+// Template literals
+.templateLiteral
+  color stringColor
+  &::before
+    content '`'
+  &::after
+    content '`'
 
-    &::before
-      display inline-block
-      margin-right 1em
-      font-weight 600
+  > .templateElement
+    &:not(:last-of-type)::after
+      content '${'
+      color operatorColor
 
-.if
-  background-color ifColor
-  border-color darken(ifColor, 20%)
+    &:not(:first-of-type)::before
+      content '}'
+      color operatorColor
 
-  > header
-    &::before
-      content 'if'
+// Numbers
+.number
+  color numberColor
 
-  > .consequent
-    padding 0 0 0 1em
+// Regex
+.regex
+  color hsl(300, 50%, 50%)
 
-  > .alternate
-    padding 0 0 0 1em
-    &::before
-      content 'else'
-      display block
-      font-weight 600
-      margin-bottom 1em
-      margin-left -1em
+// Comments
+.comment
+  display block
+  color commentColor
+  font-style italic
+  &::before
+    content '// '
 
+.commentedSection
+  display block
+  margin 0.5em 0
 
-.for
-  background-color forColor
-  border-color darken(forColor, 10%)
+// Labels - hide them
+.label
+  display none !important
 
-  > header
-    > .init
-      display block
-      > .declarations
-        display inline-block
-      &::before
-        content 'set'
-        margin-right 0.5em
-        font-weight 600
-
-    > .test
-      display block
-      &::before
-        content 'for'
-        margin-right 1em
-        font-weight 600
-      // &::after
-      //   content 'do'
-      //   margin-left 1em
-      //   font-weight 600
-
-  > .body,
-  > .update
-    padding 0 0 0 1em
-
-
-.while
-  background-color whileColor
-  border-color darken(whileColor, 10%)
-
-  > header
-    &::before
-      content 'while'
-
-  > .body
-    padding 0.5em 1em
-
-
+// Functions
 .function
-  background-color functionColor
-  border-color darken(functionColor, 10%)
-  position relative
-  margin-bottom 2em
+  display block !important
+  margin-bottom 1em !important
 
   &::before
-    content 'function'
-    labelStyling()
+    content 'function '
+    color keywordColor
+    font-weight normal
 
   > header
-    > .name
-      font-weight 900
-      margin-right 0.5em
+    display inline
 
-    > .parameters
-      color gray
+    > .name
+      color functionNameColor
+      font-weight normal
+      &::after
+        content ' '
+
+    > .params
       &::before
         content '('
       &::after
-        content ')'
+        content ') {'
 
-      > .parameter:not(:last-of-type)
+      > .parameter:not(:last-of-type)::after
+        content ', '
+
+  > .body
+    display block
+    padding-left 2em
+
+    &::after
+      content '}'
+      display block
+      margin-left -2em
+
+// Arrow functions
+.arrowFunctionExpression
+  display inline !important
+
+  > div
+    display inline
+
+    > .paramsWrapper
+      display inline
+
+      > .params
+        display inline
+        &::before
+          content '('
         &::after
+          content ')'
+
+        > .parameter:not(:last-of-type)::after
           content ', '
 
-.functionExpression .params,
+        &:empty
+          &::before
+            content '('
+          &::after
+            content ')'
+
+      &::after
+        content ' => '
+        color operatorColor
+
+  > .body
+    display inline
+
+  &.async::before
+    content 'async '
+    color keywordColor
+
+// Function expressions
+.functionExpression
+  display inline !important
+
+  &::before
+    content 'function '
+    color keywordColor
+
+  > div
+    display inline
+
+    > .paramsWrapper
+      display inline
+
+      > .params
+        display inline
+        &::before
+          content '('
+        &::after
+          content ') {'
+
+        > .parameter:not(:last-of-type)::after
+          content ', '
+
+      &::after
+        content ''
+
+  > .body
+    display block
+    padding-left 2em
+    &::after
+      content '}'
+      display block
+      margin-left -2em
+
+// Declarations
+.declarations
+  display block !important
+  margin-bottom 0.2em !important
+
+  &.const::before
+    content 'const '
+    color keywordColor
+
+  &.let::before
+    content 'let '
+    color keywordColor
+
+  &.var::before
+    content 'var '
+    color keywordColor
+
+.declaration
+  display inline
+
+  > .identifier
+    color primaryColor
+
+  &.hasInit > .identifier::after
+    content ' = '
+    color operatorColor
+
+  > .init
+    display inline
+
+// Return statements
+.return
+  display block !important
+
+  &::before
+    content 'return '
+    color keywordColor
+    font-size 1em
+    margin 0
+
+// If statements
+.if
+  display block !important
+  flex-wrap nowrap !important
+
+  > header
+    display inline
+    &::before
+      content 'if ('
+      color keywordColor
+
+    &::after
+      content ') {'
+
+  > .consequent
+    display block
+    padding-left 2em
+    &::before
+      content ''
+    &::after
+      content '}'
+      display block
+      margin-left -2em
+
+  > .alternate
+    display block
+    &::before
+      content ' else {'
+      color keywordColor
+      display block
+      margin-left 0
+
+    padding-left 2em
+
+    &::after
+      content '}'
+      display block
+      margin-left -2em
+
+// For loops
+.for
+  display block !important
+
+  > header
+    display inline
+
+    > .init
+      display inline
+      &::before
+        content 'for ('
+        color keywordColor
+
+      > .declarations
+        display inline !important
+        &::before
+          content 'let '
+          color keywordColor
+
+      &::after
+        content '; '
+
+    > .test
+      display inline
+      &::before
+        content ''
+      &::after
+        content '; '
+
+  > .update
+    display inline
+    &::after
+      content ') {'
+
+  > .body
+    display block
+    padding 0
+    padding-left 2em
+    &::after
+      content '}'
+      display block
+      margin-left -2em
+
+// For-of loops
+.forOf
+  display block !important
+
+  > header
+    display inline
+
+    > .left
+      &::before
+        content 'for ('
+        color keywordColor
+
+      > .declarations
+        display inline !important
+        &::before
+          content 'const '
+          color keywordColor
+
+    > .right
+      &::before
+        content ' of '
+        color keywordColor
+      &::after
+        content ') {'
+
+  > .body
+    display block
+    padding-left 2em
+    &::after
+      content '}'
+      display block
+      margin-left -2em
+
+// While loops
+.while
+  display block !important
+
+  > header
+    display inline
+    &::before
+      content 'while ('
+      color keywordColor
+    &::after
+      content ') {'
+
+  > .body
+    display block
+    padding-left 2em
+    padding-top 0
+    &::after
+      content '}'
+      display block
+      margin-left -2em
+
+// Try-catch
+.tryStatement
+  display block !important
+  flex-wrap nowrap !important
+
+  > .block
+    display block
+    &::before
+      content 'try {'
+      color keywordColor
+    padding-left 2em
+    &::after
+      content '}'
+      display block
+      margin-left -2em
+
+  > .handler
+    display block
+    &::before
+      content ' catch '
+      color keywordColor
+    > .catchClause
+      > .param::after
+        content ' {'
+      > .body
+        display block
+        padding-left 2em
+        &::after
+          content '}'
+          display block
+          margin-left -2em
+
+  > .finalizer
+    display block
+    &::before
+      content ' finally {'
+      color keywordColor
+    padding-left 2em
+    &::after
+      content '}'
+      display block
+      margin-left -2em
+
+// Switch statement
+.switchStatement
+  display block !important
+
+  > .discriminant
+    &::before
+      content 'switch ('
+      color keywordColor
+    &::after
+      content ') {'
+
+  > .cases
+    display block
+    padding-left 2em
+
+  &::after
+    content '}'
+    display block
+
+// Classes
+.classDeclaration,
+.classExpression
+  display block !important
+  margin-bottom 1em !important
+
+  &::before
+    content 'class '
+    color keywordColor
+
+  > header
+    display inline
+
+    > .name
+      color functionNameColor
+
+  > .superClass
+    &::before
+      content ' extends '
+      color keywordColor
+
+  &::after
+    content ' {'
+
+  > .body
+    display block
+    padding-left 2em
+
+// Methods
+.method
+  display block !important
+  margin-bottom 0.5em !important
+
+  &::before
+    content ''
+
+  > .name
+    color functionNameColor
+
+  > .functionExpression
+    &::before
+      content ''
+
+    > div > .paramsWrapper > .params
+      &::before
+        content '('
+      &::after
+        content ') {'
+
+// Expression statements
+.expressionStatement
+  display block !important
+  margin-bottom 0.2em !important
+
+// Member expressions
+.memberExpression
+  display inline
+  > .property
+    &::before
+      content '.'
+
+  &.computed > .property
+    &::before
+      content '['
+    &::after
+      content ']'
+
+// Call expressions
+.callee > .memberExpression > .property
+  color inherit !important
+  &::before
+    content '.'
+    color inherit !important
+  &::after
+    content ''
+
+// Arguments
 .arguments
+  display inline
   &::before
     content '('
   &::after
     content ')'
-  & > span:not(:last-of-type)
-    &::after
-      content ', '
 
+  > span:not(:last-of-type)::after
+    content ', '
 
-.arrowFunctionExpression
-  background-color arrowFuncColor
-  border-color darken(arrowFuncColor, 10%)
-  display inline-block
-  vertical-align middle
+// Object expressions
+.objectExpression
+  display inline !important
 
-  &.async
-    &::before
-      content 'async'
-      margin-right 0.5em
-      font-weight 900
-
-  > div
-    display flex
-    align-items center
-
-    > .parameters
-      &::after
-        margin 0 1em
-        content '=>'
-
-.expressionStatement
-  padding 0.5em 0 0.5em 1em
-
-.memberExpression
-  white-space pre
-  > .property
-    &::before
-      content '.'
-  > .computed
-    .property
-      &::before
-        content '['
-      &::after
-        content ']'
-
-
-.callee > .memberExpression > .property
-  color hsl(190, 70%, 60%) !important
-  &::before
-    content '\A   .'
-    color  hsl(190, 70%, 60%) !important
-
-
-
-.declarations
-  background-color declarationsColor
-  border-color darken(declarationsColor, 5%)
-  padding 0em 2.5em 0.6em 1em
-  margin-bottom 0.2em
-  > .label
-    margin-right -2.5em
-
-.declaration
-  > .identifier
-    &::after
-      content '\a0='
-  > .init
-    &::before
-      content '\a0'
-
-
-.operator
-  margin 0 0.4em
-
-.return
-  display block
-  background-color returnColor
-  border-color darken(returnColor, 20%)
-  padding 0em 2.5em 0.6em 1em
-
-  &::before
-    content 'return'
-    margin-right -2.5em
-    labelStyling()
-
-.comment
-  display inline-block
-  border-left 4px solid hsl(0, 0, 80%)
-  padding-left 1em
-  color hsl(0, 0, 50%)
-  font-size 0.9em
-  margin 0.5em 0
-  &::first-letter
-    text-transform uppercase
-
-.commentedSection
-  margin-top 1em
-
-.label + .commentedSection,
-.body > .commentedSection:first-child
-  margin-top 0 !important
-
-.withTrailingComment
-  display flex
-  flex-direction row
-
-  :first-child
-    flex-grow 9
-
-  .trailing.comment
-    border-width 2px
-    padding-left 0.5em
-    margin-left 1em
-    flex-grow 1
-
-.objectExpression:empty
+  &:empty
     &::before
       content '{'
     &::after
       content '}'
 
-.arrayExpression:empty
+  &:not(:empty)
+    &::before
+      content '{ '
+    &::after
+      content ' }'
+
+  > .property
+    display inline
+
+    > .key::after
+      content ': '
+
+    &:not(:last-of-type)::after
+      content ', '
+
+// Array expressions
+.arrayExpression
+  display inline !important
+
+  &:empty
+    &::before
+      content '['
+    &::after
+      content ']'
+
+  &:not(:empty)
     &::before
       content '['
     &::after
       content ']'
 
 .arrayElement
-  border-collapse collapse
-  border-color rgba(0,0,0,0.2)
-  border-style solid
-  border-width 1px
-  display block
-  margin-right -1px
-  padding 0 0.5em
+  display inline
+  border none
+  padding 0
+  margin 0
 
-.openingBracket,
-.closingBracket,
-.arraySeparator
-  color transparent
+  &:not(:last-of-type)::after
+    content ', '
 
-.assignment,
-.infinity,
-.true,
-.false,
-.equal,
-.bitshift
-  color transparent
-  margin 0 0.2em
-  width 0.8em
-  display inline-block
-  &::before
-    color black
+// Binary operators
+.binaryExpression
+  display inline
 
+  > .left::after
+    content ''
 
-.assignment
-  font-size 0.8em
-  padding 0 0.2em
-  &::before
-    content '='
+.operator-add > .left::after
+  content ' + '
+  color operatorColor
 
-.infinity
-  font-size 1.4em
-  vertical-align -10%
-  &::before
-    content '∞'
+.operator-subtract > .left::after
+  content ' - '
+  color operatorColor
 
+.operator-multiply > .left::after
+  content ' * '
+  color operatorColor
+
+.operator-divide > .left::after
+  content ' / '
+  color operatorColor
+
+.operator-modulo > .left::after
+  content ' % '
+  color operatorColor
+
+.operator-equals > .left::after
+  content ' == '
+  color operatorColor
+
+.operator-equals-not > .left::after
+  content ' != '
+  color operatorColor
+
+.operator-equals-strict > .left::after
+  content ' === '
+  color operatorColor
+
+.operator-equals-strict-not > .left::after
+  content ' !== '
+  color operatorColor
+
+.operator-less-than > .left::after
+  content ' < '
+  color operatorColor
+
+.operator-less-than-equals > .left::after
+  content ' <= '
+  color operatorColor
+
+.operator-greater-than > .left::after
+  content ' > '
+  color operatorColor
+
+.operator-greater-than-equals > .left::after
+  content ' >= '
+  color operatorColor
+
+.operator-shift-left > .left::after
+  content ' << '
+  color operatorColor
+
+.operator-shift-right > .left::after
+  content ' >> '
+  color operatorColor
+
+.operator-and > .left::after
+  content ' && '
+  color operatorColor
+
+.operator-or > .left::after
+  content ' || '
+  color operatorColor
+
+// Unary operators
+.operator-not::before
+  content '!'
+  color operatorColor
+
+.operator-typeof::before
+  content 'typeof '
+  color keywordColor
+
+.operator-void::before
+  content 'void '
+  color keywordColor
+
+.operator-delete::before
+  content 'delete '
+  color keywordColor
+
+.operator-spread::before
+  content '...'
+  color operatorColor
+
+// Logical expressions
+.logicalExpression
+  display inline
+  border none
+  padding 0
+
+// Conditional/ternary
+.conditionalExpression
+  display inline
+
+  > .separator-question
+    color operatorColor
+    &::before
+      content ' ? '
+
+  > .separator-colon
+    color operatorColor
+    &::before
+      content ' : '
+
+// Assignment
+.assignmentExpression,
+.assignmentPattern
+  > .left::after
+    content ' = '
+    color operatorColor
+
+// Await
+.awaitExpression::before
+  content 'await '
+  color keywordColor
+
+// Literals
 .true::before
-  color green
-  content '✔︎'
+  content 'true'
+  color keywordColor
+
 .false::before
-  color red
-  content '✘'
+  content 'false'
+  color keywordColor
 
-span[class='operator equal']
-  width 1.5em
+.null::before
+  content 'null'
+  color keywordColor
+
+.undefined::before
+  content 'undefined'
+  color keywordColor
+
+.nan::before
+  content 'NaN'
+  color numberColor
+
+.infinity::before
+  content 'Infinity'
+  color numberColor
+
+// This expression
+.thisExpression::after
+  content 'this'
+  color keywordColor
+
+// Super
+.super::before
+  content 'super'
+  color keywordColor
+
+// New expression
+.newExpression::before
+  content 'new '
+  color keywordColor
+
+// Throw
+.throwStatement::before
+  content 'throw '
+  color keywordColor
+
+// Break
+.breakStatement::before
+  content 'break'
+  color keywordColor
+
+// Continue
+.continueStatement::before
+  content 'continue'
+  color keywordColor
+
+// Import/Export
+.importDeclaration
+  display block
+
+  .specifiers::before
+    content 'import '
+    color keywordColor
+
+  > .source::before
+    content ' from '
+    color keywordColor
+
+.importNamespaceSpecifier::before
+  content '* as '
+  color operatorColor
+
+.importSpecifier
   &::before
-    color orange
-    content 'is'
-.not.equal::before
-  content '≠'
+    content '{ '
+  &::after
+    content ' }'
 
-span[class='operator strict equal']
-  width 6.5em
-  &::before
-    color orange
-    content 'is exactly'
-    white-space nowrap
-.not.strict.equal::before
-  content '≢'
-  font-size 1.6em
+  > .local::before
+    content ' as '
+    color keywordColor
 
-.bitshift.left::before
-  content '≪'
-.bitshift.right::before
-  content '≫'
+.exportNamedDeclaration
+  .specifiers::before
+    content 'export '
+    color keywordColor
 
-.smaller.equal::before
-  content '≤'
-  font-size 1.2em
-.larger.equal::before
-  content '≥'
-  font-size 1.2em
+  .source::before
+    content ' from '
+    color keywordColor
 
-.error
-  color red
-  background-color rgb(250,200,200)
-  border-width 1px
-  border-style solid
-  border-color rgb(230,180,180)
-  border-radius 3px
-  padding 0.2em 1em
+.exportDefaultDeclaration::before
+  content 'export default '
+  color keywordColor
 
+// Shebang
 .shebang
-  color gray
+  color commentColor
   margin-bottom 1em
 
-// .thisExpression
-//  &::after
-//    content 'this'
+// Errors
+.error
+  color hsl(0, 70%, 40%)
+  background-color hsl(0, 50%, 95%)
+  border 1px solid hsl(0, 50%, 80%)
+  border-radius 3px
+  padding 0.5em 1em

@@ -87,7 +87,6 @@ fileWrapper(
 .forOf,
 .function,
 .method,
-.if,
 .return,
 .while,
 .doWhile,
@@ -238,6 +237,10 @@ fileWrapper(
 
 .if
   display block !important
+  border none !important
+  background transparent !important
+  padding-left 0
+  margin 0.2em 0
   &::before
     parenOpen()
     content '(if '
@@ -247,15 +250,12 @@ fileWrapper(
 
   > header.test
     display inline
-    &::before
-      parenOpen()
-      content '('
     &::after
-      parenClose()
-      content ') '
+      content ' '
 
   > .consequent
-    display inline
+    display block
+    padding-left 1.5em
     &::before
       parenOpen()
       content '('
@@ -264,7 +264,8 @@ fileWrapper(
       content ') '
 
   > .alternate
-    display inline
+    display block
+    padding-left 1.5em
     &::before
       parenOpen()
       content '('
@@ -605,6 +606,8 @@ fileWrapper(
   color lispFunction
   &::before
     content '.'
+  &::after
+    content ''
 
 
 .logicalExpression
@@ -1060,13 +1063,13 @@ fileWrapper(
   > .callee::before
     parenOpen()
     content '('
-  > .arguments::after
-    parenClose()
-    content ''
+  > .callee::after
+    content ' '
   > .arguments
     &::before
       content ''
     &::after
+      parenClose()
       content ')'
 
 

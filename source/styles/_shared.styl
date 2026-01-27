@@ -38,3 +38,65 @@ labelStyling()
   font-size 0.8em
   text-align right
   margin-bottom -0.6em
+
+
+// Reusable file wrapper component
+// Parameters allow theme customization
+fileWrapper(fileBorderColor = fileColor, fileHeaderBg = lighten(fileColor, 80%), fileBg = backgroundColor, textColor = primaryColor, buttonBorderColor = silentColor, buttonBg = transparent, buttonTextColor = primaryColor, codeViewBg = hsl(0, 0%, 98%), codeViewBorder = hsl(0, 0%, 85%), codeViewText = hsl(0, 0%, 20%))
+  .file
+    border-width 1px
+    border-style solid
+    border-color fileBorderColor
+    border-radius 0.5em
+    position relative
+    font-family 'Source Code Pro', 'Courier New', monospace
+    background-color fileBg
+
+    > .blockLabel
+      margin-bottom 1em
+      color rgba(textColor, 0.8)
+
+    > header
+      font-weight 600
+      background-color fileHeaderBg
+      border-bottom-color rgba(0, 0, 0, 0.1)
+      border-bottom-style solid
+      border-bottom-width 1px
+      margin-bottom 0.3em
+      border-radius 0.5em 0.5em 0 0
+      padding 0.4rem 1rem
+      display flex
+      align-items center
+      justify-content space-between
+      color textColor
+
+    > .body
+      padding 1em 1em
+
+  button.code
+    border-width 1px
+    border-style solid
+    border-color buttonBorderColor
+    border-radius 0.5em
+    cursor pointer
+    padding 0.5em 1em
+    background-color buttonBg
+    color buttonTextColor
+    font-size 0.85em
+    &:hover
+      opacity 0.8
+
+  .code-view
+    background-color codeViewBg
+    border 1px solid codeViewBorder
+    border-radius 0.3em
+    padding 1em
+    margin 0.5em 1em
+    overflow-x auto
+    font-family 'Source Code Pro', 'Courier New', monospace
+    font-size 0.9em
+    line-height 1.4
+    &.hidden
+      display none
+    code
+      color codeViewText
