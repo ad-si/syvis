@@ -3,4 +3,5 @@ export default {
   range: false,
   attachComment: true,
   tolerant: true,
+  sourceType: "module",
 }

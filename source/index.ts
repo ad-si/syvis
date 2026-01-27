@@ -36,7 +36,10 @@ export function renderSyntax (fileData: FileData): ShavenArray | Error {
     log(syntaxTree)
 
     if (syntaxTree.errors && syntaxTree.errors.length > 0) {
-      return syntaxTree.errors
+      const errorMessages = syntaxTree.errors
+        .map((err: any) => `Line ${err.lineNumber}: ${err.description}`)
+        .join("\n")
+      return new Error(`Parse errors:\n${errorMessages}`)
     }
     else {
       const vDomArray = walkTree(syntaxTree, fileData)
