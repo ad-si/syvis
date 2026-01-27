@@ -464,8 +464,8 @@ function propertyComment (node: Node) {
 function property (node: Node) {
   const classes = ["property", node.kind]
 
-  if ((node as any).method != null) classes.push("method")
-  if ((node as any).shorthand != null) classes.push("shorthand")
+  if ((node as any).method) classes.push("method")
+  if ((node as any).shorthand) classes.push("shorthand")
 
   return [
     "span",
@@ -515,7 +515,7 @@ function taggedTemplateExpression (node: Node) {
 function templateElement (node: Node) {
   const classes = ["templateElement", "string"]
 
-  if ((node as any).tail != null) classes.push("tail")
+  if ((node as any).tail) classes.push("tail")
 
   return [
     "span",
