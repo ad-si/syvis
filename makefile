@@ -14,12 +14,6 @@ build: node_modules
 	bunx vite build
 
 
-# Deploy to surge.sh
-.PHONY: deploy
-deploy: build
-	surge dist syvis.surge.sh
-
-
 .PHONY: dev
 dev: node_modules
 	bunx vite

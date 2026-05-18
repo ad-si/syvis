@@ -22,7 +22,6 @@
             bun
             coreutils
             gnumake
-            surge-cli
           ];
         };
         formatter = pkgs.nixfmt-tree; # Format this file with `nix fmt`
