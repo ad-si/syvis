@@ -25,11 +25,6 @@ test: node_modules
 	bun test
 
 
-.PHONY: postinstall
-postinstall: node_modules
-	cp node_modules/shaven/shaven.js public
-
-
 .PHONY: clean
 clean:
 	-rm -r dist
