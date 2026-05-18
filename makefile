@@ -9,60 +9,51 @@ entryPoint := $$(pwd)/source/index.js
 
 
 node_modules: package.json bun.lock
-	if test ! -d $@; then bun install --force; fi
+	bun install
+	touch $@
 
 
 # Build all files for deployment
-.PHONY: all
-all: \
-	build/index.html \
-	build/index.js \
-	build/screen.css \
-	build/CNAME
+.PHONY: build
+build: \
+	dist/index.html \
+	dist/index.js \
+	dist/screen.css
 
 
 # Build HTML file for deployment
-build/index.html: public/index.html | build
+dist/index.html: public/index.html | dist
 	sed 's/{{version}}/$(shell git describe)/' $< > $@
 
 
 # Build CSS file for deployment
-build/screen.css: node_modules $(stylFiles) | build
+dist/screen.css: node_modules $(stylFiles) | dist
 	bunx stylus --compress \
 		< source/styles/main.styl \
 		> $@
 
 
-build/index.js: node_modules source build/shaven.js | build
-	bun build $< --outfile $@
+dist/index.js: node_modules source dist/shaven.js | dist
+	bun dist $< --outfile $@
 
 
-build/shaven.js: node_modules/shaven/build/browser.js node_modules
+dist/shaven.js: node_modules/shaven/dist/browser.js node_modules
 	cp $< $@
 
 
-build:
+dist:
 	-mkdir -p $@
-
-
-build/CNAME: | build
-	echo "syvis.surge.sh" > $@
 
 
 # Deploy to surge.sh
 .PHONY: deploy
-deploy:
-	# Execute `cd /syvis && surge` once the docker container runs
-	docker run \
-		--interactive \
-		--tty \
-		--volume "$$PWD":/syvis \
-		--rm andthensome/alpine-surge-bash
+deploy: dist
+	surge $< syvis.surge.sh
 
 
 .PHONY: dev
 dev: node_modules
-	bunx parcel serve public/index.html
+	bunx parcel serve --no-autoinstall public/index.html
 
 
 .PHONY: test
@@ -79,6 +70,5 @@ postinstall: node_modules
 .PHONY: clean
 clean:
 	-rm -r .parcel-cache
-	-rm -r build
 	-rm -r dist
 	-rm -r node_modules
