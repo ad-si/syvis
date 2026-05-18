@@ -17,30 +17,21 @@
   "dependencies": {
     "codemirror": "^6.0.2",
     "esprima": "^4.0.1",
-    "express": "^5.2.1",
-    "morgan": "^1.10.1",
-    "serve-favicon": "^2.5.1",
     "shaven": "2.1.0",
     "stylus": "^0.64.0"
   },
   "devDependencies": {
-    "@parcel/transformer-stylus": "^2.16.4",
     "@types/node": "^25.8.0",
     "@typescript-eslint/parser": "^8.59.3",
     "eslint": "^10.4.0",
     "eslint-config-javascript": "^3.0.0",
-    "parcel": "^2.16.4",
     "prettier": "^3.8.3",
     "prettier-eslint": "^16.4.2",
     "typescript": "^6.0.3",
+    "vite": "^7.1.13",
     "vue-eslint-parser": "^10.4.0"
   },
   "eslintConfig": {
     "extends": "eslint-config-javascript"
-  },
-  "browserify": {
-    "transform": [
-      "brfs"
-    ]
   }
 }

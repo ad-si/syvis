@@ -1,6 +1,6 @@
 import type { FileData, Node, Comment, ShavenArray } from "./types.js"
 
-import shaven from "shaven"
+import shaven from "shaven/source/library/browser.js"
 import * as esprima from "esprima"
 import * as codemirror from "codemirror"
 // require('codemirror/mode/javascript/javascript.js')

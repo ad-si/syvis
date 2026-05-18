@@ -3,11 +3,6 @@ help: makefile
 	@tail -n +4 makefile | grep ".PHONY"
 
 
-jsFiles := $(shell find ./source -iname '*.js')
-stylFiles := $(shell find ./source -iname '*.styl')
-entryPoint := $$(pwd)/source/index.js
-
-
 node_modules: package.json bun.lock
 	bun install
 	touch $@
@@ -15,45 +10,19 @@ node_modules: package.json bun.lock
 
 # Build all files for deployment
 .PHONY: build
-build: \
-	dist/index.html \
-	dist/index.js \
-	dist/screen.css
-
-
-# Build HTML file for deployment
-dist/index.html: public/index.html | dist
-	sed 's/{{version}}/$(shell git describe)/' $< > $@
-
-
-# Build CSS file for deployment
-dist/screen.css: node_modules $(stylFiles) | dist
-	bunx stylus --compress \
-		< source/styles/main.styl \
-		> $@
-
-
-dist/index.js: node_modules source dist/shaven.js | dist
-	bun dist $< --outfile $@
-
-
-dist/shaven.js: node_modules/shaven/dist/browser.js node_modules
-	cp $< $@
-
-
-dist:
-	-mkdir -p $@
+build: node_modules
+	bunx vite build
 
 
 # Deploy to surge.sh
 .PHONY: deploy
-deploy: dist
-	surge $< syvis.surge.sh
+deploy: build
+	surge dist syvis.surge.sh
 
 
 .PHONY: dev
 dev: node_modules
-	bunx parcel serve --no-autoinstall public/index.html
+	bunx vite
 
 
 .PHONY: test
@@ -69,6 +38,5 @@ postinstall: node_modules
 
 .PHONY: clean
 clean:
-	-rm -r .parcel-cache
 	-rm -r dist
 	-rm -r node_modules

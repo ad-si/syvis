@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <title>Syntax Visualizer</title>
+  <link rel="icon" type="image/x-icon" href="./images/favicon.ico" />
+</head>
+
+<body>
+  <main>
+    <header>
+      <div>
+        <h1>Syvis</h1>
+        <small>Version: <strong><code>{{version}}</code></strong></small>
+      </div>
+      <h2>The JavaScript Syntax Visualizer</h2>
+    </header>
+
+    <div class="controls">
+      <input type="radio" name="inputTab" id="inputTabExample" class="tab-input" checked>
+      <input type="radio" name="inputTab" id="inputTabUrl" class="tab-input">
+      <input type="radio" name="inputTab" id="inputTabPaste" class="tab-input">
+
+      <nav class="tab-labels">
+        <label for="inputTabExample">Example</label>
+        <label for="inputTabUrl">URL</label>
+        <label for="inputTabPaste">Paste</label>
+      </nav>
+
+      <div class="tab-panels">
+        <section class="tab-panel panel-example">
+          <form id="formForExample">
+            <label>
+              <input type="radio" name="example" value="ifElse" checked>
+              <span>If-else statement</span>
+            </label>
+            <label>
+              <input type="radio" name="example" value="addFunction">
+              <span>Function declaration</span>
+            </label>
+            <label>
+              <input type="radio" name="example" value="simpleObject">
+              <span>Simple object</span>
+            </label>
+            <label>
+              <input type="radio" name="example" value="chaining">
+              <span>Chaining</span>
+            </label>
+            <label>
+              <input type="radio" name="example" value="loops">
+              <span>Loops</span>
+            </label>
+          </form>
+        </section>
+
+        <section class="tab-panel panel-url">
+          <form id="fileUrl">
+            <input
+              id="fileUrlInput"
+              type="text"
+              name="fileUrl"
+              placeholder="URL to a JavaScript or JSON file"
+            />
+            <button id="visualizeButton" type="submit">
+              Visualize
+            </button>
+          </form>
+        </section>
+
+        <section class="tab-panel panel-paste">
+          <form id="codePaste">
+            <textarea
+              id="codePasteInput"
+              name="code"
+              rows="6"
+              placeholder="Paste JavaScript or JSON code here"
+            ></textarea>
+            <button id="visualizePasteButton" type="submit">
+              Visualize
+            </button>
+          </form>
+        </section>
+      </div>
+
+      <form id="formForTheme" class="theme-selector">
+        <span>Theme:</span>
+        <label>
+          <input type="radio" name="theme" id="themeNeo" value="themeNeo" checked>
+          <span>Neo</span>
+        </label>
+        <label>
+          <input type="radio" name="theme" id="themeClassic" value="themeClassic">
+          <span>Classic</span>
+        </label>
+        <label>
+          <input type="radio" name="theme" id="themeDracula" value="themeDracula">
+          <span>Dracula</span>
+        </label>
+        <label>
+          <input type="radio" name="theme" id="themeLisp" value="themeLisp">
+          <span>Lisp</span>
+        </label>
+      </form>
+    </div>
+
+    <div id="output" class="syvis"></div>
+  </main>
+
+  <script type="module" src="./source/index.ts"></script>
+</body>
+
+</html>

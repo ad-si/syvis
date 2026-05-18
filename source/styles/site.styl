@@ -35,41 +35,126 @@ hr
   border-color silentColor
   margin 1em 0
 
+inputControl()
+  border-width 1px
+  border-style solid
+  border-radius 0.5em
+  border-color silentColor
+  padding 0.5em 1em
+  background-color backgroundColor
+  font-family inherit
+  font-size inherit
+  color inherit
+
 form#fileUrl
-  flex 1 1 auto
   display flex
-  gap 1em
+  gap 0.5em
 
   input[type=text]
-    border-width 1px
-    border-style solid
-    border-radius 0.5em
-    border-color silentColor
-    padding 0.5em 1em
-    width 40em
+    inputControl()
+    flex 1 1 auto
+    min-width 0
 
   button
-    border-width 1px
-    border-style solid
-    border-color silentColor
-    border-radius 0.5em
+    inputControl()
     cursor pointer
-    padding 0.5em 1em
 
-fieldset
-  legend
-    margin-bottom: 0.5em
+form#codePaste
+  display flex
+  flex-direction column
+  gap 0.5em
+  align-items flex-start
+
+  textarea
+    inputControl()
+    width 100%
+    font-family monospace
+    box-sizing border-box
+    resize vertical
+
+  button
+    inputControl()
+    cursor pointer
+
+form#formForExample
+  display flex
+  flex-wrap wrap
+  gap 0.75em
 
   label
-    display: inline-flex
-    align-items: center
-    margin-right: 1rem
+    display inline-flex
+    align-items center
     cursor pointer
-    user-select: none
+    user-select none
 
   input[type=radio]
     cursor pointer
-    margin-right: 0.35em
-    margin-top: 0
-    margin-bottom: 0
+    margin-right 0.35em
+    margin-top 0
+    margin-bottom 0
+
+.controls
+  margin 1em 0 1.5em 0
+
+  > .tab-input
+    display none
+
+  > .tab-labels
+    display flex
+    gap 0.25em
+    border-bottom 1px solid silentColor
+    margin-bottom 1em
+
+    label
+      padding 0.5em 1em
+      cursor pointer
+      border 1px solid transparent
+      border-bottom none
+      border-radius 0.5em 0.5em 0 0
+      margin-bottom -1px
+      user-select none
+      color quietColor
+
+      &:hover
+        color primaryColor
+
+  > .tab-panels > .tab-panel
+    display none
+
+  > #inputTabExample:checked ~ .tab-labels > label[for=inputTabExample]
+  > #inputTabUrl:checked ~ .tab-labels > label[for=inputTabUrl]
+  > #inputTabPaste:checked ~ .tab-labels > label[for=inputTabPaste]
+    border-color silentColor
+    border-bottom-color backgroundColor
+    color primaryColor
+    background-color backgroundColor
+
+  > #inputTabExample:checked ~ .tab-panels > .panel-example
+  > #inputTabUrl:checked ~ .tab-panels > .panel-url
+  > #inputTabPaste:checked ~ .tab-panels > .panel-paste
+    display block
+
+.theme-selector
+  display flex
+  align-items center
+  flex-wrap wrap
+  gap 0.75em
+  margin-top 1em
+  padding-top 0.75em
+  border-top 1px solid silentColor
+
+  > span
+    color quietColor
+
+  label
+    display inline-flex
+    align-items center
+    cursor pointer
+    user-select none
+
+  input[type=radio]
+    cursor pointer
+    margin-right 0.35em
+    margin-top 0
+    margin-bottom 0
 

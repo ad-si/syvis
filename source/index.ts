@@ -1,3 +1,5 @@
+import "./styles/main.styl"
+
 import type { FileData, ShavenArray, ShavenObject } from "./types.js"
 
 import * as esprima from "esprima"
@@ -153,6 +155,21 @@ function getSelectedTheme (): string {
   return selectedExample as string
 }
 
+function renderPastedCode (code: string, outputElement: HTMLElement) {
+  const selectedTheme = getSelectedTheme()
+  outputElement.className = `syvis ${selectedTheme || 'themeNeo'}`
+  outputElement.innerHTML = ""
+
+  const fileData = {
+    url: new URL("https://github.com/ad-si/syvis"),
+    path: "pasted.js",
+    content: code,
+    shebang: "",
+  }
+  const shavenArray = renderSyntax(fileData)
+  injectShavenObj(shavenArray, outputElement)
+}
+
 async function renderSelectedCode (outputElement: HTMLElement) {
   console.info("Starting...")
   const selectedExample = getSelectedExample()
@@ -172,23 +189,6 @@ async function renderSelectedCode (outputElement: HTMLElement) {
     }
     const shavenArray = renderSyntax(fileData)
     injectShavenObj(shavenArray, outputElement)
-    return
-  }
-
-  // If no example is selected, try to load from URL input or /filename endpoint
-  const fileUrlInput = document.getElementById("fileUrlInput")
-  if (!fileUrlInput) {
-    throw new Error("Input element for file URL does not exist")
-  }
-
-  const filePathResponse = await fetch("/filename")
-
-  if (filePathResponse.ok) {
-    const filePath = await filePathResponse.text()
-    await loadAndRender(filePath)
-  }
-  else if ((fileUrlInput as HTMLInputElement).value) {
-    await loadAndRender((fileUrlInput as HTMLInputElement).value)
   }
 }
 
@@ -226,6 +226,22 @@ if (typeof document !== "undefined") {
       if (fileUrlInput?.value) {
         try {
           await loadAndRender(fileUrlInput.value)
+        } catch (error) {
+          outputElement.innerHTML = toHtmlError(error)
+        }
+      }
+    })
+
+    const codePasteForm = document.getElementById("codePaste")
+    const codePasteInput = document.getElementById("codePasteInput") as HTMLTextAreaElement
+
+    codePasteForm?.addEventListener("submit", (event) => {
+      event.preventDefault()
+      event.stopPropagation()
+
+      if (codePasteInput?.value) {
+        try {
+          renderPastedCode(codePasteInput.value, outputElement)
         } catch (error) {
           outputElement.innerHTML = toHtmlError(error)
         }

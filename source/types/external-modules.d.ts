@@ -33,25 +33,5 @@ declare module 'codemirror' {
   }
 }
 
-declare module 'express' {
-  function express(): unknown;
-  export = express;
-}
+declare module '*.styl'
 
-declare module 'morgan' {
-  function morgan(format: string): unknown;
-  export = morgan;
-}
-
-declare module 'stylus' {
-  interface StylusRenderer {
-    render(callback: (err: Error | null, css: string) => void): void;
-  }
-  function stylus(str: string): StylusRenderer;
-  export = stylus;
-}
-
-declare module 'serve-favicon' {
-  function serveFavicon(path: string): unknown;
-  export = serveFavicon;
-}
