@@ -1,11 +1,5 @@
 # Syvis
 
-[![Build Status][]][syvis]
-
-[Build Status]:
-  https://travis-ci.com/adius/feram_syvis.svg?token=o8saMqgg3F8qbjfsyJiu&branch=master
-[syvis]: https://travis-ci.com/adius/feram_syvis
-
 Syntax visualization instead of syntax highlighting.
 
 A graphical representation of code.
