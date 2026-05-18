@@ -117,19 +117,11 @@ async function loadAndRender (filePath: string) {
     throw new Error("Element #output does not exist")
   }
 
-  // Get current theme
-  const selectedTheme = getSelectedTheme()
-
-  outputElement.innerHTML = ""
-  // Preserve theme class
-  outputElement.className = `syvis ${selectedTheme || 'themeNeo'}`
-
   if (result instanceof Error) {
     outputElement.innerHTML = toHtmlError(result)
   }
   else {
-    const shavenArray = renderSyntax(result)
-    injectShavenObj(shavenArray, outputElement)
+    renderFileData(result, outputElement)
   }
 }
 
@@ -155,40 +147,37 @@ function getSelectedTheme (): string {
   return selectedExample as string
 }
 
-function renderPastedCode (code: string, outputElement: HTMLElement) {
+let lastFileData: FileData | null = null
+
+function renderFileData (fileData: FileData, outputElement: HTMLElement) {
+  lastFileData = fileData
   const selectedTheme = getSelectedTheme()
   outputElement.className = `syvis ${selectedTheme || 'themeNeo'}`
   outputElement.innerHTML = ""
 
-  const fileData = {
-    url: new URL("https://github.com/ad-si/syvis"),
-    path: "pasted.js",
-    content: code,
-    shebang: "",
-  }
   const shavenArray = renderSyntax(fileData)
   injectShavenObj(shavenArray, outputElement)
 }
 
+function renderPastedCode (code: string, outputElement: HTMLElement) {
+  renderFileData({
+    url: new URL("https://github.com/ad-si/syvis"),
+    path: "pasted.js",
+    content: code,
+    shebang: "",
+  }, outputElement)
+}
+
 async function renderSelectedCode (outputElement: HTMLElement) {
-  console.info("Starting...")
   const selectedExample = getSelectedExample()
-  const selectedTheme = getSelectedTheme()
-
-  console.info(selectedTheme)
-
-  // Apply theme class to output element
-  outputElement.className = `syvis ${selectedTheme || 'themeNeo'}`
 
   if (selectedExample) {
-    const fileData = {
+    renderFileData({
       url: new URL("https://github.com/ad-si/syvis"),
       path: "example.js",
       content: selectedExample,
       shebang: "",
-    }
-    const shavenArray = renderSyntax(fileData)
-    injectShavenObj(shavenArray, outputElement)
+    }, outputElement)
   }
 }
 
@@ -211,8 +200,12 @@ if (typeof document !== "undefined") {
 
     document.getElementById("formForTheme")
       ?.addEventListener("change", () => {
-        outputElement.innerHTML = ""
-        renderSelectedCode(outputElement)
+        if (lastFileData) {
+          renderFileData(lastFileData, outputElement)
+        }
+        else {
+          renderSelectedCode(outputElement)
+        }
       })
 
     // Set up URL form submission handler
