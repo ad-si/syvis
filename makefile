@@ -8,8 +8,8 @@ stylFiles := $(shell find ./source -iname '*.styl')
 entryPoint := $$(pwd)/source/index.js
 
 
-node_modules: package.json package-lock.json
-	npm install
+node_modules: package.json bun.lock
+	if test ! -d $@; then bun install --force; fi
 
 
 # Build all files for deployment
@@ -27,17 +27,17 @@ build/index.html: public/index.html | build
 
 
 # Build CSS file for deployment
-build/screen.css: $(stylFiles) | build
+build/screen.css: node_modules $(stylFiles) | build
 	bunx stylus --compress \
 		< source/styles/main.styl \
 		> $@
 
 
-build/index.js: source build/shaven.js | build
+build/index.js: node_modules source build/shaven.js | build
 	bun build $< --outfile $@
 
 
-build/shaven.js: node_modules/shaven/build/browser.js
+build/shaven.js: node_modules/shaven/build/browser.js node_modules
 	cp $< $@
 
 
@@ -61,18 +61,18 @@ deploy:
 
 
 .PHONY: dev
-dev:
+dev: node_modules
 	bunx parcel serve public/index.html
 
 
 .PHONY: test
-test:
+test: node_modules
 	bunx tsc --noEmit
 	bun test
 
 
 .PHONY: postinstall
-postinstall:
+postinstall: node_modules
 	cp node_modules/shaven/shaven.js public
 
 
